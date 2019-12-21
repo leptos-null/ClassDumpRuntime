@@ -1,0 +1,9 @@
+Package: null.leptos.classdumpruntime
+Name: ClassDumpRuntime
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: ClassDump utility intended to be used with Cycript
+Maintainer: Leptos <leptos.0.null@gmail.com>
+Author: Leptos <leptos.0.null@gmail.com>
+Section: System
+Tag: role::developer
