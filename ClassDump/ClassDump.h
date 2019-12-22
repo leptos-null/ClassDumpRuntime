@@ -6,7 +6,7 @@
 //  Copyright © 2019 Leptos. All rights reserved.
 //
 
-#import <ClassDump/CDClassModel.h>
-#import <ClassDump/CDProtocolModel.h>
+#import "Models/CDClassModel.h"
+#import "Models/CDProtocolModel.h"
 
-#import <ClassDump/CDUtilities.h>
+#import "Services/CDUtilities.h"
