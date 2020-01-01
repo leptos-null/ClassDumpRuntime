@@ -358,7 +358,7 @@
     if (nameOffset != 3 && start[1] != '?') {
         char nameBuff[nameOffset];
         nameBuff[0] = ' '; // start with a space
-        strncpy(nameBuff + 1, start + 1, sizeof(nameBuff));
+        strncpy(nameBuff + 1, start + 1, sizeof(nameBuff) - 1);
         nameBuff[sizeof(nameBuff) - 1] = 0;
         [ret appendString:@(nameBuff)];
     }
