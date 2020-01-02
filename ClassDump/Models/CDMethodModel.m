@@ -33,7 +33,8 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 
-static const char *skipFirstType(const char *type) {
+/// Find the end of a type encoding
+static const char *seekOverType(const char *type) {
     while (*type) {
         switch (*type) {
             case '0':
@@ -46,7 +47,7 @@ static const char *skipFirstType(const char *type) {
             case '7':
             case '8':
             case '9':
-                /* don't modify */
+                /* don't modify, this isn't actually a type */
                 return type;
                 
             /* prefix modifiers */
@@ -141,174 +142,16 @@ static const char *skipFirstType(const char *type) {
     return type;
 }
 
-static unsigned int encoding_getNumberOfArguments(const char *typedesc) {
-    // First, skip the return type
-    typedesc = skipFirstType(typedesc);
-    
-    // Next, skip stack size
-    while (isnumber(*typedesc)) {
-        typedesc++;
+/// Returns the number of times a character occurs in a null-terminated stringb
+static size_t characterCount(const char *str, const char c) {
+    size_t ret = 0;
+    while (*str) {
+        if (*str++ == c) {
+            ret++;
+        }
     }
-    // Now, we have the arguments - count how many
-    unsigned nargs = 0;
-    while (*typedesc) {
-        // Traverse argument type
-        typedesc = skipFirstType(typedesc);
-        
-        // Skip GNU runtime's register parameter hint
-        if (*typedesc == '+') {
-            typedesc++;
-        }
-        // Traverse (possibly negative) argument offset
-        if (*typedesc == '-') {
-            typedesc++;
-        }
-        
-        while (isnumber(*typedesc)) {
-            typedesc++;
-        }
-        // Made it past an argument
-        nargs++;
-    }
-    
-    return nargs;
+    return ret;
 }
-
-static unsigned int encoding_getArgumentInfo(const char *typedesc, unsigned int arg, const char **type, int *offset) {
-    unsigned nargs = 0;
-    int self_offset = 0;
-    bool offset_is_negative = NO;
-    
-    // First, skip the return type
-    typedesc = skipFirstType(typedesc);
-    
-    // Next, skip stack size
-    while (isnumber(*typedesc)) {
-        typedesc++;
-    }
-    
-    // Now, we have the arguments - position typedesc to the appropriate argument
-    while (*typedesc && nargs != arg) {
-        
-        // Skip argument type
-        typedesc = skipFirstType(typedesc);
-        
-        if (nargs == 0) {
-            // Skip GNU runtime's register parameter hint
-            if (*typedesc == '+') {
-                typedesc++;
-            }
-            // Skip negative sign in offset
-            if (*typedesc == '-') {
-                offset_is_negative = YES;
-                typedesc++;
-            } else {
-                offset_is_negative = NO;
-            }
-            
-            while (isnumber(*typedesc)) {
-                self_offset = self_offset * 10 + (*typedesc++ - '0');
-            }
-            if (offset_is_negative) {
-                self_offset = -(self_offset);
-            }
-        } else {
-            // Skip GNU runtime's register parameter hint
-            if (*typedesc == '+') {
-                typedesc++;
-            }
-            // Skip (possibly negative) argument offset
-            if (*typedesc == '-')
-                typedesc += 1;
-            while ((*typedesc >= '0') && (*typedesc <= '9'))
-                typedesc += 1;
-        }
-        
-        nargs += 1;
-    }
-    
-    if (*typedesc) {
-        int arg_offset = 0;
-        
-        *type = typedesc;
-        typedesc = skipFirstType(typedesc);
-        
-        if (arg == 0) {
-            *offset = 0;
-        } else {
-            // Skip GNU register parameter hint
-            if (*typedesc == '+') {
-                typedesc++;
-            }
-            
-            // Pick up (possibly negative) argument offset
-            if (*typedesc == '-') {
-                offset_is_negative = YES;
-                typedesc++;
-            } else {
-                offset_is_negative = NO;
-            }
-            
-            while (isnumber(*typedesc)) {
-                arg_offset = arg_offset * 10 + (*typedesc++ - '0');
-            }
-            if (offset_is_negative) {
-                arg_offset = -(arg_offset);
-            }
-            *offset = arg_offset - self_offset;
-        }
-        
-    } else {
-        *type = 0;
-        *offset = 0;
-    }
-    
-    return nargs;
-}
-
-/// Returns the method's return type string on the heap.
-static char *encoding_copyReturnType(const char *t) {
-    size_t len;
-    const char *end;
-    char *result;
-    
-    if (!t) {
-        return NULL;
-    }
-    
-    end = skipFirstType(t);
-    len = end - t;
-    result = malloc(len + 1);
-    strncpy(result, t, len);
-    result[len] = '\0';
-    return result;
-}
-
-/// Returns a single argument's type string on the heap. Argument 0 is `self`; argument 1 is typically `_cmd`.
-static char *encoding_copyArgumentType(const char *t, unsigned int index) {
-    size_t len;
-    const char *end;
-    char *result;
-    int offset;
-    
-    if (!t) {
-        return NULL;
-    }
-    
-    encoding_getArgumentInfo(t, index, &t, &offset);
-    
-    if (!t) {
-        return NULL;
-    }
-    
-    end = skipFirstType(t);
-    len = end - t;
-    result = malloc(len + 1);
-    strncpy(result, t, len);
-    result[len] = '\0';
-    return result;
-}
-
 
 @implementation CDMethodModel
 
@@ -322,34 +165,39 @@ static char *encoding_copyArgumentType(const char *t, unsigned int index) {
         _isClass = isClass;
         _name = NSStringFromSelector(methd.name);
         
-        char *returnType = encoding_copyReturnType(methd.types);
-        _returnType = [CDTypeParser stringForEncoding:returnType variable:nil];
-        free(returnType);
-        returnType = NULL;
+        const char *typedesc = methd.types;
+        /* this code is heavily modified from, but based on encoding_getArgumentInfo */
+        const char *type = typedesc;
+        typedesc = seekOverType(typedesc);
+        _returnType = [CDTypeParser stringForEncodingStart:type end:typedesc variable:nil error:NULL];
         
-        NSArray<NSString *> *brokenupName = [self.name componentsSeparatedByString:@":"];
-        unsigned int visibleArgs = (__typeof(visibleArgs))brokenupName.count - 1;
+        NSUInteger const expectedArguments = characterCount(sel_getName(methd.name), ':');
+        NSMutableArray<NSString *> *arguments = [NSMutableArray arrayWithCapacity:expectedArguments + 2];
         
-        unsigned int meth_argCount = encoding_getNumberOfArguments(methd.types);
-        // in the event that SEL _cmd is missing:
-        //  method:name:
-        //   0: self
-        //   1: arg1
-        //   2: arg2
-        //  visibleArgs = 2
-        //  meth_argCount = 3
-        unsigned int argOffset = (meth_argCount - visibleArgs);
-        if (argOffset > INT_MAX) {
-            // bad encoding, most likely a bad encoding. just skip for now
-        } else {
-            NSMutableArray<NSString *> *visibleArgTypes = [NSMutableArray arrayWithCapacity:visibleArgs];
-            for (unsigned int argIndex = 0; argIndex < visibleArgs; argIndex++) {
-                char *meth_argType = encoding_copyArgumentType(methd.types, argIndex + argOffset);
-                [visibleArgTypes addObject:[CDTypeParser stringForEncoding:meth_argType variable:nil]];
-                free(meth_argType);
-            }
-            _argumentTypes = [visibleArgTypes copy];
+        // skip stack size
+        while (isnumber(*typedesc)) {
+            typedesc++;
         }
+        
+        while (*typedesc) {
+            type = typedesc;
+            typedesc = seekOverType(type);
+            [arguments addObject:[CDTypeParser stringForEncodingStart:type end:typedesc variable:nil error:NULL]];
+            
+            // Skip GNU runtime's register parameter hint
+            if (*typedesc == '+') {
+                typedesc++;
+            }
+            // Skip negative sign in offset
+            if (*typedesc == '-') {
+                typedesc++;
+            }
+            while (isnumber(*typedesc)) {
+                typedesc++;
+            }
+        }
+        
+        _argumentTypes = [arguments subarrayWithRange:NSMakeRange(arguments.count - expectedArguments, expectedArguments)];
     }
     return self;
 }
