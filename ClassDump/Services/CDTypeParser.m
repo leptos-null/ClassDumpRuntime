@@ -149,7 +149,7 @@
                     type = @(typeBuff);
                     
                     NSArray<NSString *> *protocols = [type componentsSeparatedByCharactersInSet:[self _protocolConformanceCharacters]];
-                    BOOL hasConcreteBase = protocols.firstObject.length;
+                    BOOL hasConcreteBase = (protocols.firstObject.length != 0);
                     if (protocols.count > 1) {
                         NSMutableString *buildConforms = [NSMutableString string];
                         if (hasConcreteBase) {
