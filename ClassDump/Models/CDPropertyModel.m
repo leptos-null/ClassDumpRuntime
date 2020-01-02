@@ -190,4 +190,11 @@
     return ret;
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@: %p> {type: '%@', attributes: %@, "
+            "ivar: '%@', getter: '%@', setter: '%@'}",
+            [self class], self, self.type, self.attributes,
+            self.iVar, self.getter, self.setter];
+}
+
 @end

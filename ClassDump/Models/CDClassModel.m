@@ -235,4 +235,11 @@
     return self.name;
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@: %p> {name: '%@', protocols: %@, "
+            "classProperties: %@, instanceProperties: %@, classMethods: %@, instanceMethods: %@, ivars: %@}",
+            [self class], self, self.name, self.protocols,
+            self.classProperties, self.instanceProperties, self.classMethods, self.instanceMethods, self.ivars];
+}
+
 @end

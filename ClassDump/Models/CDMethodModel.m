@@ -383,4 +383,11 @@ static char *encoding_copyArgumentType(const char *t, unsigned int index) {
     return ret;
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@: %p> {signature: '%@', argumentTypes: %@, "
+            "returnType: '%@', isClass: %@}",
+            [self class], self, self.name, self.argumentTypes,
+            self.returnType, self.isClass ? @"YES" : @"NO"];
+}
+
 @end

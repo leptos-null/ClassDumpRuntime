@@ -286,4 +286,17 @@
     return self.name;
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@: %p> {name: '%@', protocols: %@, "
+            "requiredClassProperties: %@, requiredInstanceProperties: %@, "
+            "requiredClassMethods: %@, requiredInstanceMethods: %@, "
+            "optionalClassProperties: %@, optionalInstanceProperties: %@, "
+            "optionalClassMethods: %@, optionalInstanceMethods: %@}",
+            [self class], self, self.name, self.protocols,
+            self.requiredClassProperties, self.requiredInstanceProperties,
+            self.requiredClassMethods, self.requiredInstanceMethods,
+            self.optionalClassProperties, self.optionalInstanceProperties,
+            self.optionalClassMethods, self.optionalInstanceMethods];
+}
+
 @end
