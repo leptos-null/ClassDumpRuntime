@@ -25,9 +25,11 @@
 }
 
 - (BOOL)isEqual:(id)object {
-    if ([object isKindOfClass:self.class]) {
+    if ([object isKindOfClass:[self class]]) {
         __typeof(self) casted = (__typeof(casted))object;
-        return self.backing == casted.backing; /* too agressive? */
+        Ivar const sVar = self.backing, cVar = casted.backing;
+        return [self.name isEqual:casted.name] &&
+        (strstr(ivar_getTypeEncoding(sVar), ivar_getTypeEncoding(cVar)) == 0);
     }
     return NO;
 }

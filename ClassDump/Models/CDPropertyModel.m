@@ -169,22 +169,25 @@
     _type = type;
 }
 
+static BOOL _NSStringNullableEqual(NSString *a, NSString *b) {
+    return (!a && !b) || [a isEqual:b];
+}
 - (BOOL)isEqual:(id)object {
-    if ([object isKindOfClass:self.class]) {
+    if ([object isKindOfClass:[self class]]) {
         __typeof(self) casted = (__typeof(casted))object;
-        if ([self.name isEqual:casted.name] && [self.attributes isEqual:casted.attributes]) {
-            // todo: check ivar, getter, setter (needs null checks to work correctly)
-            return YES;
-        }
+        return [self.name isEqual:casted.name] && [self.attributes isEqual:casted.attributes] &&
+        _NSStringNullableEqual(self.iVar, casted.iVar) &&
+        _NSStringNullableEqual(self.getter, casted.getter) &&
+        _NSStringNullableEqual(self.setter, casted.setter);
     }
     return NO;
 }
 
 - (NSString *)description {
     NSMutableString *ret = [NSMutableString stringWithString:@"@property "];
-    NSUInteger attributeCount = self.attributes.count;
-    if (attributeCount) {
-        [ret appendFormat:@"(%@) ", [self.attributes componentsJoinedByString:@", "]];
+    NSArray<NSString *> *attributes = self.attributes;
+    if (attributes.count != 0) {
+        [ret appendFormat:@"(%@) ", [attributes componentsJoinedByString:@", "]];
     }
     [ret appendString:self.type];
     return ret;

@@ -203,9 +203,11 @@ static size_t characterCount(const char *str, const char c) {
 }
 
 - (BOOL)isEqual:(id)object {
-    if ([object isKindOfClass:self.class]) {
+    if ([object isKindOfClass:[self class]]) {
         __typeof(self) casted = (__typeof(casted))object;
-        return [self.name isEqual:casted.name] && [self.argumentTypes isEqual:casted.argumentTypes] && [self.returnType isEqual:casted.returnType];
+        return [self.name isEqual:casted.name] &&
+        [self.argumentTypes isEqual:casted.argumentTypes] &&
+        [self.returnType isEqual:casted.returnType];
     }
     return NO;
 }
