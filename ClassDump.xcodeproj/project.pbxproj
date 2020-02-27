@@ -18,6 +18,7 @@
 		FA2A011E23AEB15700B52F1D /* libClassDump.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2A00DC23ADD19D00B52F1D /* libClassDump.a */; };
 		FA829A0323BD250100FA4DC1 /* CDParseAdvancedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */; };
 		FA829A0523BD310600FA4DC1 /* CDParseCppTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */; };
+		FAE71A7523DA0AB20079321A /* CDObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE71A7423DA0AB20079321A /* CDObjCTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		FA2A012423AEB98400B52F1D /* ClassDump.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ClassDump.xctestplan; sourceTree = "<group>"; };
 		FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDParseAdvancedTests.m; sourceTree = "<group>"; };
 		FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CDParseCppTests.mm; sourceTree = "<group>"; };
+		FAE71A7423DA0AB20079321A /* CDObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDObjCTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 				FA2A011B23AEB15700B52F1D /* CDParsePrimitiveTests.m */,
 				FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */,
 				FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */,
+				FAE71A7423DA0AB20079321A /* CDObjCTests.m */,
 			);
 			path = ClassDumpTests;
 			sourceTree = "<group>";
@@ -255,6 +258,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAE71A7523DA0AB20079321A /* CDObjCTests.m in Sources */,
 				FA2A011C23AEB15700B52F1D /* CDParsePrimitiveTests.m in Sources */,
 				FA829A0523BD310600FA4DC1 /* CDParseCppTests.mm in Sources */,
 				FA829A0323BD250100FA4DC1 /* CDParseAdvancedTests.m in Sources */,
