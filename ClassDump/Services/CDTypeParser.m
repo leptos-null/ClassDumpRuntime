@@ -10,15 +10,6 @@
 
 @implementation CDTypeParser
 
-+ (NSCharacterSet *)_protocolConformanceCharacters {
-    static NSCharacterSet *ret;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        ret = [NSCharacterSet characterSetWithCharactersInString:@"<>"];
-    });
-    return ret;
-}
-
 // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
 // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
 // https://gcc.gnu.org/onlinedocs/gcc-4.8.2/gcc/Type-encoding.html
@@ -136,38 +127,52 @@
             case '@': {
                 if (chr[1] == '"') {
                     chr += 2;
-                    size_t objectNameLen = 1;
                     const char *const chrcpy = chr;
-                    while (*chr++ != '"') {
-                        objectNameLen++;
+                    const char *protocolHead = NULL;
+                    while (*chr != '"') {
+                        if (*chr == '<' && !protocolHead) {
+                            protocolHead = chr;
+                        }
+                        chr++;
                     }
                     
-                    char typeBuff[objectNameLen];
-                    strncpy(typeBuff, chrcpy, sizeof(typeBuff));
-                    typeBuff[sizeof(typeBuff) - 1] = 0;
-                    
-                    type = @(typeBuff);
-                    
-                    NSArray<NSString *> *protocols = [type componentsSeparatedByCharactersInSet:[self _protocolConformanceCharacters]];
-                    BOOL hasConcreteBase = (protocols.firstObject.length != 0);
-                    if (protocols.count > 1) {
-                        NSMutableString *buildConforms = [NSMutableString string];
-                        if (hasConcreteBase) {
-                            [buildConforms appendString:protocols.firstObject];
+                    if (!protocolHead) {
+                        type = [[NSString alloc] initWithBytes:chrcpy length:(chr - chrcpy) encoding:NSUTF8StringEncoding];
+                        pointerCounter++;
+                    } else {
+                        ptrdiff_t const baseTypeLength = (protocolHead - chrcpy);
+                        NSString *baseType;
+                        if (baseTypeLength) {
+                            baseType = [[NSString alloc] initWithBytes:chrcpy length:baseTypeLength encoding:NSUTF8StringEncoding];
+                            pointerCounter++;
                         } else {
-                            [buildConforms appendString:@"id"];
+                            baseType = @"id";
                         }
-                        protocols = [protocols subarrayWithRange:NSMakeRange(1, protocols.count - 1)];
-                        protocols = [protocols filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString *str, id bindings) {
-                            return str.length;
-                        }]];
+                        
+                        NSMutableString *buildConforms = [NSMutableString stringWithString:baseType];
                         [buildConforms appendString:@"<"];
-                        [buildConforms appendString:[protocols componentsJoinedByString:@", "]];
+                        
+                        const char *protocolSearch = protocolHead;
+                        while (chr > protocolSearch) {
+                            while (*protocolSearch != '>') {
+                                protocolSearch++;
+                            }
+                            protocolHead++; // skip the leading '<'
+                            NSString *protocolName = [[NSString alloc] initWithBytes:protocolHead length:(protocolSearch - protocolHead) encoding:NSUTF8StringEncoding];
+                            [buildConforms appendString:protocolName];
+                            
+                            protocolSearch++; // move over the trailing '>'
+                            if (protocolSearch == chr) {
+                                break;
+                            }
+                            assert(protocolSearch[0] == '<');
+                            protocolHead = protocolSearch;
+                            
+                            [buildConforms appendString:@", "];
+                        }
+                        
                         [buildConforms appendString:@">"];
                         type = [buildConforms copy];
-                    }
-                    if (hasConcreteBase) {
-                        pointerCounter++;
                     }
                 } else if (chr[1] == '?') {
                     type = @"id /* block */";
