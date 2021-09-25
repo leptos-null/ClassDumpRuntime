@@ -26,9 +26,81 @@
     XCTAssert([parsed isEqualToString:@"_Atomic int var"]);
 }
 
+- (void)testConstAttribute {
+    NSString *parsed = [CDTypeParser stringForEncoding:@encode(const char *) variable:@"var"];
+    XCTAssert([parsed isEqualToString:@"const char *var"]);
+}
+
 - (void)testInlineArray {
     NSString *parsed = [CDTypeParser stringForEncoding:@encode(char[8]) variable:@"var"];
     XCTAssert([parsed isEqualToString:@"char var[8]"]);
+    
+    parsed = [CDTypeParser stringForEncoding:@encode(char[8]) variable:nil];
+    XCTAssert([parsed isEqualToString:@"char[8]"]);
+}
+
+- (void)testMutliDemensionalArray {
+    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int[8][2][4]) variable:@"var"];
+    XCTAssert([parsed isEqualToString:@"int var[8][2][4]"]);
+    
+    parsed = [CDTypeParser stringForEncoding:@encode(int[8][2][4]) variable:nil];
+    XCTAssert([parsed isEqualToString:@"int[8][2][4]"]);
+}
+
+- (void)testPointerArray {
+    // this is an array of 4 pointers to long long
+    NSString *parsed = [CDTypeParser stringForEncoding:@encode(long long *[4]) variable:@"var"];
+    XCTAssert([parsed isEqualToString:@"long long *var[4]"]);
+    
+    parsed = [CDTypeParser stringForEncoding:@encode(long long *[4]) variable:nil];
+    XCTAssert([parsed isEqualToString:@"long long *[4]"]);
+}
+
+- (void)testArrayPointer {
+    // this is a pointer to array of 2 int elements
+    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int (*)[2]) variable:@"var"];
+    XCTAssert([parsed isEqualToString:@"int (*var)[2]"]);
+    
+    parsed = [CDTypeParser stringForEncoding:@encode(int (*)[2]) variable:nil];
+    XCTAssert([parsed isEqualToString:@"int (*)[2]"]);
+}
+
+- (void)testPointerArrayPointers {
+    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int *(*)[2]) variable:@"var"];
+    XCTAssert([parsed isEqualToString:@"int *(*var)[2]"]);
+    
+    parsed = [CDTypeParser stringForEncoding:@encode(int *(*)[2]) variable:nil];
+    XCTAssert([parsed isEqualToString:@"int *(*)[2]"]);
+}
+
+- (void)testPointerArrayPointersArray {
+    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int *(*[4])[2]) variable:@"var"];
+    XCTAssert([parsed isEqualToString:@"int *(*var[4])[2]"]);
+    
+    parsed = [CDTypeParser stringForEncoding:@encode(int *(*[4])[2]) variable:nil];
+    XCTAssert([parsed isEqualToString:@"int *(*[4])[2]"]);
+}
+
+- (void)testPointerArrayPointersArrayPointer {
+    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int *(*(*)[4])[2]) variable:@"var"];
+    XCTAssert([parsed isEqualToString:@"int *(*(*var)[4])[2]"]);
+    
+    parsed = [CDTypeParser stringForEncoding:@encode(int *(*(*)[4])[2]) variable:nil];
+    XCTAssert([parsed isEqualToString:@"int *(*(*)[4])[2]"]);
+}
+
+- (void)testMutliDemensionalArrayStruct {
+    struct TestStruct {
+        int a[1];
+        float b[2][3];
+        long long *c[4];
+    };
+    NSString *parsed = [CDTypeParser stringForEncoding:@encode(struct TestStruct [5]) variable:@"var"];
+    XCTAssert([parsed isEqualToString:@"struct TestStruct { "
+               "int x0[1]; "
+               "float x1[2][3]; "
+               "long long *x2[4]; "
+               "} var[5]"]);
 }
 
 - (void)testStruct {
