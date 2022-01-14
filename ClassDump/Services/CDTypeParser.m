@@ -25,9 +25,10 @@
     NSMutableArray<NSString *> *prefixMods = [NSMutableArray array]; // only applicable to Obj-C method arguments
     NSString *subjectPostfix = nil; // this can _only_ be "[#]" *OR* " : #"
     
-    // known bug: the `const` attribute applies other types other than Obj-C method arguments.
+    // known bug: the `const` attribute applies to types other than Obj-C method arguments.
     //   it can also occur anywhere in the encoding, not just in the front. the position in the
     //   encoding relays where the const was in the type, i.e. `int *const` != `const int *`
+    // this doesn't seem to have much of an impact, because clang seems to only include a leading `const`
     
     // see getObjCEncodingForTypeImpl in llvm/clang/lib/AST/ASTContext.cpp
     for (const char *chr = start; chr < end; chr++) {
@@ -229,7 +230,6 @@
                 }
             } break;
             case '[': {
-                size_t typeSize = 0;
                 const char *const chrcpy = chr;
                 unsigned openTokens = 1;
                 while (openTokens) {
@@ -241,7 +241,6 @@
                             openTokens--;
                             break;
                     }
-                    typeSize++;
                 }
                 
                 size_t numSize = 1;
