@@ -206,7 +206,8 @@
                 continue;
             }
             if (comments) {
-                dladdr(methd.backing.types, &info);
+                IMP const methdImp = method_getImplementation(class_getClassMethod(self.backing, methd.backing.name));
+                dladdr(methdImp, &info);
                 [ret appendFormat:@"\n/* %s in %s */\n", info.dli_saddr ? info.dli_sname : "(runtime)", info.dli_fname];
             }
             [ret appendFormat:@"%@;\n", methd];
@@ -220,7 +221,8 @@
                 continue;
             }
             if (comments) {
-                dladdr(methd.backing.types, &info);
+                IMP const methdImp = method_getImplementation(class_getInstanceMethod(self.backing, methd.backing.name));
+                dladdr(methdImp, &info);
                 [ret appendFormat:@"\n/* %s in %s */\n", info.dli_saddr ? info.dli_sname : "(runtime)", info.dli_fname];
             }
             [ret appendFormat:@"%@;\n", methd];
