@@ -10,4 +10,9 @@
 
 @implementation CDPointerType
 
++ (nonnull instancetype)pointerToPointee:(nonnull CDParseType *)pointee {
+    CDPointerType *ret = [self new];
+    ret.pointee = pointee;
+    return ret;
+}
 @end

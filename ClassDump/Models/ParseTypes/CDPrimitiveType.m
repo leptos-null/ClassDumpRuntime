@@ -10,4 +10,10 @@
 
 @implementation CDPrimitiveType
 
++ (nonnull instancetype)primitiveWithRawType:(CDPrimitiveRawType)rawType {
+    CDPrimitiveType *ret = [self new];
+    ret.rawType = rawType;
+    return ret;
+}
+
 @end

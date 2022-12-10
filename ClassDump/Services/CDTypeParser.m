@@ -8,13 +8,385 @@
 
 #import "CDTypeParser.h"
 
+#import "CDPrimitiveType.h"
+#import "CDObjectType.h"
+#import "CDRecordType.h"
+#import "CDPointerType.h"
+#import "CDArrayType.h"
+#import "CDBitFieldType.h"
+
 @implementation CDTypeParser
 
 // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
 // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
 // https://gcc.gnu.org/onlinedocs/gcc-4.8.2/gcc/Type-encoding.html
-// https://github.com/gcc-mirror/gcc/blob/master/gcc/objc/objc-encoding.c
-// https://github.com/llvm/llvm-project/blob/master/clang/lib/AST/ASTContext.cpp
+// https://github.com/gcc-mirror/gcc/blob/master/gcc/objc/objc-encoding.cc
+// https://github.com/llvm/llvm-project/blob/main/clang/lib/AST/ASTContext.cpp
+
++ (CDParseType *)typeForEncoding:(const char *)encoding {
+    return [self typeForEncodingStart:encoding end:encoding + strlen(encoding) error:NULL];
+}
+
++ (CDParseType *)typeForEncodingStart:(const char *const)start end:(const char *const)end error:(inout BOOL *)error {
+    __kindof CDParseType *type;
+    NSMutableArray<NSNumber *> *modifiers = [NSMutableArray array];
+    
+    // see getObjCEncodingForTypeImpl in llvm/clang/lib/AST/ASTContext.cpp
+    for (const char *chr = start; chr < end; chr++) {
+        switch (*chr) {
+            case '^': {
+                BOOL pointeeError = NO;
+                CDParseType *pointee = [self typeForEncodingStart:chr + 1 end:end error:&pointeeError];
+                if (pointeeError) {
+                    if (error) {
+                        *error = pointeeError;
+                    }
+                    return nil;
+                }
+                if (pointee == NULL) {
+                    // TODO
+                    pointee = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeVoid];
+                }
+                type = [CDPointerType pointerToPointee:pointee];
+            } break;
+            case '*': {
+                CDParseType *pointee = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeChar];
+                
+                type = [CDPointerType pointerToPointee:pointee];
+            } break;
+            case 'c':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeChar];
+                break;
+            case 'i':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeInt];
+                break;
+            case 's':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeShort];
+                break;
+            case 'l':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeLong];
+                break;
+            case 'q':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeLongLong];
+                break;
+            case 't':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeInt128];
+                break;
+            case 'C':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeUnsignedChar];
+                break;
+            case 'I':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeUnsignedInt];
+                break;
+            case 'S':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeUnsignedShort];
+                break;
+            case 'L':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeUnsignedLong];
+                break;
+            case 'Q':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeUnsignedLongLong];
+                break;
+            case 'T':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeUnsignedInt128];
+                break;
+            case 'f':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeFloat];
+                break;
+            case 'd':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeDouble];
+                break;
+            case 'D':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeLongDouble];
+                break;
+            case 'B':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeBool];
+                break;
+            case 'v':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeVoid];
+                break;
+            case '#':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeClass];
+                break;
+            case ':':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeSel];
+                break;
+            case 'r':
+                [modifiers addObject:@(CDTypeModifierConst)];
+                break;
+            case 'n':
+                [modifiers addObject:@(CDTypeModifierIn)];
+                break;
+            case 'N':
+                [modifiers addObject:@(CDTypeModifierInOut)];
+                break;
+            case 'o':
+                [modifiers addObject:@(CDTypeModifierOut)];
+                break;
+            case 'O':
+                [modifiers addObject:@(CDTypeModifierBycopy)];
+                break;
+            case 'R':
+                [modifiers addObject:@(CDTypeModifierByref)];
+                break;
+            case 'V':
+                [modifiers addObject:@(CDTypeModifierOneway)];
+                break;
+            case 'A':
+                [modifiers addObject:@(CDTypeModifierAtomic)];
+                break;
+            case 'j':
+                [modifiers addObject:@(CDTypeModifierComplex)];
+                break;
+            case '@': {
+                CDObjectType *objType = [CDObjectType new];
+                
+                if (chr[1] == '"') {
+                    chr += 2;
+                    const char *const chrcpy = chr;
+                    const char *protocolHead = NULL;
+                    while (*chr != '"') {
+                        if (*chr == '<' && !protocolHead) {
+                            protocolHead = chr;
+                        }
+                        chr++;
+                    }
+                    
+                    if (!protocolHead) {
+                        objType.className = [[NSString alloc] initWithBytes:chrcpy length:(chr - chrcpy) encoding:NSUTF8StringEncoding];
+                    } else {
+                        ptrdiff_t const baseTypeLength = (protocolHead - chrcpy);
+                        
+                        if (baseTypeLength) {
+                            objType.className = [[NSString alloc] initWithBytes:chrcpy length:baseTypeLength encoding:NSUTF8StringEncoding];
+                        }
+                        
+                        NSMutableArray *protocolNames = [NSMutableArray array];
+                        const char *protocolSearch = protocolHead;
+                        while (chr > protocolSearch) {
+                            while (*protocolSearch != '>') {
+                                protocolSearch++;
+                            }
+                            protocolHead++; // skip the leading '<'
+                            NSString *protocolName = [[NSString alloc] initWithBytes:protocolHead length:(protocolSearch - protocolHead) encoding:NSUTF8StringEncoding];
+                            [protocolNames addObject:protocolName];
+                            
+                            protocolSearch++; // move over the trailing '>'
+                            if (protocolSearch == chr) {
+                                break;
+                            }
+                            assert(protocolSearch[0] == '<');
+                            protocolHead = protocolSearch;
+                        }
+                        
+                        objType.protocolNames = protocolNames;
+                    }
+                } else if (chr[1] == '?') {
+                    objType.isBlock = YES;
+                    chr++;
+                }
+                type = objType;
+            } break;
+            case 'b': {
+                chr++; // fastforward over 'b'
+                
+                CDBitFieldType *bitField = [CDBitFieldType new];
+                bitField.width = strtoul(chr, (char **)&chr, 10);
+                
+                type = bitField;
+            } break;
+            case '[': {
+                const char *const chrcpy = chr;
+                unsigned openTokens = 1;
+                while (openTokens) {
+                    switch (*++chr) {
+                        case '[':
+                            openTokens++;
+                            break;
+                        case ']':
+                            openTokens--;
+                            break;
+                    }
+                }
+                
+                CDArrayType *arrayType = [CDArrayType new];
+                
+                char *tokenStart = NULL;
+                arrayType.size = strtoul(chrcpy + 1, &tokenStart, 10);
+                
+                BOOL typeError = NO;
+                arrayType.type = [self typeForEncodingStart:tokenStart end:chr error:&typeError];
+                
+                if (typeError) {
+                    if (error) {
+                        *error = typeError;
+                    }
+                    return nil;
+                }
+                type = arrayType;
+            } break;
+            case '{': {
+                const char *const chrcpy = chr;
+                unsigned openTokens = 1;
+                while (openTokens) {
+                    switch (*++chr) {
+                        case '{':
+                            openTokens++;
+                            break;
+                        case '}':
+                            openTokens--;
+                            break;
+                    }
+                }
+                type = [self recordTypeForEncodingStart:chrcpy end:chr + 1];
+            } break;
+            case '(': {
+                const char *const chrcpy = chr;
+                unsigned openTokens = 1;
+                while (openTokens) {
+                    switch (*++chr) {
+                        case '(':
+                            openTokens++;
+                            break;
+                        case ')':
+                            openTokens--;
+                            break;
+                    }
+                }
+                type = [self recordTypeForEncodingStart:chrcpy end:chr + 1];
+            } break;
+            case '?':
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeFunction];
+                break;
+            default: {
+                if (error) {
+                    *error = YES;
+                }
+                return nil;
+            } break;
+        }
+    }
+    
+    type.modifiers = modifiers;
+    return type;
+}
+
++ (CDRecordType *)recordTypeForEncodingStart:(const char *const)start end:(const char *const)end {
+    const char *const endToken = end - 1;
+    const char firstChar = *start;
+    const char lastChar = *endToken;
+    
+    BOOL const isStruct = (firstChar == '{' && lastChar == '}');
+    BOOL const isUnion = (firstChar == '(' && lastChar == ')');
+    NSAssert(isStruct || isUnion, @"Expected either a struct or union");
+    NSAssert(isStruct != isUnion, @"Record cannot be both a struct and union");
+    
+    CDRecordType *record = [CDRecordType new];
+    record.isUnion = isUnion;
+    
+    size_t nameOffset = 1;
+    while (start[nameOffset] != '=' && start[nameOffset] != '}') {
+        nameOffset++;
+    }
+    nameOffset++;
+    
+    // anonymous indicator
+    if (nameOffset != 3 && start[1] != '?') {
+        char nameBuff[nameOffset];
+        nameBuff[0] = ' '; // start with a space
+        strncpy(nameBuff + 1, start + 1, sizeof(nameBuff) - 1);
+        nameBuff[sizeof(nameBuff) - 1] = 0;
+        record.name = @(nameBuff);
+    }
+    // no content, usually caused by multiple levels of indirection
+    if (nameOffset == (end - start)) {
+        return record;
+    }
+    
+    NSMutableArray<CDVariableModel *> *fields = [NSMutableArray array];
+    
+    for (const char *chr = start + nameOffset; chr < endToken;) {
+        CDVariableModel *variableModel = [CDVariableModel new];
+        
+        if (*chr == '"') {
+            const char *const chrcpy = ++chr;
+            while (*chr != '"') {
+                chr++;
+            }
+            variableModel.name = [[NSString alloc] initWithBytes:chrcpy length:(chr - chrcpy) encoding:NSUTF8StringEncoding];
+            chr++;
+        }
+        
+        unsigned pointerCount = 0;
+        const char *const beforeIndirection = chr;
+        while (*chr == '^') {
+            pointerCount++;
+            chr++;
+        }
+        
+        if (*chr == '@' && chr[1] == '"') {
+            chr += 2; /* fastforward over '@' and the first '"' */
+            while (*chr != '"') {
+                chr++;
+            }
+        } else if (*chr == '@' && chr[1] == '?') {
+            chr++;
+        } else if (*chr == '[') {
+            unsigned openTokens = 1;
+            while (openTokens) {
+                switch (*++chr) {
+                    case '[':
+                        openTokens++;
+                        break;
+                    case ']':
+                        openTokens--;
+                        break;
+                }
+            }
+        } else if (*chr == '{') {
+            unsigned openTokens = 1;
+            while (openTokens) {
+                switch (*++chr) {
+                    case '{':
+                        openTokens++;
+                        break;
+                    case '}':
+                        openTokens--;
+                        break;
+                }
+            }
+        } else if (*chr == '(') {
+            unsigned openTokens = 1;
+            while (openTokens) {
+                switch (*++chr) {
+                    case '(':
+                        openTokens++;
+                        break;
+                    case ')':
+                        openTokens--;
+                        break;
+                }
+            }
+        } else if (*chr == 'b') {
+            chr++;
+            while (isnumber(*chr)) {
+                chr++;
+            }
+            /* unlike arrays, structs, unions, and quotes, this doesn't have a close, so we have to rewind */
+            chr--;
+        }
+        chr++;
+        
+        BOOL subError = NO;
+        variableModel.type = [self typeForEncodingStart:beforeIndirection end:chr error:&subError];
+        if (subError) {
+            return nil;
+        }
+    }
+    record.fields = fields;
+    return record;
+}
+
 + (NSString *)stringForEncoding:(const char *)encoding variable:(NSString *)varName {
     return [self stringForEncodingStart:encoding end:encoding + strlen(encoding) variable:varName error:NULL];
 }

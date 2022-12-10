@@ -8,7 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+#import "CDParseType.h"
+
 @interface CDTypeParser : NSObject
+
++ (CDParseType *)typeForEncoding:(const char *)encoding;
+
++ (CDParseType *)typeForEncodingStart:(const char *const)start end:(const char *const)end error:(inout BOOL *)error;
 
 /// @brief A variable declaration that is able to be compiled
 /// @param encoding A null-terminated C-string as returned by @c encode

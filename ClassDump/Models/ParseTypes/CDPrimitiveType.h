@@ -40,4 +40,6 @@ typedef NS_ENUM(NSUInteger, CDPrimitiveRawType) {
 
 @property (nonatomic) CDPrimitiveRawType rawType;
 
++ (nonnull instancetype)primitiveWithRawType:(CDPrimitiveRawType)rawType;
+
 @end

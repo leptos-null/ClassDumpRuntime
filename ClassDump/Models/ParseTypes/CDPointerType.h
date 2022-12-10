@@ -11,6 +11,8 @@
 /// Type representing a pointer
 @interface CDPointerType : CDParseType
 /// The type that this pointer points to
-@property (strong, nonatomic) CDParseType *pointee;
+@property (nullable, strong, nonatomic) CDParseType *pointee;
+
++ (nonnull instancetype)pointerToPointee:(nonnull CDParseType *)pointee;
 
 @end
