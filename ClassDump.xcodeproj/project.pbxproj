@@ -19,6 +19,14 @@
 		FA829A0323BD250100FA4DC1 /* CDParseAdvancedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */; };
 		FA829A0523BD310600FA4DC1 /* CDParseCppTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */; };
 		FAE71A7523DA0AB20079321A /* CDObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE71A7423DA0AB20079321A /* CDObjCTests.m */; };
+		FAF031E22942E4FF00B6C424 /* CDParseType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031E12942E4FF00B6C424 /* CDParseType.m */; };
+		FAF031E52942F6C400B6C424 /* CDPrimitiveType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031E42942F6C400B6C424 /* CDPrimitiveType.m */; };
+		FAF031E82942F8C300B6C424 /* CDRecordType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031E72942F8C300B6C424 /* CDRecordType.m */; };
+		FAF031EE2942F8D300B6C424 /* CDPointerType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031ED2942F8D300B6C424 /* CDPointerType.m */; };
+		FAF031F12942F90D00B6C424 /* CDBitFieldType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031F02942F90D00B6C424 /* CDBitFieldType.m */; };
+		FAF031F42942FC3B00B6C424 /* CDVariableModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031F32942FC3B00B6C424 /* CDVariableModel.m */; };
+		FAF031F72942FF2A00B6C424 /* CDArrayType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031F62942FF2A00B6C424 /* CDArrayType.m */; };
+		FAF031FA2943154B00B6C424 /* CDObjectType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031F92943154B00B6C424 /* CDObjectType.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +74,22 @@
 		FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDParseAdvancedTests.m; sourceTree = "<group>"; };
 		FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CDParseCppTests.mm; sourceTree = "<group>"; };
 		FAE71A7423DA0AB20079321A /* CDObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDObjCTests.m; sourceTree = "<group>"; };
+		FAF031E02942E4FF00B6C424 /* CDParseType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDParseType.h; sourceTree = "<group>"; };
+		FAF031E12942E4FF00B6C424 /* CDParseType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDParseType.m; sourceTree = "<group>"; };
+		FAF031E32942F6C400B6C424 /* CDPrimitiveType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDPrimitiveType.h; sourceTree = "<group>"; };
+		FAF031E42942F6C400B6C424 /* CDPrimitiveType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDPrimitiveType.m; sourceTree = "<group>"; };
+		FAF031E62942F8C300B6C424 /* CDRecordType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDRecordType.h; sourceTree = "<group>"; };
+		FAF031E72942F8C300B6C424 /* CDRecordType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDRecordType.m; sourceTree = "<group>"; };
+		FAF031EC2942F8D300B6C424 /* CDPointerType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDPointerType.h; sourceTree = "<group>"; };
+		FAF031ED2942F8D300B6C424 /* CDPointerType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDPointerType.m; sourceTree = "<group>"; };
+		FAF031EF2942F90D00B6C424 /* CDBitFieldType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDBitFieldType.h; sourceTree = "<group>"; };
+		FAF031F02942F90D00B6C424 /* CDBitFieldType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDBitFieldType.m; sourceTree = "<group>"; };
+		FAF031F22942FC3B00B6C424 /* CDVariableModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDVariableModel.h; sourceTree = "<group>"; };
+		FAF031F32942FC3B00B6C424 /* CDVariableModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDVariableModel.m; sourceTree = "<group>"; };
+		FAF031F52942FF2A00B6C424 /* CDArrayType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDArrayType.h; sourceTree = "<group>"; };
+		FAF031F62942FF2A00B6C424 /* CDArrayType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDArrayType.m; sourceTree = "<group>"; };
+		FAF031F82943154B00B6C424 /* CDObjectType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDObjectType.h; sourceTree = "<group>"; };
+		FAF031F92943154B00B6C424 /* CDObjectType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDObjectType.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +154,7 @@
 		FA2A00F223ADD2EA00B52F1D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				FAF031DF2942E4D000B6C424 /* ParseTypes */,
 				FA2A00F723ADD2EA00B52F1D /* CDClassModel.h */,
 				FA2A00FC23ADD2EA00B52F1D /* CDClassModel.m */,
 				FA2A00FB23ADD2EA00B52F1D /* CDProtocolModel.h */,
@@ -140,6 +165,8 @@
 				FA2A00FA23ADD2EA00B52F1D /* CDMethodModel.m */,
 				FA2A00F823ADD2EA00B52F1D /* CDIvarModel.h */,
 				FA2A00F623ADD2EA00B52F1D /* CDIvarModel.m */,
+				FAF031F22942FC3B00B6C424 /* CDVariableModel.h */,
+				FAF031F32942FC3B00B6C424 /* CDVariableModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -153,6 +180,27 @@
 				FAE71A7423DA0AB20079321A /* CDObjCTests.m */,
 			);
 			path = ClassDumpTests;
+			sourceTree = "<group>";
+		};
+		FAF031DF2942E4D000B6C424 /* ParseTypes */ = {
+			isa = PBXGroup;
+			children = (
+				FAF031E02942E4FF00B6C424 /* CDParseType.h */,
+				FAF031E12942E4FF00B6C424 /* CDParseType.m */,
+				FAF031E32942F6C400B6C424 /* CDPrimitiveType.h */,
+				FAF031E42942F6C400B6C424 /* CDPrimitiveType.m */,
+				FAF031F82943154B00B6C424 /* CDObjectType.h */,
+				FAF031F92943154B00B6C424 /* CDObjectType.m */,
+				FAF031E62942F8C300B6C424 /* CDRecordType.h */,
+				FAF031E72942F8C300B6C424 /* CDRecordType.m */,
+				FAF031EC2942F8D300B6C424 /* CDPointerType.h */,
+				FAF031ED2942F8D300B6C424 /* CDPointerType.m */,
+				FAF031F52942FF2A00B6C424 /* CDArrayType.h */,
+				FAF031F62942FF2A00B6C424 /* CDArrayType.m */,
+				FAF031EF2942F90D00B6C424 /* CDBitFieldType.h */,
+				FAF031F02942F90D00B6C424 /* CDBitFieldType.m */,
+			);
+			path = ParseTypes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,12 +292,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAF031EE2942F8D300B6C424 /* CDPointerType.m in Sources */,
 				FA2A00FE23ADD2EA00B52F1D /* CDUtilities.m in Sources */,
+				FAF031E52942F6C400B6C424 /* CDPrimitiveType.m in Sources */,
 				FA2A010323ADD2EA00B52F1D /* CDMethodModel.m in Sources */,
 				FA2A010123ADD2EA00B52F1D /* CDPropertyModel.m in Sources */,
 				FA2A010023ADD2EA00B52F1D /* CDProtocolModel.m in Sources */,
+				FAF031E82942F8C300B6C424 /* CDRecordType.m in Sources */,
+				FAF031E22942E4FF00B6C424 /* CDParseType.m in Sources */,
+				FAF031FA2943154B00B6C424 /* CDObjectType.m in Sources */,
 				FA2A00FF23ADD2EA00B52F1D /* CDTypeParser.m in Sources */,
+				FAF031F72942FF2A00B6C424 /* CDArrayType.m in Sources */,
+				FAF031F12942F90D00B6C424 /* CDBitFieldType.m in Sources */,
 				FA2A010223ADD2EA00B52F1D /* CDIvarModel.m in Sources */,
+				FAF031F42942FC3B00B6C424 /* CDVariableModel.m in Sources */,
 				FA2A010423ADD2EA00B52F1D /* CDClassModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
