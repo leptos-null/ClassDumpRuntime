@@ -8,6 +8,46 @@
 
 #import "CDParseType.h"
 
+NSString *NSStringFromCDTypeModifier(CDTypeModifier modifier) {
+    switch (modifier) {
+        case CDTypeModifierConst:
+            return @"const";
+        case CDTypeModifierComplex:
+            return @"_Complex";
+        case CDTypeModifierAtomic:
+            return @"_Atomic";
+        case CDTypeModifierIn:
+            return @"in";
+        case CDTypeModifierInOut:
+            return @"inout";
+        case CDTypeModifierOut:
+            return @"out";
+        case CDTypeModifierBycopy:
+            return @"bycopy";
+        case CDTypeModifierByref:
+            return @"byref";
+        case CDTypeModifierOneway:
+            return @"oneway";
+        default:
+            NSCAssert(NO, @"Unknown CDTypeModifier value");
+            return nil;
+    }
+}
+
 @implementation CDParseType
+
+- (NSString *)stringForVariableName:(NSString *)varName {
+    NSAssert(NO, @"Subclasses must implement stringForVariableName");
+    return @"";
+}
+
+- (NSString *)modifiersString {
+    NSArray<NSNumber *> *const modifiers = self.modifiers;
+    NSMutableArray<NSString *> *strings = [NSMutableArray arrayWithCapacity:modifiers.count];
+    [modifiers enumerateObjectsUsingBlock:^(NSNumber *value, NSUInteger idx, BOOL *stop) {
+        strings[idx] = NSStringFromCDTypeModifier(value.unsignedIntegerValue);
+    }];
+    return [strings componentsJoinedByString:@" "];
+}
 
 @end

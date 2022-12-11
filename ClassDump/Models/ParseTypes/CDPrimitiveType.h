@@ -36,6 +36,8 @@ typedef NS_ENUM(NSUInteger, CDPrimitiveRawType) {
     CDPrimitiveRawTypeFunction,
 };
 
+OBJC_EXTERN NSString *_Nullable NSStringFromCDPrimitiveRawType(CDPrimitiveRawType);
+
 @interface CDPrimitiveType : CDParseType
 
 @property (nonatomic) CDPrimitiveRawType rawType;

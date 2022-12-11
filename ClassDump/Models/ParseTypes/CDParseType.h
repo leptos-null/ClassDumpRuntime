@@ -24,6 +24,8 @@ typedef NS_ENUM(NSUInteger, CDTypeModifier) {
     CDTypeModifierCount
 };
 
+OBJC_EXTERN NSString *_Nullable NSStringFromCDTypeModifier(CDTypeModifier);
+
 /// Base class to represent a type that a variable may be
 @interface CDParseType : NSObject
 
@@ -33,5 +35,7 @@ typedef NS_ENUM(NSUInteger, CDTypeModifier) {
 ///
 /// @param varName The name of the variable this type is for
 - (nonnull NSString *)stringForVariableName:(nullable NSString *)varName;
+
+- (nonnull NSString *)modifiersString;
 
 @end

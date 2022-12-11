@@ -9,9 +9,6 @@
 #import "CDMethodModel.h"
 #import "../Services/CDTypeParser.h"
 
-// these functions were copied from objc4/runtime/objc-typeencoding.mm
-//   and modified slightly to fix a bug in SkipFirstType
-
 /*
  * @APPLE_LICENSE_HEADER_START@
  *
@@ -32,115 +29,6 @@
  *
  * @APPLE_LICENSE_HEADER_END@
  */
-
-/// Find the end of a type encoding
-static const char *seekOverType(const char *type) {
-    while (*type) {
-        switch (*type) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                /* don't modify, this isn't actually a type */
-                return type;
-                
-            /* prefix modifiers */
-            case '^':
-            case 'r':
-            case 'n':
-            case 'N':
-            case 'o':
-            case 'O':
-            case 'R':
-            case 'V':
-            case 'A':
-            case 'j':
-                type++;
-                break;
-                
-            case '@': {
-                type++;
-                if (*type == '"') {
-                    type++;
-                    while (*type != '"') {
-                        type++;
-                    }
-                    type++;
-                } else if (*type == '?') {
-                    type++;
-                }
-                return type;
-            } break;
-                
-            case 'b': { // not really possible to have a bit field as a return type, but just in case
-                type++;
-                while (isnumber(*type)) {
-                    type++;
-                }
-                return type;
-            } break;
-                
-            case '[': {
-                unsigned openTokens = 1;
-                while (openTokens) {
-                    switch (*++type) {
-                        case '[':
-                            openTokens++;
-                            break;
-                        case ']':
-                            openTokens--;
-                            break;
-                    }
-                }
-                type++;
-                return type;
-            } break;
-                
-            case '{': {
-                unsigned openTokens = 1;
-                while (openTokens) {
-                    switch (*++type) {
-                        case '{':
-                            openTokens++;
-                            break;
-                        case '}':
-                            openTokens--;
-                            break;
-                    }
-                }
-                type++;
-                return type;
-            } break;
-                
-            case '(': {
-                unsigned openTokens = 1;
-                while (openTokens) {
-                    switch (*++type) {
-                        case '(':
-                            openTokens++;
-                            break;
-                        case ')':
-                            openTokens--;
-                            break;
-                    }
-                }
-                type++;
-                return type;
-            } break;
-                
-            default:
-                type++;
-                return type;
-        }
-    }
-    return type;
-}
 
 /// Returns the number of times a character occurs in a null-terminated stringb
 static size_t characterCount(const char *str, const char c) {
@@ -166,9 +54,10 @@ static size_t characterCount(const char *str, const char c) {
         _name = NSStringFromSelector(methd.name);
         
         const char *typedesc = methd.types;
-        /* this code is heavily modified from, but based on encoding_getArgumentInfo */
+        // this code is heavily modified from, but based on encoding_getArgumentInfo
+        // https://github.com/apple-oss-distributions/objc4/blob/689525d556/runtime/objc-typeencoding.mm#L168-L272
         const char *type = typedesc;
-        typedesc = seekOverType(typedesc);
+        typedesc = [CDTypeParser endOfTypeEncoding:type];
         _returnType = [CDTypeParser stringForEncodingStart:type end:typedesc variable:nil error:NULL];
         
         NSUInteger const expectedArguments = characterCount(sel_getName(methd.name), ':');
@@ -181,7 +70,7 @@ static size_t characterCount(const char *str, const char c) {
         
         while (*typedesc) {
             type = typedesc;
-            typedesc = seekOverType(type);
+            typedesc = [CDTypeParser endOfTypeEncoding:type];
             [arguments addObject:[CDTypeParser stringForEncodingStart:type end:typedesc variable:nil error:NULL]];
             
             // Skip GNU runtime's register parameter hint
@@ -223,7 +112,7 @@ static size_t characterCount(const char *str, const char c) {
     if (self.argumentTypes.count) {
         NSArray<NSString *> *brokenupName = [self.name componentsSeparatedByString:@":"];
         [self.argumentTypes enumerateObjectsUsingBlock:^(NSString *argumentType, NSUInteger idx, BOOL *stop) {
-            [ret appendFormat:@"%@:(%@)a%@ ", brokenupName[idx], argumentType, @(idx).stringValue];
+            [ret appendFormat:@"%@:(%@)a%lu ", brokenupName[idx], argumentType, (unsigned long)idx];
         }];
         // remove the last space
         [ret deleteCharactersInRange:NSMakeRange(ret.length - 1, 1)];

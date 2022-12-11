@@ -15,4 +15,23 @@
     ret.pointee = pointee;
     return ret;
 }
+
+- (NSString *)stringForVariableName:(NSString *)varName {
+    NSMutableString *build = [NSMutableString string];
+    NSString *modifiersString = [self modifiersString];
+    if (modifiersString.length > 0) {
+        [build appendString:modifiersString];
+        [build appendString:@" "];
+    }
+    [build appendString:[self.pointee stringForVariableName:nil]];
+    if ([build characterAtIndex:(build.length - 1)] != '*') {
+        [build appendString:@" "];
+    }
+    [build appendString:@"*"];
+    if (varName != nil) {
+        [build appendString:varName];
+    }
+    return [build copy];
+}
+
 @end

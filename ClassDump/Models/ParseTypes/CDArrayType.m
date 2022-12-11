@@ -10,4 +10,19 @@
 
 @implementation CDArrayType
 
+- (NSString *)stringForVariableName:(NSString *)varName {
+    NSMutableString *build = [NSMutableString string];
+    NSString *modifiersString = [self modifiersString];
+    if (modifiersString.length > 0) {
+        [build appendString:modifiersString];
+        [build appendString:@" "];
+    }
+    
+    [build appendString:[self.type stringForVariableName:varName]];
+    
+    [build appendFormat:@"[%lu]", (unsigned long)self.size];
+    
+    return [build copy];
+}
+
 @end
