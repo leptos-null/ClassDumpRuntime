@@ -45,4 +45,9 @@
     return [build copy];
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@: %p> {modifiers: '%@', className: '%@', protocolNames: %@, isBlock: %@}",
+            [self class], self, [self modifiersString], self.className, self.protocolNames, self.isBlock ? @"YES" : @"NO"];
+}
+
 @end

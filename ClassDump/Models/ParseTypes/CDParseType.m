@@ -50,4 +50,13 @@ NSString *NSStringFromCDTypeModifier(CDTypeModifier modifier) {
     return [strings componentsJoinedByString:@" "];
 }
 
+- (NSString *)description {
+    return [self stringForVariableName:nil];
+}
+
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@: %p> {modifiers: '%@'}",
+            [self class], self, [self modifiersString]];
+}
+
 @end

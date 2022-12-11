@@ -15,6 +15,9 @@
 ///
 /// If the type is anonymous, this value will be @c nil
 @property (nullable, strong, nonatomic) NSString *name;
+/// @c YES if the receiver represents a @c union
+/// otherwise the receiver represents a @c struct
+@property (nonatomic) BOOL isUnion;
 /// The fields of the record
 ///
 /// A @c struct stores a value in each field.
@@ -24,8 +27,5 @@
 /// If the value is non-nil but empty (i.e. an empty array),
 /// the record is defined to have no fields.
 @property (nullable, strong, nonatomic) NSArray<CDVariableModel *> *fields;
-/// @c YES if the receiver represents a @c union
-/// otherwise the receiver represents a @c struct
-@property (nonatomic) BOOL isUnion;
 
 @end

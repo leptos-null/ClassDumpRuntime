@@ -76,4 +76,9 @@ NSString *NSStringFromCDPrimitiveRawType(CDPrimitiveRawType rawType) {
     return [build copy];
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@: %p> {modifiers: '%@', rawType: '%@'}",
+            [self class], self, [self modifiersString], NSStringFromCDPrimitiveRawType(self.rawType)];
+}
+
 @end

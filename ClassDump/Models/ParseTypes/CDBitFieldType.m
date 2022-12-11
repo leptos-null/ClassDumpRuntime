@@ -69,4 +69,9 @@
     return [build copy];
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@: %p> {modifiers: '%@', width: %lu}",
+            [self class], self, [self modifiersString], (unsigned long)self.width];
+}
+
 @end

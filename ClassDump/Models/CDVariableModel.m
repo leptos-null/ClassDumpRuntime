@@ -10,4 +10,13 @@
 
 @implementation CDVariableModel
 
+- (NSString *)description {
+    return [self.type stringForVariableName:self.name];
+}
+
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@: %p> {name: '%@', type: %@}",
+            [self class], self, self.name, self.type.debugDescription];
+}
+
 @end

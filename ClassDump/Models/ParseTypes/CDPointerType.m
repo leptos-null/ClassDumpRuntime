@@ -34,4 +34,9 @@
     return [build copy];
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@: %p> {modifiers: '%@', pointee: %@}",
+            [self class], self, [self modifiersString], self.pointee.debugDescription];
+}
+
 @end

@@ -25,4 +25,9 @@
     return [build copy];
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@: %p> {modifiers: '%@', type: %@, size: %lu}",
+            [self class], self, [self modifiersString], self.type.debugDescription, (unsigned long)self.size];
+}
+
 @end
