@@ -17,68 +17,56 @@
 @implementation CDParseAdvancedTests
 
 - (void)testComplex {
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(_Complex float) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"_Complex float var"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(_Complex float)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"_Complex float var"]);
 }
 
 - (void)testAtomic {
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(_Atomic int) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"_Atomic int var"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(_Atomic int)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"_Atomic int var"]);
 }
 
 - (void)testFunction {
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int (*)(char)) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"void /* function */ *var"]);
-    
-    parsed = [CDTypeParser stringForEncoding:@encode(int (*)(char)) variable:nil];
-    XCTAssert([parsed isEqualToString:@"void /* function */ *"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(int (*)(char))];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"void /* function */ *var"]);
+    XCTAssert([[type stringForVariableName:nil] isEqualToString:@"void /* function */ *"]);
 }
 
 - (void)testConstAttribute {
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(const char *) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"const char *var"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(const char *)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"const char *var"]);
 }
 
 - (void)testInlineArray {
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(char[8]) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"char var[8]"]);
-    
-    parsed = [CDTypeParser stringForEncoding:@encode(char[8]) variable:nil];
-    XCTAssert([parsed isEqualToString:@"char[8]"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(char[8])];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"char var[8]"]);
+    XCTAssert([[type stringForVariableName:nil] isEqualToString:@"char[8]"]);
 }
 
 - (void)testMutliDemensionalArray {
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int[8][2][4]) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"int var[8][2][4]"]);
-    
-    parsed = [CDTypeParser stringForEncoding:@encode(int[8][2][4]) variable:nil];
-    XCTAssert([parsed isEqualToString:@"int[8][2][4]"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(int[8][2][4])];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int var[8][2][4]"]);
+    XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int[8][2][4]"]);
 }
 
 - (void)testPointerArray {
     // this is an array of 4 pointers to long long
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(long long *[4]) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"long long *var[4]"]);
-    
-    parsed = [CDTypeParser stringForEncoding:@encode(long long *[4]) variable:nil];
-    XCTAssert([parsed isEqualToString:@"long long *[4]"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(long long *[4])];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"long long *var[4]"]);
+    XCTAssert([[type stringForVariableName:nil] isEqualToString:@"long long *[4]"]);
 }
 
 - (void)testArrayPointer {
     // this is a pointer to array of 2 int elements
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int (*)[2]) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"int (*var)[2]"]);
-    
-    parsed = [CDTypeParser stringForEncoding:@encode(int (*)[2]) variable:nil];
-    XCTAssert([parsed isEqualToString:@"int (*)[2]"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(int (*)[2])];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int (*var)[2]"]);
+    XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int (*)[2]"]);
 }
 
 - (void)testPointerArrayPointers {
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int *(*)[2]) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"int *(*var)[2]"]);
-    
-    parsed = [CDTypeParser stringForEncoding:@encode(int *(*)[2]) variable:nil];
-    XCTAssert([parsed isEqualToString:@"int *(*)[2]"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(int *(*)[2])];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int *(*var)[2]"]);
+    XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int *(*)[2]"]);
 }
 
 - (void)testPointerArrayPointersPointer {
@@ -88,27 +76,21 @@
      * int **ppa[2] = { pp, pp };
      * int **(*ppap)[2] = &ppa;
      */
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int **(*)[2]) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"int **(*var)[2]"]);
-    
-    parsed = [CDTypeParser stringForEncoding:@encode(int **(*)[2]) variable:nil];
-    XCTAssert([parsed isEqualToString:@"int **(*)[2]"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(int **(*)[2])];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int **(*var)[2]"]);
+    XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int **(*)[2]"]);
 }
 
 - (void)testPointerArrayPointersArray {
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int *(*[4])[2]) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"int *(*var[4])[2]"]);
-    
-    parsed = [CDTypeParser stringForEncoding:@encode(int *(*[4])[2]) variable:nil];
-    XCTAssert([parsed isEqualToString:@"int *(*[4])[2]"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(int *(*[4])[2])];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int *(*var[4])[2]"]);
+    XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int *(*[4])[2]"]);
 }
 
 - (void)testPointerArrayPointersArrayPointer {
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int *(*(*)[4])[2]) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"int *(*(*var)[4])[2]"]);
-    
-    parsed = [CDTypeParser stringForEncoding:@encode(int *(*(*)[4])[2]) variable:nil];
-    XCTAssert([parsed isEqualToString:@"int *(*(*)[4])[2]"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(int *(*(*)[4])[2])];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int *(*(*var)[4])[2]"]);
+    XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int *(*(*)[4])[2]"]);
 }
 
 - (void)testMutliDemensionalArrayStruct {
@@ -117,8 +99,8 @@
         float b[2][3];
         long long *c[4];
     };
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(struct TestStruct [5]) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"struct TestStruct { "
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(struct TestStruct [5])];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"struct TestStruct { "
                "int x0[1]; "
                "float x1[2][3]; "
                "long long *x2[4]; "
@@ -131,8 +113,10 @@
         float b;
         long long c;
     };
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(struct TestStruct) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"struct TestStruct { int x0; float x1; long long x2; } var"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(struct TestStruct)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"struct TestStruct { "
+               "int x0; float x1; long long x2; "
+               "} var"]);
 }
 
 - (void)testUnion {
@@ -140,8 +124,10 @@
         int fixed;
         float floating;
     };
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(union TestUnion) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"union TestUnion { int x0; float x1; } var"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(union TestUnion)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"union TestUnion { "
+               "int x0; float x1; "
+               "} var"]);
 }
 
 - (void)testNestedStructsUnions {
@@ -159,8 +145,8 @@
         } socket_addr;
         int words[4];
     };
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(union TestUnion) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"union TestUnion { "
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(union TestUnion)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"union TestUnion { "
                "char x0[16]; "
                "struct demo_sockaddr_in { "
                "unsigned char x0; "
@@ -184,12 +170,13 @@
         unsigned g : 10;
         unsigned h : 15;
     };
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(struct BitfieldTest) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"struct BitfieldTest { "
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(struct BitfieldTest)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"struct BitfieldTest { "
                "unsigned int x0 : 18; unsigned char x1 : 2; "
                "unsigned int x2 : 30; unsigned long x3 : 34; "
                "unsigned char x4 : 1; unsigned __int128 x5 : 100; "
-               "unsigned short x6 : 10; unsigned short x7 : 15; } var"]);
+               "unsigned short x6 : 10; unsigned short x7 : 15; "
+               "} var"]);
 }
 
 - (void)testModifiedFields {
@@ -198,21 +185,21 @@
         _Complex float b;
         _Atomic _Complex int c;
     };
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(struct ModifiersTest) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"struct ModifiersTest { "
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(struct ModifiersTest)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"struct ModifiersTest { "
                "_Atomic BOOL x0; _Complex float x1; _Atomic _Complex int x2; "
                "} var"]);
 }
 
 - (void)testPointers {
-    NSString *parsed = [CDTypeParser stringForEncoding:@encode(void **) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"void **var"]);
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(void **)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"void **var"]);
     
-    parsed = [CDTypeParser stringForEncoding:@encode(int *) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"int *var"]);
+    type = [CDTypeParser typeForEncoding:@encode(int *)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int *var"]);
     
-    parsed = [CDTypeParser stringForEncoding:@encode(char **) variable:@"var"];
-    XCTAssert([parsed isEqualToString:@"char **var"]);
+    type = [CDTypeParser typeForEncoding:@encode(char **)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"char **var"]);
 }
 
 @end

@@ -498,13 +498,4 @@
     return record;
 }
 
-+ (NSString *)stringForEncoding:(const char *)encoding variable:(NSString *)varName {
-    return [self stringForEncodingStart:encoding end:encoding + strlen(encoding) variable:varName error:NULL];
-}
-
-+ (NSString *)stringForEncodingStart:(const char *const)start end:(const char *const)end variable:(NSString *)varName error:(inout BOOL *)error {
-    CDParseType *type = [self typeForEncodingStart:start end:end error:error];
-    return [type stringForVariableName:varName] ?: varName;
-}
-
 @end
