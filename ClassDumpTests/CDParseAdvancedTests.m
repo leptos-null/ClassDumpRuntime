@@ -26,6 +26,14 @@
     XCTAssert([parsed isEqualToString:@"_Atomic int var"]);
 }
 
+- (void)testFunction {
+    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int (*)(char)) variable:@"var"];
+    XCTAssert([parsed isEqualToString:@"void /* function */ *var"]);
+    
+    parsed = [CDTypeParser stringForEncoding:@encode(int (*)(char)) variable:nil];
+    XCTAssert([parsed isEqualToString:@"void /* function */ *"]);
+}
+
 - (void)testConstAttribute {
     NSString *parsed = [CDTypeParser stringForEncoding:@encode(const char *) variable:@"var"];
     XCTAssert([parsed isEqualToString:@"const char *var"]);
@@ -71,6 +79,20 @@
     
     parsed = [CDTypeParser stringForEncoding:@encode(int *(*)[2]) variable:nil];
     XCTAssert([parsed isEqualToString:@"int *(*)[2]"]);
+}
+
+- (void)testPointerArrayPointersPointer {
+    /* pointer to an array of pointers to pointers
+     *
+     * int **pp;
+     * int **ppa[2] = { pp, pp };
+     * int **(*ppap)[2] = &ppa;
+     */
+    NSString *parsed = [CDTypeParser stringForEncoding:@encode(int **(*)[2]) variable:@"var"];
+    XCTAssert([parsed isEqualToString:@"int **(*var)[2]"]);
+    
+    parsed = [CDTypeParser stringForEncoding:@encode(int **(*)[2]) variable:nil];
+    XCTAssert([parsed isEqualToString:@"int **(*)[2]"]);
 }
 
 - (void)testPointerArrayPointersArray {
@@ -168,6 +190,18 @@
                "unsigned int x2 : 30; unsigned long x3 : 34; "
                "unsigned char x4 : 1; unsigned __int128 x5 : 100; "
                "unsigned short x6 : 10; unsigned short x7 : 15; } var"]);
+}
+
+- (void)testModifiedFields {
+    struct ModifiersTest {
+        _Atomic BOOL a;
+        _Complex float b;
+        _Atomic _Complex int c;
+    };
+    NSString *parsed = [CDTypeParser stringForEncoding:@encode(struct ModifiersTest) variable:@"var"];
+    XCTAssert([parsed isEqualToString:@"struct ModifiersTest { "
+               "_Atomic BOOL x0; _Complex float x1; _Atomic _Complex int x2; "
+               "} var"]);
 }
 
 - (void)testPointers {
