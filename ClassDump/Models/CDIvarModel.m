@@ -19,7 +19,7 @@
     if (self = [self init]) {
         _backing = ivar;
         _name = @(ivar_getName(ivar));
-        _line = [CDTypeParser stringForEncoding:ivar_getTypeEncoding(ivar) variable:self.name];
+        _type = [CDTypeParser typeForEncoding:ivar_getTypeEncoding(ivar)];
     }
     return self;
 }
@@ -35,7 +35,7 @@
 }
 
 - (NSString *)description {
-    return self.line;
+    return [self.type stringForVariableName:self.name];
 }
 
 @end

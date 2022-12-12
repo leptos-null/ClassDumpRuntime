@@ -90,15 +90,25 @@
         Ivar *ivarList = class_copyIvarList(cls, &count);
         if (ivarList) {
             NSMutableArray<CDIvarModel *> *ivars = [NSMutableArray arrayWithCapacity:count];
+            
+            NSMutableArray<CDPropertyModel *> *eligibleProperties = [NSMutableArray arrayWithArray:self.instanceProperties];
+            NSUInteger eligiblePropertiesCount = eligibleProperties.count;
+            
             for (index = 0; index < count; index++) {
                 CDIvarModel *model = [CDIvarModel modelWithIvar:ivarList[index]];
-                // todo: use indexset here to increase preformance
-                NSInteger targetIndex = [self.instanceProperties indexOfObjectPassingTest:^BOOL(CDPropertyModel *propModel, NSUInteger i, BOOL *stp) {
-                    return [propModel.iVar isEqualToString:model.name];
-                }];
-                if (targetIndex != NSNotFound) {
-                    CDPropertyModel *propModel = self.instanceProperties[targetIndex];
-                    [propModel overrideType:[CDTypeParser stringForEncoding:ivar_getTypeEncoding(model.backing) variable:propModel.name]];
+                
+                for (NSUInteger eligibleIndex = 0; eligibleIndex < eligiblePropertiesCount; eligibleIndex++) {
+                    CDPropertyModel *propModel = eligibleProperties[eligibleIndex];
+                    if ([propModel.iVar isEqualToString:model.name]) {
+                        [propModel overrideType:model.type];
+                        
+                        eligiblePropertiesCount--;
+                        // constant time operation
+                        // since we decremented eligiblePropertiesCount, this object is now unreachable
+                        [eligibleProperties exchangeObjectAtIndex:eligibleIndex withObjectAtIndex:eligiblePropertiesCount];
+                        
+                        break;
+                    }
                 }
                 [ivars addObject:model];
             }

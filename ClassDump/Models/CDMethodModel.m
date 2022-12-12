@@ -58,10 +58,10 @@ static size_t characterCount(const char *str, const char c) {
         // https://github.com/apple-oss-distributions/objc4/blob/689525d556/runtime/objc-typeencoding.mm#L168-L272
         const char *type = typedesc;
         typedesc = [CDTypeParser endOfTypeEncoding:type];
-        _returnType = [CDTypeParser stringForEncodingStart:type end:typedesc variable:nil error:NULL];
+        _returnType = [CDTypeParser typeForEncodingStart:type end:typedesc error:NULL];
         
         NSUInteger const expectedArguments = characterCount(sel_getName(methd.name), ':');
-        NSMutableArray<NSString *> *arguments = [NSMutableArray arrayWithCapacity:expectedArguments + 2];
+        NSMutableArray<CDParseType *> *arguments = [NSMutableArray arrayWithCapacity:expectedArguments + 2];
         
         // skip stack size
         while (isnumber(*typedesc)) {
@@ -71,7 +71,7 @@ static size_t characterCount(const char *str, const char c) {
         while (*typedesc) {
             type = typedesc;
             typedesc = [CDTypeParser endOfTypeEncoding:type];
-            [arguments addObject:[CDTypeParser stringForEncodingStart:type end:typedesc variable:nil error:NULL]];
+            [arguments addObject:[CDTypeParser typeForEncodingStart:type end:typedesc error:NULL]];
             
             // Skip GNU runtime's register parameter hint
             if (*typedesc == '+') {
@@ -108,11 +108,12 @@ static size_t characterCount(const char *str, const char c) {
     } else {
         [ret appendString:@"-"];
     }
-    [ret appendFormat:@" (%@)", self.returnType];
+    [ret appendFormat:@" (%@)", [self.returnType stringForVariableName:nil]];
     if (self.argumentTypes.count) {
         NSArray<NSString *> *brokenupName = [self.name componentsSeparatedByString:@":"];
-        [self.argumentTypes enumerateObjectsUsingBlock:^(NSString *argumentType, NSUInteger idx, BOOL *stop) {
-            [ret appendFormat:@"%@:(%@)a%lu ", brokenupName[idx], argumentType, (unsigned long)idx];
+        [self.argumentTypes enumerateObjectsUsingBlock:^(CDParseType *argumentType, NSUInteger idx, BOOL *stop) {
+            [ret appendFormat:@"%@:(%@)a%lu ",
+             brokenupName[idx], [argumentType stringForVariableName:nil], (unsigned long)idx];
         }];
         // remove the last space
         [ret deleteCharactersInRange:NSMakeRange(ret.length - 1, 1)];

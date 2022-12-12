@@ -70,7 +70,7 @@
                 propSeek++;
             }
             
-            long valueLen = propSeek - attribHead;
+            long const valueLen = propSeek - attribHead;
             if (valueLen > 0) {
                 attributeValue = [[NSString alloc] initWithBytes:attribHead length:valueLen encoding:NSUTF8StringEncoding];
             }
@@ -119,7 +119,7 @@
                     _iVar = attributeValue;
                     break;
                 case 'T':
-                    _type = [CDTypeParser stringForEncodingStart:attribHead end:propSeek variable:self.name error:NULL];
+                    _type = [CDTypeParser typeForEncodingStart:attribHead end:propSeek error:NULL];
                     break;
                 case 'W':
                     attributeName = @"weak";
@@ -131,8 +131,7 @@
                     attributeName = @"nonatomic";
                     break;
                 default:
-                    NSLog(@"Unknown attribute code: %c", switchOnMe);
-                    assert(0);
+                    NSAssert(NO, @"Unknown attribute code: %c", switchOnMe);
                     break;
             }
             
@@ -156,7 +155,7 @@
                 // this is the implementation that will be used
                 // preferably a link to the Clang implementation or the Obj-C spec
                 // should be here before this is "production ready"
-                unichar realFirstChar = [self.name characterAtIndex:0];
+                unichar const realFirstChar = [self.name characterAtIndex:0];
                 NSString *firstChar = [NSString stringWithCharacters:&realFirstChar length:1];
                 _setter = [NSString stringWithFormat:@"set%@%@:", firstChar.uppercaseString, [self.name substringFromIndex:1]];
             }
@@ -165,7 +164,7 @@
     return self;
 }
 
-- (void)overrideType:(NSString *)type {
+- (void)overrideType:(CDParseType *)type {
     _type = type;
 }
 
@@ -189,12 +188,12 @@ static BOOL _NSStringNullableEqual(NSString *a, NSString *b) {
     if (attributes.count != 0) {
         [ret appendFormat:@"(%@) ", [attributes componentsJoinedByString:@", "]];
     }
-    [ret appendString:self.type];
+    [ret appendString:[self.type stringForVariableName:self.name]];
     return ret;
 }
 
 - (NSString *)debugDescription {
-    return [NSString stringWithFormat:@"<%@: %p> {type: '%@', attributes: %@, "
+    return [NSString stringWithFormat:@"<%@: %p> {type: %@, attributes: %@, "
             "ivar: '%@', getter: '%@', setter: '%@'}",
             [self class], self, self.type, self.attributes,
             self.iVar, self.getter, self.setter];

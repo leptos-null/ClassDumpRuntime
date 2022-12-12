@@ -84,7 +84,7 @@
     CDMethodModel *requiredInstanceMethod = requiredInstanceMethods.firstObject;
     XCTAssert([requiredInstanceMethod.name isEqualToString:@"happenedWithError:"]);
     XCTAssert(requiredInstanceMethod.argumentTypes.count == 1);
-    XCTAssert([requiredInstanceMethod.argumentTypes[0] isEqualToString:@"id"]);
+    XCTAssert([[requiredInstanceMethod.argumentTypes[0] stringForVariableName:nil] isEqualToString:@"id"]);
     XCTAssert(!requiredInstanceMethod.isClass);
     
     CDMethodModel *optionalInstanceMethod = optionalInstanceMethods.firstObject;
@@ -111,7 +111,7 @@
             XCTAssert([prop.iVar isEqualToString:@"_charlie"]);
             XCTAssert([prop.getter isEqualToString:@"charlie"]);
             XCTAssert([prop.setter isEqualToString:@"setCharlie:"]);
-            XCTAssert([prop.type isEqualToString:@"NSString *charlie"]);
+            XCTAssert([[prop.type stringForVariableName:prop.name] isEqualToString:@"NSString *charlie"]);
         }
     }
     XCTAssert(found, @"Failed to find property");
@@ -120,15 +120,15 @@
 - (void)testPropertyProtocols {
     for (CDPropertyModel *prop in _model.instanceProperties) {
         if ([prop.name isEqualToString:@"charlie"]) {
-            XCTAssert([prop.type isEqualToString:@"NSString *charlie"]);
+            XCTAssert([[prop.type stringForVariableName:prop.name] isEqualToString:@"NSString *charlie"]);
         } else if ([prop.name isEqualToString:@"cacheDelegate"]) {
-            XCTAssert([prop.type isEqualToString:@"id<NSCacheDelegate> cacheDelegate"]);
+            XCTAssert([[prop.type stringForVariableName:prop.name] isEqualToString:@"id<NSCacheDelegate> cacheDelegate"]);
         } else if ([prop.name isEqualToString:@"progressReportingEnumeration"]) {
-            XCTAssert([prop.type isEqualToString:@"id<NSProgressReporting, NSFastEnumeration> progressReportingEnumeration"]);
+            XCTAssert([[prop.type stringForVariableName:prop.name] isEqualToString:@"id<NSProgressReporting, NSFastEnumeration> progressReportingEnumeration"]);
         } else if ([prop.name isEqualToString:@"mutableUUID"]) {
-            XCTAssert([prop.type isEqualToString:@"NSUUID<NSMutableCopying, NSFastEnumeration> *mutableUUID"]);
+            XCTAssert([[prop.type stringForVariableName:prop.name] isEqualToString:@"NSUUID<NSMutableCopying, NSFastEnumeration> *mutableUUID"]);
         } else if ([prop.name isEqualToString:@"discardableURL"]) {
-            XCTAssert([prop.type isEqualToString:@"NSURL<NSDiscardableContent> *discardableURL"]);
+            XCTAssert([[prop.type stringForVariableName:prop.name] isEqualToString:@"NSURL<NSDiscardableContent> *discardableURL"]);
         }
     }
 }
@@ -141,9 +141,9 @@
             found = YES;
             
             XCTAssert(mthd.argumentTypes.count == 2);
-            XCTAssert([mthd.argumentTypes[0] isEqualToString:@"int **"]);
-            XCTAssert([mthd.argumentTypes[1] isEqualToString:@"inout id *"]);
-            XCTAssert([mthd.returnType isEqualToString:@"id"]);
+            XCTAssert([[mthd.argumentTypes[0] stringForVariableName:nil] isEqualToString:@"int **"]);
+            XCTAssert([[mthd.argumentTypes[1] stringForVariableName:nil] isEqualToString:@"inout id *"]);
+            XCTAssert([[mthd.returnType stringForVariableName:nil] isEqualToString:@"id"]);
             XCTAssert(!mthd.isClass);
         }
     }
@@ -157,7 +157,7 @@
             XCTAssert(!found, @"Found ivar multiple times");
             found = YES;
             
-            XCTAssert([ivar.line isEqualToString:@"NSString *_charlie"]);
+            XCTAssert([[ivar.type stringForVariableName:ivar.name] isEqualToString:@"NSString *_charlie"]);
         }
     }
     XCTAssert(found, @"Failed to find ivar");
