@@ -18,9 +18,20 @@
         [build appendString:@" "];
     }
     
-    [build appendString:[self.type stringForVariableName:varName]];
+    NSMutableArray<CDArrayType *> *arrayStack = [NSMutableArray array];
     
-    [build appendFormat:@"[%lu]", (unsigned long)self.size];
+    CDParseType *headType = self;
+    while ([headType isKindOfClass:[CDArrayType class]]) {
+        CDArrayType *arrayType = (__kindof CDParseType *)headType;
+        [arrayStack addObject:arrayType];
+        headType = arrayType.type;
+    }
+    
+    [build appendString:[headType stringForVariableName:varName]];
+    
+    [arrayStack enumerateObjectsUsingBlock:^(CDArrayType *arrayType, NSUInteger idx, BOOL *stop) {
+        [build appendFormat:@"[%lu]", (unsigned long)arrayType.size];
+    }];
     
     return [build copy];
 }
