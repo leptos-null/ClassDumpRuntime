@@ -45,6 +45,17 @@
     return [build copy];
 }
 
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[self class]]) {
+        __typeof(self) casted = (__typeof(casted))object;
+        return (self.modifiers == casted.modifiers || [self.modifiers isEqualToArray:casted.modifiers]) &&
+        (self.className == casted.className || [self.className isEqualToString:casted.className]) &&
+        (self.protocolNames == casted.protocolNames || [self.protocolNames isEqualToArray:casted.protocolNames]) &&
+        self.isBlock == casted.isBlock;
+    }
+    return NO;
+}
+
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"<%@: %p> {modifiers: '%@', className: '%@', protocolNames: %@, isBlock: %@}",
             [self class], self, [self modifiersString], self.className, self.protocolNames, self.isBlock ? @"YES" : @"NO"];

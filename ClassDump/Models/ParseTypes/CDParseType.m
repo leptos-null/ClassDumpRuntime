@@ -50,6 +50,14 @@ NSString *NSStringFromCDTypeModifier(CDTypeModifier modifier) {
     return [strings componentsJoinedByString:@" "];
 }
 
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[self class]]) {
+        __typeof(self) casted = (__typeof(casted))object;
+        return (self.modifiers == casted.modifiers || [self.modifiers isEqualToArray:casted.modifiers]);
+    }
+    return NO;
+}
+
 - (NSString *)description {
     return [self stringForVariableName:nil];
 }

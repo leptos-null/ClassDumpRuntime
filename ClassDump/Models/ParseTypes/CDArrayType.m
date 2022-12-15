@@ -36,6 +36,16 @@
     return [build copy];
 }
 
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[self class]]) {
+        __typeof(self) casted = (__typeof(casted))object;
+        return (self.modifiers == casted.modifiers || [self.modifiers isEqualToArray:casted.modifiers]) &&
+        (self.type == casted.type || [self.type isEqual:casted.type]) &&
+        (self.size == casted.size);
+    }
+    return NO;
+}
+
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"<%@: %p> {modifiers: '%@', type: %@, size: %lu}",
             [self class], self, [self modifiersString], self.type.debugDescription, (unsigned long)self.size];

@@ -44,6 +44,17 @@
     return [build copy];
 }
 
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[self class]]) {
+        __typeof(self) casted = (__typeof(casted))object;
+        return (self.modifiers == casted.modifiers || [self.modifiers isEqualToArray:casted.modifiers]) &&
+        (self.name == casted.name || [self.name isEqualToString:casted.name]) &&
+        self.isUnion == casted.isUnion &&
+        (self.fields == casted.fields || [self.fields isEqualToArray:casted.fields]);
+    }
+    return NO;
+}
+
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"<%@: %p> {modifiers: '%@', name: '%@', isUnion: %@, fields: %@}",
             [self class], self, [self modifiersString], self.name, self.isUnion ? @"YES" : @"NO", self.fields.debugDescription];
