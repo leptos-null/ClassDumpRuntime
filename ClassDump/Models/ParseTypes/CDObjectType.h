@@ -16,7 +16,5 @@
 @property (nullable, strong, nonatomic) NSString *className;
 /// The names of the protocols the object conforms to
 @property (nullable, strong, nonatomic) NSArray<NSString *> *protocolNames;
-/// @c YES if the receiver represents a block, otherwise @c NO
-@property (nonatomic) BOOL isBlock;
 
 @end

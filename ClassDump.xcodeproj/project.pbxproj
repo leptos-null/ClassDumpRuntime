@@ -27,6 +27,7 @@
 		FAF031F42942FC3B00B6C424 /* CDVariableModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031F32942FC3B00B6C424 /* CDVariableModel.m */; };
 		FAF031F72942FF2A00B6C424 /* CDArrayType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031F62942FF2A00B6C424 /* CDArrayType.m */; };
 		FAF031FA2943154B00B6C424 /* CDObjectType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031F92943154B00B6C424 /* CDObjectType.m */; };
+		FAF031FD294C441F00B6C424 /* CDBlockType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031FC294C441F00B6C424 /* CDBlockType.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +91,8 @@
 		FAF031F62942FF2A00B6C424 /* CDArrayType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDArrayType.m; sourceTree = "<group>"; };
 		FAF031F82943154B00B6C424 /* CDObjectType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDObjectType.h; sourceTree = "<group>"; };
 		FAF031F92943154B00B6C424 /* CDObjectType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDObjectType.m; sourceTree = "<group>"; };
+		FAF031FB294C441E00B6C424 /* CDBlockType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDBlockType.h; sourceTree = "<group>"; };
+		FAF031FC294C441F00B6C424 /* CDBlockType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDBlockType.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +194,8 @@
 				FAF031E42942F6C400B6C424 /* CDPrimitiveType.m */,
 				FAF031F82943154B00B6C424 /* CDObjectType.h */,
 				FAF031F92943154B00B6C424 /* CDObjectType.m */,
+				FAF031FB294C441E00B6C424 /* CDBlockType.h */,
+				FAF031FC294C441F00B6C424 /* CDBlockType.m */,
 				FAF031E62942F8C300B6C424 /* CDRecordType.h */,
 				FAF031E72942F8C300B6C424 /* CDRecordType.m */,
 				FAF031EC2942F8D300B6C424 /* CDPointerType.h */,
@@ -304,6 +309,7 @@
 				FA2A00FF23ADD2EA00B52F1D /* CDTypeParser.m in Sources */,
 				FAF031F72942FF2A00B6C424 /* CDArrayType.m in Sources */,
 				FAF031F12942F90D00B6C424 /* CDBitFieldType.m in Sources */,
+				FAF031FD294C441F00B6C424 /* CDBlockType.m in Sources */,
 				FA2A010223ADD2EA00B52F1D /* CDIvarModel.m in Sources */,
 				FAF031F42942FC3B00B6C424 /* CDVariableModel.m in Sources */,
 				FA2A010423ADD2EA00B52F1D /* CDClassModel.m in Sources */,

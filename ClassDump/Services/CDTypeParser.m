@@ -10,6 +10,7 @@
 
 #import "CDPrimitiveType.h"
 #import "CDObjectType.h"
+#import "CDBlockType.h"
 #import "CDRecordType.h"
 #import "CDPointerType.h"
 #import "CDArrayType.h"
@@ -89,6 +90,20 @@
                     encoding++;
                 } else if (*encoding == '?') {
                     encoding++;
+                    if (*encoding == '<') {
+                        unsigned openTokens = 1;
+                        while (openTokens) {
+                            switch (*++encoding) {
+                                case '<':
+                                    openTokens++;
+                                    break;
+                                case '>':
+                                    openTokens--;
+                                    break;
+                            }
+                        }
+                        encoding++;
+                    }
                 }
                 return encoding;
             } break;
@@ -303,9 +318,9 @@
                 [modifiers addObject:@(CDTypeModifierComplex)];
                 break;
             case '@': {
-                CDObjectType *objType = [CDObjectType new];
-                
                 if (chr[1] == '"') {
+                    CDObjectType *objType = [CDObjectType new];
+                    
                     chr += 2;
                     const char *const chrcpy = chr;
                     const char *protocolHead = NULL;
@@ -345,12 +360,54 @@
                         
                         objType.protocolNames = protocolNames;
                     }
+                    NSAssert(type == nil, @"Overwriting type");
+                    type = objType;
                 } else if (chr[1] == '?') {
-                    objType.isBlock = YES;
+                    CDBlockType *blockType = [CDBlockType new];
                     chr++;
+                    
+                    if (chr[1] == '<') {
+                        // chr is pointing to '?'
+                        // jump over '?' and '<'
+                        chr += 2;
+                        
+                        const char *parameterEncoding = [self endOfTypeEncoding:chr];
+                        blockType.returnType = [self typeForEncodingStart:chr end:parameterEncoding error:NULL];
+                        chr = parameterEncoding;
+
+                        NSAssert(chr[0] == '@' && chr[1], @"First block parameter should be itself");
+                        chr += 2; // skip first block parameter
+                        
+                        const char *paramEnd = chr;
+                        unsigned openTokens = 1;
+                        while (openTokens) {
+                            switch (*++paramEnd) {
+                                case '<':
+                                    openTokens++;
+                                    break;
+                                case '>':
+                                    openTokens--;
+                                    break;
+                            }
+                        }
+
+                        NSMutableArray<CDParseType *> *parameterTypes = [NSMutableArray array];
+                        while (chr < paramEnd) {
+                            const char *tokenEnd = [self endOfTypeEncoding:chr];
+                            [parameterTypes addObject:[self typeForEncodingStart:chr end:tokenEnd error:NULL]];
+                            chr = tokenEnd;
+                        }
+                        chr = paramEnd;
+
+                        blockType.parameterTypes = parameterTypes;
+                    }
+
+                    NSAssert(type == nil, @"Overwriting type");
+                    type = blockType;
+                } else {
+                    NSAssert(type == nil, @"Overwriting type");
+                    type = [CDObjectType new];
                 }
-                NSAssert(type == nil, @"Overwriting type");
-                type = objType;
             } break;
             case 'b': {
                 chr++; // fastforward over 'b'
