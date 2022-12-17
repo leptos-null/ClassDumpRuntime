@@ -85,7 +85,14 @@ static size_t characterCount(const char *str, const char c) {
                 typedesc++;
             }
         }
-        
+        // if there were less arguments than expected, fill in the rest with empty types
+        for (NSUInteger argumentIndex = arguments.count; argumentIndex < expectedArguments; argumentIndex++) {
+            [arguments addObject:[CDTypeParser typeForEncoding:""]]; // add an empty encoding
+        }
+        // if there were more arguments than expected, trim from the beginning.
+        // usually `self` (type `id`) and `_cmd` (type `SEL`) are the first two parameters,
+        // however they are not included in expectedArguments. `_cmd` may not be included
+        // if the method is backed by a block instead of a selector.
         _argumentTypes = [arguments subarrayWithRange:NSMakeRange(arguments.count - expectedArguments, expectedArguments)];
     }
     return self;
@@ -111,12 +118,15 @@ static size_t characterCount(const char *str, const char c) {
     [ret appendFormat:@" (%@)", [self.returnType stringForVariableName:nil]];
     if (self.argumentTypes.count) {
         NSArray<NSString *> *brokenupName = [self.name componentsSeparatedByString:@":"];
+        
+        NSUInteger const argumentCount = self.argumentTypes.count;
         [self.argumentTypes enumerateObjectsUsingBlock:^(CDParseType *argumentType, NSUInteger idx, BOOL *stop) {
-            [ret appendFormat:@"%@:(%@)a%lu ",
+            [ret appendFormat:@"%@:(%@)a%lu",
              brokenupName[idx], [argumentType stringForVariableName:nil], (unsigned long)idx];
+            if ((idx + 1) < argumentCount) { // if there are still arguments left, add a space to separate
+                [ret appendString:@" "];
+            }
         }];
-        // remove the last space
-        [ret deleteCharactersInRange:NSMakeRange(ret.length - 1, 1)];
     } else {
         [ret appendString:self.name];
     }

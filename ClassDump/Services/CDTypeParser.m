@@ -262,6 +262,10 @@
                 NSAssert(type == nil, @"Overwriting type");
                 type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeUnsignedInt128];
                 break;
+            case ' ':
+                NSAssert(type == nil, @"Overwriting type");
+                type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeBlank];
+                break;
             case 'f':
                 NSAssert(type == nil, @"Overwriting type");
                 type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeFloat];
@@ -494,7 +498,10 @@
             } break;
         }
     }
-    NSAssert(type != nil, @"type should be set");
+    
+    if (type == nil) {
+        type = [CDPrimitiveType primitiveWithRawType:CDPrimitiveRawTypeEmpty];
+    }
     type.modifiers = modifiers;
     return type;
 }

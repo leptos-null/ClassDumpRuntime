@@ -34,6 +34,20 @@ typedef NS_ENUM(NSUInteger, CDPrimitiveRawType) {
     CDPrimitiveRawTypeSel,
     
     CDPrimitiveRawTypeFunction,
+    
+    /// @note This is not a real type.
+    /// @discussion A blank type represents a type that
+    /// is encoded to a space character. There are multiple
+    /// types that are encoded to a space character, and it
+    /// is not possible for us to discern the difference
+    /// between them.
+    CDPrimitiveRawTypeBlank,
+    /// @note This is not a real type.
+    /// @discussion An empty type represents a type that
+    /// was not encoded. Usually this occurs when types
+    /// that do not exist in Objective-C are bridged into
+    /// Objective-C (this should only occur at runtime).
+    CDPrimitiveRawTypeEmpty,
 };
 
 OBJC_EXTERN NSString *_Nullable NSStringFromCDPrimitiveRawType(CDPrimitiveRawType);

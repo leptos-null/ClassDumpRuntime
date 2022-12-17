@@ -50,6 +50,10 @@ NSString *NSStringFromCDPrimitiveRawType(CDPrimitiveRawType rawType) {
             return @"SEL";
         case CDPrimitiveRawTypeFunction:
             return @"void /* function */";
+        case CDPrimitiveRawTypeBlank:
+            return @"void /* unknown type, blank encoding */";
+        case CDPrimitiveRawTypeEmpty:
+            return @"void /* unknown type, empty encoding */";
     }
 }
 
