@@ -8,13 +8,13 @@
 
 #import "CDTypeParser.h"
 
-#import "CDPrimitiveType.h"
-#import "CDObjectType.h"
-#import "CDBlockType.h"
-#import "CDRecordType.h"
-#import "CDPointerType.h"
-#import "CDArrayType.h"
-#import "CDBitFieldType.h"
+#import "../Models/ParseTypes/CDPrimitiveType.h"
+#import "../Models/ParseTypes/CDObjectType.h"
+#import "../Models/ParseTypes/CDBlockType.h"
+#import "../Models/ParseTypes/CDRecordType.h"
+#import "../Models/ParseTypes/CDPointerType.h"
+#import "../Models/ParseTypes/CDArrayType.h"
+#import "../Models/ParseTypes/CDBitFieldType.h"
 
 /*
  * @APPLE_LICENSE_HEADER_START@

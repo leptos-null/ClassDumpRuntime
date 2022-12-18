@@ -8,6 +8,7 @@
 
 #import "CDClassModel.h"
 #import "../Services/CDTypeParser.h"
+
 #import <dlfcn.h>
 
 @implementation CDClassModel {

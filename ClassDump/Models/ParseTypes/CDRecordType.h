@@ -7,7 +7,7 @@
 //
 
 #import "CDParseType.h"
-#import "CDVariableModel.h"
+#import "../CDVariableModel.h"
 
 /// Type representing a @c struct or @c union
 @interface CDRecordType : CDParseType

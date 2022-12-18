@@ -7,8 +7,8 @@
 //
 
 #import "CDProtocolModel.h"
+
 #import <dlfcn.h>
-#import <pthread.h>
 
 @implementation CDProtocolModel {
     NSArray<NSString *> *_classPropertySynthesizedMethods;
