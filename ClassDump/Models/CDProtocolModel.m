@@ -158,12 +158,14 @@
 }
 
 - (NSString *)linesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip {
-    Dl_info info;
-    
     NSMutableString *ret = [NSMutableString string];
     if (comments) {
-        dladdr(protocol_getName(self.backing), &info);
-        [ret appendFormat:@"/* %s in %s */\n", info.dli_sname ? info.dli_sname : "(runtime)", info.dli_fname];
+        Dl_info info;
+        if (dladdr((__bridge void *)self.backing, &info)) {
+            [ret appendFormat:@"/* %s in %s */\n", info.dli_sname ?: "(anonymous)", info.dli_fname];
+        } else {
+            [ret appendString:@"/* no symbol found */\n"];
+        }
     }
     [ret appendString:@"@protocol "];
     [ret appendString:self.name];
@@ -174,112 +176,64 @@
     }
     [ret appendString:@"\n"];
     
-    if (self.requiredClassProperties.count) {
-        [ret appendString:@"\n"];
-        for (CDPropertyModel *model in self.requiredClassProperties) {
-            if (comments) {
-                dladdr(model.backing, &info);
-                [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
-            }
-            [ret appendFormat:@"%@;\n", model];
-        }
-    }
+    [self _appendLines:ret properties:self.requiredClassProperties comments:comments];
+    [self _appendLines:ret methods:self.requiredClassMethods synthesized:(synthesizeStrip ? _classPropertySynthesizedMethods : nil) comments:comments];
     
-    if (self.requiredClassMethods.count) {
-        [ret appendString:@"\n"];
-        for (CDMethodModel *model in self.requiredClassMethods) {
-            if (synthesizeStrip && [_classPropertySynthesizedMethods containsObject:model.name]) {
-                continue;
-            }
-            if (comments) {
-                dladdr(model.backing.types, &info);
-                [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
-            }
-            [ret appendFormat:@"%@;\n", model];
-        }
-    }
+    [self _appendLines:ret properties:self.requiredInstanceProperties comments:comments];
+    [self _appendLines:ret methods:self.requiredInstanceMethods synthesized:(synthesizeStrip ? _instancePropertySynthesizedMethods : nil) comments:comments];
     
-    if (self.requiredInstanceProperties.count) {
-        [ret appendString:@"\n"];
-        for (CDPropertyModel *model in self.requiredInstanceProperties) {
-            if (comments) {
-                dladdr(model.backing, &info);
-                [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
-            }
-            [ret appendFormat:@"%@;\n", model];
-        }
-    }
-    
-    if (self.requiredInstanceMethods.count) {
-        [ret appendString:@"\n"];
-        for (CDMethodModel *model in self.requiredInstanceMethods) {
-            if (synthesizeStrip && [_instancePropertySynthesizedMethods containsObject:model.name]) {
-                continue;
-            }
-            if (comments) {
-                dladdr(model.backing.types, &info);
-                [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
-            }
-            [ret appendFormat:@"%@;\n", model];
-        }
-    }
     if (self.optionalClassProperties.count || self.optionalClassMethods.count ||
         self.optionalInstanceProperties.count || self.optionalInstanceMethods.count) {
         [ret appendString:@"\n@optional\n"];
     }
     
-    if (self.optionalClassProperties.count) {
-        [ret appendString:@"\n"];
-        for (CDPropertyModel *model in self.optionalClassProperties) {
-            if (comments) {
-                dladdr(model.backing, &info);
-                [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
-            }
-            [ret appendFormat:@"%@;\n", model];
-        }
-    }
+    [self _appendLines:ret properties:self.optionalClassProperties comments:comments];
+    [self _appendLines:ret methods:self.optionalClassMethods synthesized:(synthesizeStrip ? _classPropertySynthesizedMethods : nil) comments:comments];
     
-    if (self.optionalClassMethods.count) {
-        [ret appendString:@"\n"];
-        for (CDMethodModel *model in self.optionalClassMethods) {
-            if (synthesizeStrip && [_classPropertySynthesizedMethods containsObject:model.name]) {
-                continue;
-            }
-            if (comments) {
-                dladdr(model.backing.types, &info);
-                [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
-            }
-            [ret appendFormat:@"%@;\n", model];
-        }
-    }
-    
-    if (self.optionalInstanceProperties.count) {
-        [ret appendString:@"\n"];
-        for (CDPropertyModel *model in self.optionalInstanceProperties) {
-            if (comments) {
-                dladdr(model.backing, &info);
-                [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
-            }
-            [ret appendFormat:@"%@;\n", model];
-        }
-    }
-    
-    if (self.optionalInstanceMethods.count) {
-        [ret appendString:@"\n"];
-        for (CDMethodModel *model in self.optionalInstanceMethods) {
-            if (synthesizeStrip && [_instancePropertySynthesizedMethods containsObject:model.name]) {
-                continue;
-            }
-            if (comments) {
-                dladdr(model.backing.types, &info);
-                [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
-            }
-            [ret appendFormat:@"%@;\n", model];
-        }
-    }
+    [self _appendLines:ret properties:self.optionalInstanceProperties comments:comments];
+    [self _appendLines:ret methods:self.optionalInstanceMethods synthesized:(synthesizeStrip ? _instancePropertySynthesizedMethods : nil) comments:comments];
     
     [ret appendString:@"\n@end\n"];
     return [ret copy];
+}
+
+- (void)_appendLines:(NSMutableString *)ret properties:(NSArray<CDPropertyModel *> *)properties comments:(BOOL)comments {
+    if (properties.count) {
+        [ret appendString:@"\n"];
+        
+        Dl_info info;
+        for (CDPropertyModel *prop in properties) {
+            if (comments) {
+                if (dladdr(prop.backing, &info)) {
+                    [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
+                } else {
+                    [ret appendString:@"\n/* no symbol found */\n"];
+                }
+            }
+            [ret appendFormat:@"%@;\n", prop];
+        }
+    }
+}
+
+- (void)_appendLines:(NSMutableString *)ret methods:(NSArray<CDMethodModel *> *)methods synthesized:(NSArray<NSString *> *)synthesized comments:(BOOL)comments {
+    if (methods.count) {
+        [ret appendString:@"\n"];
+        
+        Dl_info info;
+        for (CDMethodModel *methd in methods) {
+            if ([synthesized containsObject:methd.name]) {
+                continue;
+            }
+            if (comments) {
+                if (dladdr(methd.backing.types, &info)) {
+                    [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
+                } else {
+                    [ret appendString:@"\n/* no symbol found */\n"];
+                }
+            }
+            [ret appendFormat:@"%@;\n", methd];
+        }
+    }
 }
 
 - (NSString *)description {
