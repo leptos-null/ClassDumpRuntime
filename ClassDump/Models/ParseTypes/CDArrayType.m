@@ -10,12 +10,12 @@
 
 @implementation CDArrayType
 
-- (NSString *)stringForVariableName:(NSString *)varName {
-    NSMutableString *build = [NSMutableString string];
-    NSString *modifiersString = [self modifiersString];
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+    CDSemanticString *build = [CDSemanticString new];
+    CDSemanticString *modifiersString = [self modifiersSemanticString];
     if (modifiersString.length > 0) {
-        [build appendString:modifiersString];
-        [build appendString:@" "];
+        [build appendSemanticString:modifiersString];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
     }
     
     NSMutableArray<CDArrayType *> *arrayStack = [NSMutableArray array];
@@ -27,13 +27,15 @@
         headType = arrayType.type;
     }
     
-    [build appendString:[headType stringForVariableName:varName]];
+    [build appendSemanticString:[headType semanticStringForVariableName:varName]];
     
     [arrayStack enumerateObjectsUsingBlock:^(CDArrayType *arrayType, NSUInteger idx, BOOL *stop) {
-        [build appendFormat:@"[%lu]", (unsigned long)arrayType.size];
+        [build appendString:@"[" semanticType:CDSemanticTypeStandard];
+        [build appendString:[NSString stringWithFormat:@"%lu", (unsigned long)arrayType.size] semanticType:CDSemanticTypeNumeric];
+        [build appendString:@"]" semanticType:CDSemanticTypeStandard];
     }];
     
-    return [build copy];
+    return build;
 }
 
 - (BOOL)isEqual:(id)object {

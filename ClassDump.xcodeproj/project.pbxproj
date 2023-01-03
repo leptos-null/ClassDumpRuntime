@@ -16,6 +16,7 @@
 		FA2A010423ADD2EA00B52F1D /* CDClassModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2A00FC23ADD2EA00B52F1D /* CDClassModel.m */; };
 		FA2A011C23AEB15700B52F1D /* CDParsePrimitiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2A011B23AEB15700B52F1D /* CDParsePrimitiveTests.m */; };
 		FA2A011E23AEB15700B52F1D /* libClassDump.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2A00DC23ADD19D00B52F1D /* libClassDump.a */; };
+		FA5A1ED42962B117005A2A90 /* CDSemanticString.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5A1ED32962B117005A2A90 /* CDSemanticString.m */; };
 		FA829A0323BD250100FA4DC1 /* CDParseAdvancedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */; };
 		FA829A0523BD310600FA4DC1 /* CDParseCppTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */; };
 		FAE71A7523DA0AB20079321A /* CDObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE71A7423DA0AB20079321A /* CDObjCTests.m */; };
@@ -72,6 +73,8 @@
 		FA2A011923AEB15700B52F1D /* ClassDumpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClassDumpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA2A011B23AEB15700B52F1D /* CDParsePrimitiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDParsePrimitiveTests.m; sourceTree = "<group>"; };
 		FA2A012423AEB98400B52F1D /* ClassDump.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ClassDump.xctestplan; sourceTree = "<group>"; };
+		FA5A1ED22962B117005A2A90 /* CDSemanticString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDSemanticString.h; sourceTree = "<group>"; };
+		FA5A1ED32962B117005A2A90 /* CDSemanticString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDSemanticString.m; sourceTree = "<group>"; };
 		FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDParseAdvancedTests.m; sourceTree = "<group>"; };
 		FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CDParseCppTests.mm; sourceTree = "<group>"; };
 		FAE71A7423DA0AB20079321A /* CDObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDObjCTests.m; sourceTree = "<group>"; };
@@ -170,6 +173,8 @@
 				FA2A00F623ADD2EA00B52F1D /* CDIvarModel.m */,
 				FAF031F22942FC3B00B6C424 /* CDVariableModel.h */,
 				FAF031F32942FC3B00B6C424 /* CDVariableModel.m */,
+				FA5A1ED22962B117005A2A90 /* CDSemanticString.h */,
+				FA5A1ED32962B117005A2A90 /* CDSemanticString.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -311,6 +316,7 @@
 				FAF031F12942F90D00B6C424 /* CDBitFieldType.m in Sources */,
 				FAF031FD294C441F00B6C424 /* CDBlockType.m in Sources */,
 				FA2A010223ADD2EA00B52F1D /* CDIvarModel.m in Sources */,
+				FA5A1ED42962B117005A2A90 /* CDSemanticString.m in Sources */,
 				FAF031F42942FC3B00B6C424 /* CDVariableModel.m in Sources */,
 				FA2A010423ADD2EA00B52F1D /* CDClassModel.m in Sources */,
 			);

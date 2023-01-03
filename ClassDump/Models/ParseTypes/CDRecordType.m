@@ -10,20 +10,20 @@
 
 @implementation CDRecordType
 
-- (NSString *)stringForVariableName:(NSString *)varName {
-    NSMutableString *build = [NSMutableString string];
-    NSString *modifiersString = [self modifiersString];
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+    CDSemanticString *build = [CDSemanticString new];
+    CDSemanticString *modifiersString = [self modifiersSemanticString];
     if (modifiersString.length > 0) {
-        [build appendString:modifiersString];
-        [build appendString:@" "];
+        [build appendSemanticString:modifiersString];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
     }
-    [build appendString:(self.isUnion ? @"union" : @"struct")];
+    [build appendString:(self.isUnion ? @"union" : @"struct") semanticType:CDSemanticTypeKeyword];
     if (self.name != nil) {
-        [build appendString:@" "];
-        [build appendString:self.name];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
+        [build appendString:self.name semanticType:CDSemanticTypeDeclared];
     }
     if (self.fields != nil) {
-        [build appendString:@" { "];
+        [build appendString:@" { " semanticType:CDSemanticTypeStandard];
         
         unsigned fieldName = 0;
         
@@ -32,16 +32,16 @@
             if (variableName == nil) {
                 variableName = [NSString stringWithFormat:@"x%u", fieldName++];
             }
-            [build appendString:[variableModel.type stringForVariableName:variableName]];
-            [build appendString:@"; "];
+            [build appendSemanticString:[variableModel.type semanticStringForVariableName:variableName]];
+            [build appendString:@"; " semanticType:CDSemanticTypeStandard];
         }
-        [build appendString:@"}"];
+        [build appendString:@"}" semanticType:CDSemanticTypeStandard];
     }
     if (varName != nil) {
-        [build appendString:@" "];
-        [build appendString:varName];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
+        [build appendString:varName semanticType:CDSemanticTypeVariable];
     }
-    return [build copy];
+    return build;
 }
 
 - (BOOL)isEqual:(id)object {

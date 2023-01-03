@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "../CDSemanticString.h"
 
 typedef NS_ENUM(NSUInteger, CDTypeModifier) {
     CDTypeModifierConst,
@@ -37,5 +38,9 @@ OBJC_EXTERN NSString *_Nullable NSStringFromCDTypeModifier(CDTypeModifier);
 - (nonnull NSString *)stringForVariableName:(nullable NSString *)varName;
 
 - (nonnull NSString *)modifiersString;
+
+- (nonnull CDSemanticString *)semanticStringForVariableName:(nullable NSString *)varName;
+
+- (nonnull CDSemanticString *)modifiersSemanticString;
 
 @end

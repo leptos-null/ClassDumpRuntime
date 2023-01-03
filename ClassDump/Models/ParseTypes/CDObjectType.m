@@ -10,39 +10,45 @@
 
 @implementation CDObjectType
 
-- (NSString *)stringForVariableName:(NSString *)varName {
-    NSMutableString *build = [NSMutableString string];
-    NSString *modifiersString = [self modifiersString];
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+    CDSemanticString *build = [CDSemanticString new];
+    CDSemanticString *modifiersString = [self modifiersSemanticString];
     if (modifiersString.length > 0) {
-        [build appendString:modifiersString];
-        [build appendString:@" "];
+        [build appendSemanticString:modifiersString];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
     }
     
     BOOL const hasClassName = (self.className != nil);
     
     if (hasClassName) {
-        [build appendString:self.className];
+        [build appendString:self.className semanticType:CDSemanticTypeDeclared];
     } else {
-        [build appendString:@"id"];
+        [build appendString:@"id" semanticType:CDSemanticTypeKeyword];
     }
     
     NSArray<NSString *> *protocolNames = self.protocolNames;
+    NSUInteger const protocolNameCount = protocolNames.count;
     if (protocolNames.count > 0) {
-        [build appendString:@"<"];
-        [build appendString:[protocolNames componentsJoinedByString:@", "]];
-        [build appendString:@">"];
+        [build appendString:@"<" semanticType:CDSemanticTypeStandard];
+        [protocolNames enumerateObjectsUsingBlock:^(NSString *protocolName, NSUInteger idx, BOOL *stop) {
+            [build appendString:protocolName semanticType:CDSemanticTypeDeclared];
+            if ((idx + 1) < protocolNameCount) {
+                [build appendString:@", " semanticType:CDSemanticTypeStandard];
+            }
+        }];
+        [build appendString:@">" semanticType:CDSemanticTypeStandard];
     }
     if (hasClassName) {
-        [build appendString:@" *"];
+        [build appendString:@" *" semanticType:CDSemanticTypeStandard];
     }
     
     if (varName != nil) {
         if (!hasClassName) {
-            [build appendString:@" "];
+            [build appendString:@" " semanticType:CDSemanticTypeStandard];
         }
-        [build appendString:varName];
+        [build appendString:varName semanticType:CDSemanticTypeVariable];
     }
-    return [build copy];
+    return build;
 }
 
 - (BOOL)isEqual:(id)object {

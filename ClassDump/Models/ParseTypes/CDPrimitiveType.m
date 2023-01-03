@@ -65,19 +65,92 @@ NSString *NSStringFromCDPrimitiveRawType(CDPrimitiveRawType rawType) {
     return ret;
 }
 
-- (NSString *)stringForVariableName:(NSString *)varName {
-    NSMutableString *build = [NSMutableString string];
-    NSString *modifiersString = [self modifiersString];
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+    CDSemanticString *build = [CDSemanticString new];
+    CDSemanticString *modifiersString = [self modifiersSemanticString];
     if (modifiersString.length > 0) {
-        [build appendString:modifiersString];
-        [build appendString:@" "];
+        [build appendSemanticString:modifiersString];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
     }
-    [build appendString:NSStringFromCDPrimitiveRawType(self.rawType)];
+    switch (self.rawType) {
+        case CDPrimitiveRawTypeVoid:
+            [build appendString:@"void" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeChar:
+            [build appendString:@"char" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeInt:
+            [build appendString:@"int" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeShort:
+            [build appendString:@"short" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeLong:
+            [build appendString:@"long" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeLongLong:
+            [build appendString:@"long long" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeInt128:
+            [build appendString:@"__int128" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeUnsignedChar:
+            [build appendString:@"unsigned char" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeUnsignedInt:
+            [build appendString:@"unsigned int" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeUnsignedShort:
+            [build appendString:@"unsigned short" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeUnsignedLong:
+            [build appendString:@"unsigned long" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeUnsignedLongLong:
+            [build appendString:@"unsigned long long" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeUnsignedInt128:
+            [build appendString:@"unsigned __int128" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeFloat:
+            [build appendString:@"float" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeDouble:
+            [build appendString:@"double" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeLongDouble:
+            [build appendString:@"long double" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeBool:
+            [build appendString:@"BOOL" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeClass:
+            [build appendString:@"Class" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeSel:
+            [build appendString:@"SEL" semanticType:CDSemanticTypeKeyword];
+            break;
+        case CDPrimitiveRawTypeFunction:
+            [build appendString:@"void" semanticType:CDSemanticTypeKeyword];
+            [build appendString:@" " semanticType:CDSemanticTypeStandard];
+            [build appendString:@"/* function */" semanticType:CDSemanticTypeComment];
+            break;
+        case CDPrimitiveRawTypeBlank:
+            [build appendString:@"void" semanticType:CDSemanticTypeKeyword];
+            [build appendString:@" " semanticType:CDSemanticTypeStandard];
+            [build appendString:@"/* unknown type, blank encoding */" semanticType:CDSemanticTypeComment];
+            break;
+        case CDPrimitiveRawTypeEmpty:
+            [build appendString:@"void" semanticType:CDSemanticTypeKeyword];
+            [build appendString:@" " semanticType:CDSemanticTypeStandard];
+            [build appendString:@"/* unknown type, empty encoding */" semanticType:CDSemanticTypeComment];
+            break;
+    }
     if (varName != nil) {
-        [build appendString:@" "];
-        [build appendString:varName];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
+        [build appendString:varName semanticType:CDSemanticTypeVariable];
     }
-    return [build copy];
+    return build;
 }
 
 - (BOOL)isEqual:(id)object {

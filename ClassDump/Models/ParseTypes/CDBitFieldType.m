@@ -10,12 +10,12 @@
 
 @implementation CDBitFieldType
 
-- (NSString *)stringForVariableName:(NSString *)varName {
-    NSMutableString *build = [NSMutableString string];
-    NSString *modifiersString = [self modifiersString];
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+    CDSemanticString *build = [CDSemanticString new];
+    CDSemanticString *modifiersString = [self modifiersSemanticString];
     if (modifiersString.length > 0) {
-        [build appendString:modifiersString];
-        [build appendString:@" "];
+        [build appendSemanticString:modifiersString];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
     }
     
     NSUInteger const bitWidth = self.width;
@@ -58,15 +58,16 @@
         type = @"unsigned";
     }
     
-    [build appendString:type];
+    [build appendString:type semanticType:CDSemanticTypeKeyword];
     
     if (varName != nil) {
-        [build appendString:@" "];
-        [build appendString:varName];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
+        [build appendString:varName semanticType:CDSemanticTypeVariable];
     }
     
-    [build appendFormat:@" : %lu", (unsigned long)self.width];
-    return [build copy];
+    [build appendString:@" : " semanticType:CDSemanticTypeStandard];
+    [build appendString:[NSString stringWithFormat:@"%lu", (unsigned long)self.width] semanticType:CDSemanticTypeNumeric];
+    return build;
 }
 
 - (BOOL)isEqual:(id)object {

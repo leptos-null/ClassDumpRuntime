@@ -37,8 +37,12 @@ NSString *NSStringFromCDTypeModifier(CDTypeModifier modifier) {
 @implementation CDParseType
 
 - (NSString *)stringForVariableName:(NSString *)varName {
-    NSAssert(NO, @"Subclasses must implement stringForVariableName");
-    return @"";
+    return [[self semanticStringForVariableName:varName] string];
+}
+
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+    NSAssert(NO, @"Subclasses must implement %@", NSStringFromSelector(_cmd));
+    return [CDSemanticString new];
 }
 
 - (NSString *)modifiersString {
@@ -48,6 +52,20 @@ NSString *NSStringFromCDTypeModifier(CDTypeModifier modifier) {
         strings[idx] = NSStringFromCDTypeModifier(value.unsignedIntegerValue);
     }];
     return [strings componentsJoinedByString:@" "];
+}
+
+- (CDSemanticString *)modifiersSemanticString {
+    NSArray<NSNumber *> *const modifiers = self.modifiers;
+    CDSemanticString *build = [CDSemanticString new];
+    NSUInteger const modifierCount = self.modifiers.count;
+    [modifiers enumerateObjectsUsingBlock:^(NSNumber *value, NSUInteger idx, BOOL *stop) {
+        NSString *string = NSStringFromCDTypeModifier(value.unsignedIntegerValue);
+        [build appendString:string semanticType:CDSemanticTypeKeyword];
+        if ((idx + 1) < modifierCount) {
+            [build appendString:@" " semanticType:CDSemanticTypeStandard];
+        }
+    }];
+    return build;
 }
 
 - (BOOL)isEqual:(id)object {

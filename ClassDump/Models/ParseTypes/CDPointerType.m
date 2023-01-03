@@ -16,22 +16,22 @@
     return ret;
 }
 
-- (NSString *)stringForVariableName:(NSString *)varName {
-    NSMutableString *build = [NSMutableString string];
-    NSString *modifiersString = [self modifiersString];
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+    CDSemanticString *build = [CDSemanticString new];
+    CDSemanticString *modifiersString = [self modifiersSemanticString];
     if (modifiersString.length > 0) {
-        [build appendString:modifiersString];
-        [build appendString:@" "];
+        [build appendSemanticString:modifiersString];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
     }
-    [build appendString:[self.pointee stringForVariableName:nil]];
-    if ([build characterAtIndex:(build.length - 1)] != '*') {
-        [build appendString:@" "];
+    [build appendSemanticString:[self.pointee semanticStringForVariableName:nil]];
+    if (![build endWithChar:'*']) {
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
     }
-    [build appendString:@"*"];
+    [build appendString:@"*" semanticType:CDSemanticTypeStandard];
     if (varName != nil) {
-        [build appendString:varName];
+        [build appendString:varName semanticType:CDSemanticTypeVariable];
     }
-    return [build copy];
+    return build;
 }
 
 - (BOOL)isEqual:(id)object {

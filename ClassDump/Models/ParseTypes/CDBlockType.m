@@ -10,50 +10,51 @@
 
 @implementation CDBlockType
 
-- (NSString *)stringForVariableName:(NSString *)varName {
-    NSMutableString *build = [NSMutableString string];
-    NSString *modifiersString = [self modifiersString];
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+    CDSemanticString *build = [CDSemanticString new];
+    CDSemanticString *modifiersString = [self modifiersSemanticString];
     
     if (self.returnType != nil && self.parameterTypes != nil) {
-        [build appendString:[self.returnType stringForVariableName:nil]];
-        [build appendString:@" (^"];
+        [build appendSemanticString:[self.returnType semanticStringForVariableName:nil]];
+        [build appendString:@" (^" semanticType:CDSemanticTypeStandard];
         
         if (modifiersString.length > 0) {
-            [build appendString:modifiersString];
+            [build appendSemanticString:modifiersString];
         }
         if (modifiersString.length > 0 && varName != nil) {
-            [build appendString:@" "];
+            [build appendString:@" " semanticType:CDSemanticTypeStandard];
         }
         if (varName != nil) {
-            [build appendString:varName];
+            [build appendString:varName semanticType:CDSemanticTypeVariable];
         }
-        [build appendString:@")("];
+        [build appendString:@")(" semanticType:CDSemanticTypeStandard];
         
         NSUInteger const paramCount = self.parameterTypes.count;
         if (paramCount == 0) {
-            [build appendString:@"void"];
+            [build appendString:@"void" semanticType:CDSemanticTypeKeyword];
         } else {
             [self.parameterTypes enumerateObjectsUsingBlock:^(CDParseType *paramType, NSUInteger idx, BOOL *stop) {
-                [build appendString:[paramType stringForVariableName:nil]];
+                [build appendSemanticString:[paramType semanticStringForVariableName:nil]];
                 if ((idx + 1) < paramCount) {
-                    [build appendString:@", "];
+                    [build appendString:@", " semanticType:CDSemanticTypeStandard];
                 }
             }];
         }
-        [build appendString:@")"];
+        [build appendString:@")" semanticType:CDSemanticTypeStandard];
     } else {
         if (modifiersString.length > 0) {
-            [build appendString:modifiersString];
-            [build appendString:@" "];
+            [build appendSemanticString:modifiersString];
+            [build appendString:@" " semanticType:CDSemanticTypeStandard];
         }
-        
-        [build appendString:@"id /* block */"];
+        [build appendString:@"id" semanticType:CDSemanticTypeKeyword];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
+        [build appendString:@"/* block */" semanticType:CDSemanticTypeComment];
         if (varName != nil) {
-            [build appendString:@" "];
-            [build appendString:varName];
+            [build appendString:@" " semanticType:CDSemanticTypeStandard];
+            [build appendString:varName semanticType:CDSemanticTypeVariable];
         }
     }
-    return [build copy];
+    return build;
 }
 
 - (BOOL)isEqual:(id)object {
