@@ -168,6 +168,27 @@
     _type = type;
 }
 
+- (CDSemanticString *)semanticString {
+    CDSemanticString *build = [CDSemanticString new];
+    [build appendString:@"@property" semanticType:CDSemanticTypeKeyword];
+    [build appendString:@" " semanticType:CDSemanticTypeStandard];
+    
+    NSArray<NSString *> *attributes = self.attributes;
+    NSUInteger const attributeCount = attributes.count;
+    if (attributeCount > 0) {
+        [build appendString:@"(" semanticType:CDSemanticTypeStandard];
+        [attributes enumerateObjectsUsingBlock:^(NSString *attribute, NSUInteger idx, BOOL *stop) {
+            [build appendString:attribute semanticType:CDSemanticTypeKeyword];
+            if ((idx + 1) < attributeCount) {
+                [build appendString:@", " semanticType:CDSemanticTypeStandard];
+            }
+        }];
+        [build appendString:@") " semanticType:CDSemanticTypeStandard];
+    }
+    [build appendSemanticString:[self.type semanticStringForVariableName:self.name]];
+    return build;
+}
+
 static BOOL _NSStringNullableEqual(NSString *a, NSString *b) {
     return (!a && !b) || [a isEqual:b];
 }
@@ -183,13 +204,7 @@ static BOOL _NSStringNullableEqual(NSString *a, NSString *b) {
 }
 
 - (NSString *)description {
-    NSMutableString *ret = [NSMutableString stringWithString:@"@property "];
-    NSArray<NSString *> *attributes = self.attributes;
-    if (attributes.count != 0) {
-        [ret appendFormat:@"(%@) ", [attributes componentsJoinedByString:@", "]];
-    }
-    [ret appendString:[self.type stringForVariableName:self.name]];
-    return ret;
+    return [[self semanticString] string];
 }
 
 - (NSString *)debugDescription {

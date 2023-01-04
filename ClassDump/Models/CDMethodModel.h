@@ -26,4 +26,6 @@
 - (instancetype)initWithMethod:(struct objc_method_description)methd isClass:(BOOL)isClass;
 + (instancetype)modelWithMethod:(struct objc_method_description)methd isClass:(BOOL)isClass;
 
+- (CDSemanticString *)semanticString;
+
 @end

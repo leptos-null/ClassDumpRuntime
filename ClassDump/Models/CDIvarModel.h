@@ -22,4 +22,6 @@
 - (instancetype)initWithIvar:(Ivar)ivar;
 + (instancetype)modelWithIvar:(Ivar)ivar;
 
+- (CDSemanticString *)semanticString;
+
 @end

@@ -158,66 +158,94 @@
 }
 
 - (NSString *)linesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip {
-    NSMutableString *ret = [NSMutableString string];
+    return [[self semanticLinesWithComments:comments synthesizeStrip:synthesizeStrip] string];
+}
+
+- (CDSemanticString *)semanticLinesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip {
+    CDSemanticString *build = [CDSemanticString new];
+    
     if (comments) {
+        NSString *comment = nil;
         Dl_info info;
         if (dladdr((__bridge void *)self.backing, &info)) {
-            [ret appendFormat:@"/* %s in %s */\n", info.dli_sname ?: "(anonymous)", info.dli_fname];
+            comment = [NSString stringWithFormat:@"/* %s in %s */", info.dli_sname ?: "(anonymous)", info.dli_fname];
         } else {
-            [ret appendString:@"/* no symbol found */\n"];
+            comment = @"/* no symbol found */";
         }
+        [build appendString:comment semanticType:CDSemanticTypeComment];
+        [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     }
-    [ret appendString:@"@protocol "];
-    [ret appendString:self.name];
-    if (self.protocols.count) {
-        [ret appendString:@" <"];
-        [ret appendString:[self.protocols componentsJoinedByString:@", "]];
-        [ret appendString:@">"];
+    [build appendString:@"@protocol" semanticType:CDSemanticTypeKeyword];
+    [build appendString:@" " semanticType:CDSemanticTypeStandard];
+    [build appendString:self.name semanticType:CDSemanticTypeDeclared];
+    
+    NSArray<CDProtocolModel *> *protocols = self.protocols;
+    NSUInteger const protocolCount = protocols.count;
+    if (protocolCount > 0) {
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
+        [build appendString:@"<" semanticType:CDSemanticTypeStandard];
+        [protocols enumerateObjectsUsingBlock:^(CDProtocolModel *protocol, NSUInteger idx, BOOL *stop) {
+            [build appendString:protocol.name semanticType:CDSemanticTypeDeclared];
+            if ((idx + 1) < protocolCount) {
+                [build appendString:@", " semanticType:CDSemanticTypeStandard];
+            }
+        }];
+        [build appendString:@">" semanticType:CDSemanticTypeStandard];
     }
-    [ret appendString:@"\n"];
+    [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     
-    [self _appendLines:ret properties:self.requiredClassProperties comments:comments];
-    [self _appendLines:ret methods:self.requiredClassMethods synthesized:(synthesizeStrip ? _classPropertySynthesizedMethods : nil) comments:comments];
+    [self _appendLines:build properties:self.requiredClassProperties comments:comments];
+    [self _appendLines:build methods:self.requiredClassMethods synthesized:(synthesizeStrip ? _classPropertySynthesizedMethods : nil) comments:comments];
     
-    [self _appendLines:ret properties:self.requiredInstanceProperties comments:comments];
-    [self _appendLines:ret methods:self.requiredInstanceMethods synthesized:(synthesizeStrip ? _instancePropertySynthesizedMethods : nil) comments:comments];
+    [self _appendLines:build properties:self.requiredInstanceProperties comments:comments];
+    [self _appendLines:build methods:self.requiredInstanceMethods synthesized:(synthesizeStrip ? _instancePropertySynthesizedMethods : nil) comments:comments];
     
     if (self.optionalClassProperties.count || self.optionalClassMethods.count ||
         self.optionalInstanceProperties.count || self.optionalInstanceMethods.count) {
-        [ret appendString:@"\n@optional\n"];
+        [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
+        [build appendString:@"@optional" semanticType:CDSemanticTypeKeyword];
+        [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     }
     
-    [self _appendLines:ret properties:self.optionalClassProperties comments:comments];
-    [self _appendLines:ret methods:self.optionalClassMethods synthesized:(synthesizeStrip ? _classPropertySynthesizedMethods : nil) comments:comments];
+    [self _appendLines:build properties:self.optionalClassProperties comments:comments];
+    [self _appendLines:build methods:self.optionalClassMethods synthesized:(synthesizeStrip ? _classPropertySynthesizedMethods : nil) comments:comments];
     
-    [self _appendLines:ret properties:self.optionalInstanceProperties comments:comments];
-    [self _appendLines:ret methods:self.optionalInstanceMethods synthesized:(synthesizeStrip ? _instancePropertySynthesizedMethods : nil) comments:comments];
+    [self _appendLines:build properties:self.optionalInstanceProperties comments:comments];
+    [self _appendLines:build methods:self.optionalInstanceMethods synthesized:(synthesizeStrip ? _instancePropertySynthesizedMethods : nil) comments:comments];
     
-    [ret appendString:@"\n@end\n"];
-    return [ret copy];
+    [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
+    [build appendString:@"@end" semanticType:CDSemanticTypeKeyword];
+    [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
+    
+    return build;
 }
 
-- (void)_appendLines:(NSMutableString *)ret properties:(NSArray<CDPropertyModel *> *)properties comments:(BOOL)comments {
+- (void)_appendLines:(CDSemanticString *)build properties:(NSArray<CDPropertyModel *> *)properties comments:(BOOL)comments {
     if (properties.count) {
-        [ret appendString:@"\n"];
+        [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
         
         Dl_info info;
         for (CDPropertyModel *prop in properties) {
             if (comments) {
+                NSString *comment = nil;
                 if (dladdr(prop.backing, &info)) {
-                    [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
+                    comment = [NSString stringWithFormat:@"/* in %s */", info.dli_fname];
                 } else {
-                    [ret appendString:@"\n/* no symbol found */\n"];
+                    comment = @"/* no symbol found */";
                 }
+                [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
+                [build appendString:comment semanticType:CDSemanticTypeComment];
+                [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
             }
-            [ret appendFormat:@"%@;\n", prop];
+            [build appendSemanticString:[prop semanticString]];
+            [build appendString:@";\n" semanticType:CDSemanticTypeStandard];
         }
     }
 }
 
-- (void)_appendLines:(NSMutableString *)ret methods:(NSArray<CDMethodModel *> *)methods synthesized:(NSArray<NSString *> *)synthesized comments:(BOOL)comments {
+- (void)_appendLines:(CDSemanticString *)build methods:(NSArray<CDMethodModel *> *)methods synthesized:(NSArray<NSString *> *)synthesized comments:(BOOL)comments {
     if (methods.count) {
-        [ret appendString:@"\n"];
+        [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
         
         Dl_info info;
         for (CDMethodModel *methd in methods) {
@@ -225,13 +253,18 @@
                 continue;
             }
             if (comments) {
+                NSString *comment = nil;
                 if (dladdr(methd.backing.types, &info)) {
-                    [ret appendFormat:@"\n/* in %s */\n", info.dli_fname];
+                    comment = [NSString stringWithFormat:@"/* in %s */", info.dli_fname];
                 } else {
-                    [ret appendString:@"\n/* no symbol found */\n"];
+                    comment = @"/* no symbol found */";
                 }
+                [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
+                [build appendString:comment semanticType:CDSemanticTypeComment];
+                [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
             }
-            [ret appendFormat:@"%@;\n", methd];
+            [build appendSemanticString:[methd semanticString]];
+            [build appendString:@";\n" semanticType:CDSemanticTypeStandard];
         }
     }
 }

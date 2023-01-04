@@ -40,4 +40,6 @@
 /// @param synthesizeStrip Remove methods and ivars synthesized from properties
 - (NSString *)linesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip;
 
+- (CDSemanticString *)semanticLinesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip;
+
 @end

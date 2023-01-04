@@ -98,6 +98,35 @@ static size_t characterCount(const char *str, const char c) {
     return self;
 }
 
+- (CDSemanticString *)semanticString {
+    CDSemanticString *build = [CDSemanticString new];
+    [build appendString:(self.isClass ? @"+" : @"-") semanticType:CDSemanticTypeStandard];
+    [build appendString:@" (" semanticType:CDSemanticTypeStandard];
+    [build appendSemanticString:[self.returnType semanticStringForVariableName:nil]];
+    [build appendString:@")" semanticType:CDSemanticTypeStandard];
+    
+    NSArray<CDParseType *> *argumentTypes = self.argumentTypes;
+    NSUInteger const argumentTypeCount = argumentTypes.count;
+    if (argumentTypeCount > 0) {
+        NSArray<NSString *> *brokenupName = [self.name componentsSeparatedByString:@":"];
+        
+        [argumentTypes enumerateObjectsUsingBlock:^(CDParseType *argumentType, NSUInteger idx, BOOL *stop) {
+            [build appendString:brokenupName[idx] semanticType:CDSemanticTypeStandard];
+            [build appendString:@":" semanticType:CDSemanticTypeStandard];
+            [build appendString:@"(" semanticType:CDSemanticTypeStandard];
+            [build appendSemanticString:[argumentType semanticStringForVariableName:nil]];
+            [build appendString:@")" semanticType:CDSemanticTypeStandard];
+            [build appendString:[NSString stringWithFormat:@"a%lu", (unsigned long)idx] semanticType:CDSemanticTypeVariable];
+            if ((idx + 1) < argumentTypeCount) { // if there are still arguments left, add a space to separate
+                [build appendString:@" " semanticType:CDSemanticTypeStandard];
+            }
+        }];
+    } else {
+        [build appendString:self.name semanticType:CDSemanticTypeStandard];
+    }
+    return build;
+}
+
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[self class]]) {
         __typeof(self) casted = (__typeof(casted))object;
@@ -109,28 +138,7 @@ static size_t characterCount(const char *str, const char c) {
 }
 
 - (NSString *)description {
-    NSMutableString *ret = [NSMutableString string];
-    if (self.isClass) {
-        [ret appendString:@"+"];
-    } else {
-        [ret appendString:@"-"];
-    }
-    [ret appendFormat:@" (%@)", [self.returnType stringForVariableName:nil]];
-    if (self.argumentTypes.count) {
-        NSArray<NSString *> *brokenupName = [self.name componentsSeparatedByString:@":"];
-        
-        NSUInteger const argumentCount = self.argumentTypes.count;
-        [self.argumentTypes enumerateObjectsUsingBlock:^(CDParseType *argumentType, NSUInteger idx, BOOL *stop) {
-            [ret appendFormat:@"%@:(%@)a%lu",
-             brokenupName[idx], [argumentType stringForVariableName:nil], (unsigned long)idx];
-            if ((idx + 1) < argumentCount) { // if there are still arguments left, add a space to separate
-                [ret appendString:@" "];
-            }
-        }];
-    } else {
-        [ret appendString:self.name];
-    }
-    return ret;
+    return [[self semanticString] string];
 }
 
 - (NSString *)debugDescription {

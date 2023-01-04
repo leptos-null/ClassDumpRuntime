@@ -24,6 +24,10 @@
     return self;
 }
 
+- (CDSemanticString *)semanticString {
+    return [self.type semanticStringForVariableName:self.name];
+}
+
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[self class]]) {
         __typeof(self) casted = (__typeof(casted))object;

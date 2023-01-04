@@ -36,4 +36,6 @@
 /// however the property only has @c id as the type
 - (void)overrideType:(CDParseType *)type;
 
+- (CDSemanticString *)semanticString;
+
 @end
