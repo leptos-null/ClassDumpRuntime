@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA06EA29296934A5008E133B /* CDPropertyAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = FA06EA28296934A5008E133B /* CDPropertyAttribute.m */; };
 		FA2A00FE23ADD2EA00B52F1D /* CDUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2A00EE23ADD2EA00B52F1D /* CDUtilities.m */; };
 		FA2A00FF23ADD2EA00B52F1D /* CDTypeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2A00F123ADD2EA00B52F1D /* CDTypeParser.m */; };
 		FA2A010023ADD2EA00B52F1D /* CDProtocolModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2A00F323ADD2EA00B52F1D /* CDProtocolModel.m */; };
@@ -54,6 +55,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FA06EA27296934A5008E133B /* CDPropertyAttribute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDPropertyAttribute.h; sourceTree = "<group>"; };
+		FA06EA28296934A5008E133B /* CDPropertyAttribute.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDPropertyAttribute.m; sourceTree = "<group>"; };
 		FA2A00DC23ADD19D00B52F1D /* libClassDump.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libClassDump.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA2A00EB23ADD21200B52F1D /* ClassDump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassDump.h; sourceTree = "<group>"; };
 		FA2A00EE23ADD2EA00B52F1D /* CDUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUtilities.m; sourceTree = "<group>"; };
@@ -167,6 +170,8 @@
 				FA2A00F323ADD2EA00B52F1D /* CDProtocolModel.m */,
 				FA2A00F923ADD2EA00B52F1D /* CDPropertyModel.h */,
 				FA2A00F523ADD2EA00B52F1D /* CDPropertyModel.m */,
+				FA06EA27296934A5008E133B /* CDPropertyAttribute.h */,
+				FA06EA28296934A5008E133B /* CDPropertyAttribute.m */,
 				FA2A00F423ADD2EA00B52F1D /* CDMethodModel.h */,
 				FA2A00FA23ADD2EA00B52F1D /* CDMethodModel.m */,
 				FA2A00F823ADD2EA00B52F1D /* CDIvarModel.h */,
@@ -310,6 +315,7 @@
 				FA2A010023ADD2EA00B52F1D /* CDProtocolModel.m in Sources */,
 				FAF031E82942F8C300B6C424 /* CDRecordType.m in Sources */,
 				FAF031E22942E4FF00B6C424 /* CDParseType.m in Sources */,
+				FA06EA29296934A5008E133B /* CDPropertyAttribute.m in Sources */,
 				FAF031FA2943154B00B6C424 /* CDObjectType.m in Sources */,
 				FA2A00FF23ADD2EA00B52F1D /* CDTypeParser.m in Sources */,
 				FAF031F72942FF2A00B6C424 /* CDArrayType.m in Sources */,

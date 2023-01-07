@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 
 #import "ParseTypes/CDParseType.h"
+#import "CDPropertyAttribute.h"
 
 @interface CDPropertyModel : NSObject
 /// The Obj-C runtime @c objc_property_t
@@ -18,8 +19,8 @@
 @property (strong, nonatomic, readonly) NSString *name;
 /// The type of the property
 @property (strong, nonatomic, readonly) CDParseType *type;
-/// The attributes of the property, e.g. @c strong, @c nonatomic, @c readonly
-@property (strong, nonatomic, readonly) NSArray<NSString *> *attributes;
+/// The attributes of the property
+@property (strong, nonatomic, readonly) NSArray<CDPropertyAttribute *> *attributes;
 /// The name of the backing instance variable
 @property (strong, nonatomic, readonly) NSString *iVar;
 /// The signature of the getter method, e.g. @c count

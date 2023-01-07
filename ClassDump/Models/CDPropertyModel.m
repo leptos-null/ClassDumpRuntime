@@ -23,9 +23,9 @@
         BOOL isReadOnly = NO, isDynamic = NO;
         
         const char *const propAttribs = property_getAttributes(property);
-        NSMutableArray<NSString *> *attributes = [NSMutableArray array];
+        NSMutableArray<CDPropertyAttribute *> *attributes = [NSMutableArray array];
         if (isClass) {
-            [attributes addObject:@"class"];
+            [attributes addObject:[CDPropertyAttribute attributeWithName:@"class" value:nil]];
         }
         
         for (const char *propSeek = propAttribs; propSeek < (propAttribs + strlen(propAttribs)); propSeek++) {
@@ -134,11 +134,7 @@
             }
             
             if (attributeName) {
-                if (attributeValue) {
-                    attributeName = [attributeName stringByAppendingString:@"="];
-                    attributeName = [attributeName stringByAppendingString:attributeValue];
-                }
-                [attributes addObject:attributeName];
+                [attributes addObject:[CDPropertyAttribute attributeWithName:attributeName value:attributeValue]];
             }
         }
         
@@ -167,12 +163,18 @@
     [build appendString:@"@property" semanticType:CDSemanticTypeKeyword];
     [build appendString:@" " semanticType:CDSemanticTypeStandard];
     
-    NSArray<NSString *> *attributes = self.attributes;
+    NSArray<CDPropertyAttribute *> *attributes = self.attributes;
     NSUInteger const attributeCount = attributes.count;
     if (attributeCount > 0) {
         [build appendString:@"(" semanticType:CDSemanticTypeStandard];
-        [attributes enumerateObjectsUsingBlock:^(NSString *attribute, NSUInteger idx, BOOL *stop) {
-            [build appendString:attribute semanticType:CDSemanticTypeKeyword];
+        [attributes enumerateObjectsUsingBlock:^(CDPropertyAttribute *attribute, NSUInteger idx, BOOL *stop) {
+            [build appendString:attribute.name semanticType:CDSemanticTypeKeyword];
+            
+            NSString *attributeValue = attribute.value;
+            if (attributeValue != nil) {
+                [build appendString:@"=" semanticType:CDSemanticTypeStandard];
+                [build appendString:attributeValue semanticType:CDSemanticTypeVariable];
+            }
             if ((idx + 1) < attributeCount) {
                 [build appendString:@", " semanticType:CDSemanticTypeStandard];
             }
