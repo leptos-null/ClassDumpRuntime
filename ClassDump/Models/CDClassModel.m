@@ -24,9 +24,9 @@
 - (instancetype)initWithClass:(Class)cls {
     if (self = [self init]) {
         _backing = cls;
-        _name = @(class_getName(cls));
+        _name = NSStringFromClass(cls);
         
-        Class metaClass = object_getClass(cls);
+        Class const metaClass = object_getClass(cls);
         
         unsigned int count, index;
         
@@ -259,10 +259,21 @@
         [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
         
         Dl_info info;
-        for (CDMethodModel *methd in self.classMethods) {
-            if ([synthesized containsObject:methd.name]) {
+        NSMutableArray<NSString *> *synthed = [NSMutableArray arrayWithArray:synthesized];
+        NSUInteger synthedCount = synthed.count;
+        for (CDMethodModel *methd in methods) {
+            // find and remove instead of just find so we don't have to search the entire
+            // array everytime, when we know the objects that we've already filtered out won't come up again
+            NSUInteger const searchResult = [synthed indexOfObject:methd.name inRange:NSMakeRange(0, synthedCount)];
+            if (searchResult != NSNotFound) {
+                synthedCount--;
+                // optimized version of remove since the
+                // order of synthed doesn't matter to us.
+                // exchange is O(1) instead of remove is O(n)
+                [synthed exchangeObjectAtIndex:searchResult withObjectAtIndex:synthedCount];
                 continue;
             }
+            
             if (comments) {
                 Method objcMethod = NULL;
                 if (methd.isClass) {

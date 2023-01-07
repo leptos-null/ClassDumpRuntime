@@ -70,14 +70,12 @@
                 propSeek++;
             }
             
-            long const valueLen = propSeek - attribHead;
+            NSUInteger const valueLen = propSeek - attribHead;
             if (valueLen > 0) {
                 attributeValue = [[NSString alloc] initWithBytes:attribHead length:valueLen encoding:NSUTF8StringEncoding];
             }
             
-            /*
-             * this enum is in llvm/clang/lib/AST/ASTContext.cpp
-             * see getObjCEncodingForPropertyDecl
+            /* per https://github.com/llvm/llvm-project/blob/63d46869ea/clang/lib/AST/ASTContext.cpp#L7827-L7918
              *
              *  enum PropertyAttributes {
              *      kPropertyReadOnly          = 'R', // property is read-only.
@@ -150,11 +148,7 @@
                 _getter = [self.name copy];
             }
             if (!self.setter && !isReadOnly) {
-                // this is likely not the correct implementation
-                // someone recommended this, so until there's another solution
-                // this is the implementation that will be used
-                // preferably a link to the Clang implementation or the Obj-C spec
-                // should be here before this is "production ready"
+                // per https://github.com/llvm/llvm-project/blob/86616443bf/clang/lib/Basic/IdentifierTable.cpp#L756-L762
                 unichar const realFirstChar = [self.name characterAtIndex:0];
                 NSString *firstChar = [NSString stringWithCharacters:&realFirstChar length:1];
                 _setter = [NSString stringWithFormat:@"set%@%@:", firstChar.uppercaseString, [self.name substringFromIndex:1]];

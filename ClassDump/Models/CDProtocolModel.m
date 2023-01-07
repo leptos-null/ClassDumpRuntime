@@ -22,7 +22,7 @@
 - (instancetype)initWithProtocol:(Protocol *)prcl {
     if (self = [self init]) {
         _backing = prcl;
-        _name = @(protocol_getName(prcl));
+        _name = NSStringFromProtocol(prcl);
         
         unsigned int count, index;
         
@@ -248,10 +248,21 @@
         [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
         
         Dl_info info;
+        NSMutableArray<NSString *> *synthed = [NSMutableArray arrayWithArray:synthesized];
+        NSUInteger synthedCount = synthed.count;
         for (CDMethodModel *methd in methods) {
-            if ([synthesized containsObject:methd.name]) {
+            // find and remove instead of just find so we don't have to search the entire
+            // array everytime, when we know the objects that we've already filtered out won't come up again
+            NSUInteger const searchResult = [synthed indexOfObject:methd.name inRange:NSMakeRange(0, synthedCount)];
+            if (searchResult != NSNotFound) {
+                synthedCount--;
+                // optimized version of remove since the
+                // order of synthed doesn't matter to us.
+                // exchange is O(1) instead of remove is O(n)
+                [synthed exchangeObjectAtIndex:searchResult withObjectAtIndex:synthedCount];
                 continue;
             }
+            
             if (comments) {
                 NSString *comment = nil;
                 if (dladdr(methd.backing.types, &info)) {
