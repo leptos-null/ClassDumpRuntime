@@ -68,6 +68,12 @@
     }
 }
 
+- (BOOL)startsWithChar:(char)character {
+    char *bytes = &character;
+    NSString *suffix = [[NSString alloc] initWithBytesNoCopy:bytes length:1 encoding:NSASCIIStringEncoding freeWhenDone:NO];
+    return [_head.string hasPrefix:suffix];
+}
+
 - (BOOL)endWithChar:(char)character {
     char *bytes = &character;
     NSString *suffix = [[NSString alloc] initWithBytesNoCopy:bytes length:1 encoding:NSASCIIStringEncoding freeWhenDone:NO];
@@ -77,6 +83,18 @@
 - (void)enumerateTypesUsingBlock:(void (NS_NOESCAPE ^)(NSString *string, CDSemanticType type))block {
     for (CDSemanticStringStaple *staple = _head; staple != nil; staple = staple.next) {
         block(staple.string, staple.type);
+    }
+}
+
+- (void)enumerateLongestEffectiveRangesUsingBlock:(void (NS_NOESCAPE ^)(NSString *string, CDSemanticType type))block {
+    for (CDSemanticStringStaple *staple = _head; staple != nil; staple = staple.next) {
+        CDSemanticType const stapleType = staple.type;
+        NSMutableString *concatString = [NSMutableString stringWithString:staple.string];
+        for (CDSemanticStringStaple *lookAhead = staple.next; lookAhead != nil && lookAhead.type == stapleType; lookAhead = lookAhead.next) {
+            [concatString appendString:lookAhead.string];
+            staple = lookAhead;
+        }
+        block([concatString copy], stapleType);
     }
 }
 
