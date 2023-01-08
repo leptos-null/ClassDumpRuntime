@@ -49,21 +49,31 @@
 + (const char *)endOfTypeEncoding:(const char *)encoding {
     while (*encoding) {
         switch (*encoding) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case '"':
-            case ']':
-            case '}':
-            case ')':
-                /* don't modify, this isn't actually a type */
+                /* known primitive types */
+            case '*':
+            case 'c':
+            case 'i':
+            case 's':
+            case 'l':
+            case 'q':
+            case 't':
+            case 'C':
+            case 'I':
+            case 'S':
+            case 'L':
+            case 'Q':
+            case 'T':
+            case ' ':
+            case 'f':
+            case 'd':
+            case 'D':
+            case 'B':
+            case 'v':
+            case '#':
+            case ':':
+            case '?':
+                // once we see an underlying type, there's nothing else in the encoding
+                encoding++;
                 return encoding;
                 
                 /* type modifiers */
@@ -165,7 +175,7 @@
             } break;
                 
             default:
-                encoding++;
+                // don't modify, this isn't actually a type
                 return encoding;
         }
     }
@@ -378,7 +388,7 @@
                         const char *parameterEncoding = [self endOfTypeEncoding:chr];
                         blockType.returnType = [self typeForEncodingStart:chr end:parameterEncoding error:NULL];
                         chr = parameterEncoding;
-
+                        
                         NSAssert(chr[0] == '@' && chr[1], @"First block parameter should be itself");
                         chr += 2; // skip first block parameter
                         
@@ -394,7 +404,7 @@
                                     break;
                             }
                         }
-
+                        
                         NSMutableArray<CDParseType *> *parameterTypes = [NSMutableArray array];
                         while (chr < paramEnd) {
                             const char *tokenEnd = [self endOfTypeEncoding:chr];
@@ -402,10 +412,10 @@
                             chr = tokenEnd;
                         }
                         chr = paramEnd;
-
+                        
                         blockType.parameterTypes = parameterTypes;
                     }
-
+                    
                     NSAssert(type == nil, @"Overwriting type");
                     type = blockType;
                 } else {
