@@ -177,7 +177,7 @@
     }
     [build appendString:@"@protocol" semanticType:CDSemanticTypeKeyword];
     [build appendString:@" " semanticType:CDSemanticTypeStandard];
-    [build appendString:self.name semanticType:CDSemanticTypeDeclared];
+    [build appendString:self.name semanticType:CDSemanticTypeProtocol];
     
     NSArray<CDProtocolModel *> *protocols = self.protocols;
     NSUInteger const protocolCount = protocols.count;
@@ -185,7 +185,7 @@
         [build appendString:@" " semanticType:CDSemanticTypeStandard];
         [build appendString:@"<" semanticType:CDSemanticTypeStandard];
         [protocols enumerateObjectsUsingBlock:^(CDProtocolModel *protocol, NSUInteger idx, BOOL *stop) {
-            [build appendString:protocol.name semanticType:CDSemanticTypeDeclared];
+            [build appendString:protocol.name semanticType:CDSemanticTypeProtocol];
             if ((idx + 1) < protocolCount) {
                 [build appendString:@", " semanticType:CDSemanticTypeStandard];
             }

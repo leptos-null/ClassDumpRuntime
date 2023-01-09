@@ -17,10 +17,14 @@ typedef NS_ENUM(NSUInteger, CDSemanticType) {
     CDSemanticTypeComment,
     // struct, union, type modifiers, language provided primitive types
     CDSemanticTypeKeyword,
-    // the name of a variable- this includes both declartion and usage sites
+    // the name of a variable- this includes both declaration and usage sites
     CDSemanticTypeVariable,
-    // a type that is declared by a header (e.g. NSString)
-    CDSemanticTypeDeclared,
+    // the name portion of a struct or union definition
+    CDSemanticTypeRecordName,
+    // an Obj-C class (e.g. NSString)
+    CDSemanticTypeClass,
+    // an Obj-C protocol (e.g. NSFastEnumeration)
+    CDSemanticTypeProtocol,
     // a number literal (e.g. 2, 18, 1e5, 7.1)
     CDSemanticTypeNumeric,
     

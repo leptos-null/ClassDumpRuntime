@@ -161,12 +161,12 @@
     }
     [build appendString:@"@interface" semanticType:CDSemanticTypeKeyword];
     [build appendString:@" " semanticType:CDSemanticTypeStandard];
-    [build appendString:self.name semanticType:CDSemanticTypeDeclared];
+    [build appendString:self.name semanticType:CDSemanticTypeClass];
     
     Class superclass = class_getSuperclass(self.backing);
     if (superclass) {
         [build appendString:@" : " semanticType:CDSemanticTypeStandard];
-        [build appendString:NSStringFromClass(superclass) semanticType:CDSemanticTypeDeclared];
+        [build appendString:NSStringFromClass(superclass) semanticType:CDSemanticTypeClass];
     }
     
     NSArray<CDProtocolModel *> *protocols = self.protocols;
@@ -175,7 +175,7 @@
         [build appendString:@" " semanticType:CDSemanticTypeStandard];
         [build appendString:@"<" semanticType:CDSemanticTypeStandard];
         [protocols enumerateObjectsUsingBlock:^(CDProtocolModel *protocol, NSUInteger idx, BOOL *stop) {
-            [build appendString:protocol.name semanticType:CDSemanticTypeDeclared];
+            [build appendString:protocol.name semanticType:CDSemanticTypeProtocol];
             if ((idx + 1) < protocolCount) {
                 [build appendString:@", " semanticType:CDSemanticTypeStandard];
             }

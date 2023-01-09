@@ -21,7 +21,7 @@
     BOOL const hasClassName = (self.className != nil);
     
     if (hasClassName) {
-        [build appendString:self.className semanticType:CDSemanticTypeDeclared];
+        [build appendString:self.className semanticType:CDSemanticTypeClass];
     } else {
         [build appendString:@"id" semanticType:CDSemanticTypeKeyword];
     }
@@ -31,7 +31,7 @@
     if (protocolNames.count > 0) {
         [build appendString:@"<" semanticType:CDSemanticTypeStandard];
         [protocolNames enumerateObjectsUsingBlock:^(NSString *protocolName, NSUInteger idx, BOOL *stop) {
-            [build appendString:protocolName semanticType:CDSemanticTypeDeclared];
+            [build appendString:protocolName semanticType:CDSemanticTypeProtocol];
             if ((idx + 1) < protocolNameCount) {
                 [build appendString:@", " semanticType:CDSemanticTypeStandard];
             }

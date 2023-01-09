@@ -20,7 +20,7 @@
     [build appendString:(self.isUnion ? @"union" : @"struct") semanticType:CDSemanticTypeKeyword];
     if (self.name != nil) {
         [build appendString:@" " semanticType:CDSemanticTypeStandard];
-        [build appendString:self.name semanticType:CDSemanticTypeDeclared];
+        [build appendString:self.name semanticType:CDSemanticTypeRecordName];
     }
     if (self.fields != nil) {
         [build appendString:@" { " semanticType:CDSemanticTypeStandard];
