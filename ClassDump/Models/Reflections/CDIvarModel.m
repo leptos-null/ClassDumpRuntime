@@ -7,7 +7,7 @@
 //
 
 #import "CDIvarModel.h"
-#import "../Services/CDTypeParser.h"
+#import "../../Services/CDTypeParser.h"
 
 @implementation CDIvarModel
 

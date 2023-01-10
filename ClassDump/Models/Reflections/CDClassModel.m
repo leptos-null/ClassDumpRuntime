@@ -7,7 +7,7 @@
 //
 
 #import "CDClassModel.h"
-#import "../Services/CDTypeParser.h"
+#import "../../Services/CDTypeParser.h"
 
 #import <dlfcn.h>
 

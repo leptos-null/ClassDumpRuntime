@@ -7,7 +7,7 @@
 //
 
 #import "CDMethodModel.h"
-#import "../Services/CDTypeParser.h"
+#import "../../Services/CDTypeParser.h"
 
 /*
  * @APPLE_LICENSE_HEADER_START@

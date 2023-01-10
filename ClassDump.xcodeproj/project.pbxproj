@@ -120,6 +120,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FA06EB0D296DDB7A008E133B /* Reflections */ = {
+			isa = PBXGroup;
+			children = (
+				FA2A00F723ADD2EA00B52F1D /* CDClassModel.h */,
+				FA2A00FC23ADD2EA00B52F1D /* CDClassModel.m */,
+				FA2A00FB23ADD2EA00B52F1D /* CDProtocolModel.h */,
+				FA2A00F323ADD2EA00B52F1D /* CDProtocolModel.m */,
+				FA2A00F923ADD2EA00B52F1D /* CDPropertyModel.h */,
+				FA2A00F523ADD2EA00B52F1D /* CDPropertyModel.m */,
+				FA06EA27296934A5008E133B /* CDPropertyAttribute.h */,
+				FA06EA28296934A5008E133B /* CDPropertyAttribute.m */,
+				FA2A00F423ADD2EA00B52F1D /* CDMethodModel.h */,
+				FA2A00FA23ADD2EA00B52F1D /* CDMethodModel.m */,
+				FA2A00F823ADD2EA00B52F1D /* CDIvarModel.h */,
+				FA2A00F623ADD2EA00B52F1D /* CDIvarModel.m */,
+			);
+			path = Reflections;
+			sourceTree = "<group>";
+		};
 		FA2A00D323ADD19D00B52F1D = {
 			isa = PBXGroup;
 			children = (
@@ -164,18 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				FAF031DF2942E4D000B6C424 /* ParseTypes */,
-				FA2A00F723ADD2EA00B52F1D /* CDClassModel.h */,
-				FA2A00FC23ADD2EA00B52F1D /* CDClassModel.m */,
-				FA2A00FB23ADD2EA00B52F1D /* CDProtocolModel.h */,
-				FA2A00F323ADD2EA00B52F1D /* CDProtocolModel.m */,
-				FA2A00F923ADD2EA00B52F1D /* CDPropertyModel.h */,
-				FA2A00F523ADD2EA00B52F1D /* CDPropertyModel.m */,
-				FA06EA27296934A5008E133B /* CDPropertyAttribute.h */,
-				FA06EA28296934A5008E133B /* CDPropertyAttribute.m */,
-				FA2A00F423ADD2EA00B52F1D /* CDMethodModel.h */,
-				FA2A00FA23ADD2EA00B52F1D /* CDMethodModel.m */,
-				FA2A00F823ADD2EA00B52F1D /* CDIvarModel.h */,
-				FA2A00F623ADD2EA00B52F1D /* CDIvarModel.m */,
+				FA06EB0D296DDB7A008E133B /* Reflections */,
 				FAF031F22942FC3B00B6C424 /* CDVariableModel.h */,
 				FAF031F32942FC3B00B6C424 /* CDVariableModel.m */,
 				FA5A1ED22962B117005A2A90 /* CDSemanticString.h */,
