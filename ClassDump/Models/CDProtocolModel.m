@@ -164,6 +164,44 @@
 - (CDSemanticString *)semanticLinesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip {
     CDSemanticString *build = [CDSemanticString new];
     
+    NSSet<NSString *> *forwardClasses = [self _forwardDeclarableClassReferences];
+    NSUInteger const forwardClassCount = forwardClasses.count;
+    if (forwardClassCount > 0) {
+        [build appendString:@"@class" semanticType:CDSemanticTypeKeyword];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
+        
+        NSUInteger classNamesRemaining = forwardClassCount;
+        for (NSString *className in forwardClasses) {
+            [build appendString:className semanticType:CDSemanticTypeClass];
+            classNamesRemaining--;
+            if (classNamesRemaining > 0) {
+                [build appendString:@", " semanticType:CDSemanticTypeStandard];
+            }
+        }
+        [build appendString:@";\n" semanticType:CDSemanticTypeStandard];
+    }
+    
+    NSSet<NSString *> *forwardProtocols = [self _forwardDeclarableProtocolReferences];
+    NSUInteger const forwardProtocolCount = forwardProtocols.count;
+    if (forwardProtocolCount > 0) {
+        [build appendString:@"@protocol" semanticType:CDSemanticTypeKeyword];
+        [build appendString:@" " semanticType:CDSemanticTypeStandard];
+        
+        NSUInteger protocolNamesRemaining = forwardProtocolCount;
+        for (NSString *protocolNames in forwardProtocols) {
+            [build appendString:protocolNames semanticType:CDSemanticTypeProtocol];
+            protocolNamesRemaining--;
+            if (protocolNamesRemaining > 0) {
+                [build appendString:@", " semanticType:CDSemanticTypeStandard];
+            }
+        }
+        [build appendString:@";\n" semanticType:CDSemanticTypeStandard];
+    }
+    
+    if (forwardClassCount > 0 || forwardProtocolCount > 0) {
+        [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
+    }
+    
     if (comments) {
         NSString *comment = nil;
         Dl_info info;
