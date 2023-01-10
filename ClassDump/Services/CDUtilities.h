@@ -10,7 +10,7 @@
 
 @interface CDUtilities : NSObject
 
-/// Attempts to find all mach-o images
-+ (NSArray<NSString *> *)dynamicMachImages;
+/// The paths of the images in the loaded dyld shared cache
++ (NSArray<NSString *> *)dyldSharedCacheImagePaths;
 
 @end

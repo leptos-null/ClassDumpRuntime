@@ -8,12 +8,7 @@
 
 #import "CDUtilities.h"
 
-#import <dlfcn.h>
-#import <sys/stat.h>
-#import <sys/mman.h>
-#import <mach/mach.h>
-#import <mach-o/dyld.h>
-#import <objc/runtime.h>
+#import <mach-o/dyld_images.h>
 
 
 /* Portions of code in this file have been explicitly copied from Apple's dyld
@@ -38,179 +33,122 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 
-
-/* from dyld/launch-cache/dyld_cache_format.h */
-struct dyld_cache_header {
-    char magic[16];               // e.g. "dyld_v0    i386"
-    uint32_t mappingOffset;       // file offset to first dyld_cache_mapping_info
-    uint32_t mappingCount;        // number of dyld_cache_mapping_info entries
-    uint32_t imagesOffset;        // file offset to first dyld_cache_image_info
-    uint32_t imagesCount;         // number of dyld_cache_image_info entries
-    uint64_t dyldBaseAddress;     // base address of dyld when cache was built
-    uint64_t codeSignatureOffset; // file offset of code signature blob
-    uint64_t codeSignatureSize;   // size of code signature blob (zero means to end of file)
-    uint64_t slideInfoOffset;     // file offset of kernel slid info
-    uint64_t slideInfoSize;       // size of kernel slid info
-    uint64_t localSymbolsOffset;  // file offset of where local symbols are stored
-    uint64_t localSymbolsSize;    // size of local symbols information
-    uuid_t uuid;                  // unique value for each shared cache file
+// https://github.com/apple-oss-distributions/dyld/blob/c8a445f88f/cache-builder/dyld_cache_format.h#L31
+struct dyld_cache_header
+{
+    char        magic[16];              // e.g. "dyld_v0    i386"
+    uint32_t    mappingOffset;          // file offset to first dyld_cache_mapping_info
+    uint32_t    mappingCount;           // number of dyld_cache_mapping_info entries
+    uint32_t    imagesOffsetOld;        // UNUSED: moved to imagesOffset to prevent older dsc_extarctors from crashing
+    uint32_t    imagesCountOld;         // UNUSED: moved to imagesCount to prevent older dsc_extarctors from crashing
+    uint64_t    dyldBaseAddress;        // base address of dyld when cache was built
+    uint64_t    codeSignatureOffset;    // file offset of code signature blob
+    uint64_t    codeSignatureSize;      // size of code signature blob (zero means to end of file)
+    uint64_t    slideInfoOffsetUnused;  // unused.  Used to be file offset of kernel slid info
+    uint64_t    slideInfoSizeUnused;    // unused.  Used to be size of kernel slid info
+    uint64_t    localSymbolsOffset;     // file offset of where local symbols are stored
+    uint64_t    localSymbolsSize;       // size of local symbols information
+    uint8_t     uuid[16];               // unique value for each shared cache file
+    uint64_t    cacheType;              // 0 for development, 1 for production, 2 for multi-cache
+    uint32_t    branchPoolsOffset;      // file offset to table of uint64_t pool addresses
+    uint32_t    branchPoolsCount;       // number of uint64_t entries
+    uint64_t    dyldInCacheMH;          // (unslid) address of mach_header of dyld in cache
+    uint64_t    dyldInCacheEntry;       // (unslid) address of entry point (_dyld_start) of dyld in cache
+    uint64_t    imagesTextOffset;       // file offset to first dyld_cache_image_text_info
+    uint64_t    imagesTextCount;        // number of dyld_cache_image_text_info entries
+    uint64_t    patchInfoAddr;          // (unslid) address of dyld_cache_patch_info
+    uint64_t    patchInfoSize;          // Size of all of the patch information pointed to via the dyld_cache_patch_info
+    uint64_t    otherImageGroupAddrUnused;    // unused
+    uint64_t    otherImageGroupSizeUnused;    // unused
+    uint64_t    progClosuresAddr;       // (unslid) address of list of program launch closures
+    uint64_t    progClosuresSize;       // size of list of program launch closures
+    uint64_t    progClosuresTrieAddr;   // (unslid) address of trie of indexes into program launch closures
+    uint64_t    progClosuresTrieSize;   // size of trie of indexes into program launch closures
+    uint32_t    platform;               // platform number (macOS=1, etc)
+    uint32_t    formatVersion          : 8,  // dyld3::closure::kFormatVersion
+    dylibsExpectedOnDisk   : 1,  // dyld should expect the dylib exists on disk and to compare inode/mtime to see if cache is valid
+    simulator              : 1,  // for simulator of specified platform
+    locallyBuiltCache      : 1,  // 0 for B&I built cache, 1 for locally built cache
+    builtFromChainedFixups : 1,  // some dylib in cache was built using chained fixups, so patch tables must be used for overrides
+    padding                : 20; // TBD
+    uint64_t    sharedRegionStart;      // base load address of cache if not slid
+    uint64_t    sharedRegionSize;       // overall size required to map the cache and all subCaches, if any
+    uint64_t    maxSlide;               // runtime slide of cache can be between zero and this value
+    uint64_t    dylibsImageArrayAddr;   // (unslid) address of ImageArray for dylibs in this cache
+    uint64_t    dylibsImageArraySize;   // size of ImageArray for dylibs in this cache
+    uint64_t    dylibsTrieAddr;         // (unslid) address of trie of indexes of all cached dylibs
+    uint64_t    dylibsTrieSize;         // size of trie of cached dylib paths
+    uint64_t    otherImageArrayAddr;    // (unslid) address of ImageArray for dylibs and bundles with dlopen closures
+    uint64_t    otherImageArraySize;    // size of ImageArray for dylibs and bundles with dlopen closures
+    uint64_t    otherTrieAddr;          // (unslid) address of trie of indexes of all dylibs and bundles with dlopen closures
+    uint64_t    otherTrieSize;          // size of trie of dylibs and bundles with dlopen closures
+    uint32_t    mappingWithSlideOffset; // file offset to first dyld_cache_mapping_and_slide_info
+    uint32_t    mappingWithSlideCount;  // number of dyld_cache_mapping_and_slide_info entries
+    uint64_t    dylibsPBLStateArrayAddrUnused;    // unused
+    uint64_t    dylibsPBLSetAddr;           // (unslid) address of PrebuiltLoaderSet of all cached dylibs
+    uint64_t    programsPBLSetPoolAddr;     // (unslid) address of pool of PrebuiltLoaderSet for each program
+    uint64_t    programsPBLSetPoolSize;     // size of pool of PrebuiltLoaderSet for each program
+    uint64_t    programTrieAddr;            // (unslid) address of trie mapping program path to PrebuiltLoaderSet
+    uint32_t    programTrieSize;
+    uint32_t    osVersion;                  // OS Version of dylibs in this cache for the main platform
+    uint32_t    altPlatform;                // e.g. iOSMac on macOS
+    uint32_t    altOsVersion;               // e.g. 14.0 for iOSMac
+    uint64_t    swiftOptsOffset;        // VM offset from cache_header* to Swift optimizations header
+    uint64_t    swiftOptsSize;          // size of Swift optimizations header
+    uint32_t    subCacheArrayOffset;    // file offset to first dyld_subcache_entry
+    uint32_t    subCacheArrayCount;     // number of subCache entries
+    uint8_t     symbolFileUUID[16];     // unique value for the shared cache file containing unmapped local symbols
+    uint64_t    rosettaReadOnlyAddr;    // (unslid) address of the start of where Rosetta can add read-only/executable data
+    uint64_t    rosettaReadOnlySize;    // maximum size of the Rosetta read-only/executable region
+    uint64_t    rosettaReadWriteAddr;   // (unslid) address of the start of where Rosetta can add read-write data
+    uint64_t    rosettaReadWriteSize;   // maximum size of the Rosetta read-write region
+    uint32_t    imagesOffset;           // file offset to first dyld_cache_image_info
+    uint32_t    imagesCount;            // number of dyld_cache_image_info entries
+    uint32_t    cacheSubType;           // 0 for development, 1 for production, when cacheType is multi-cache(2)
+    uint64_t    objcOptsOffset;         // VM offset from cache_header* to ObjC optimizations header
+    uint64_t    objcOptsSize;           // size of ObjC optimizations header
+    uint64_t    cacheAtlasOffset;       // VM offset from cache_header* to embedded cache atlas for process introspection
+    uint64_t    cacheAtlasSize;         // size of embedded cache atlas
+    uint64_t    dynamicDataOffset;      // VM offset from cache_header* to the location of dyld_cache_dynamic_data_header
+    uint64_t    dynamicDataMaxSize;     // maximum size of space reserved from dynamic data
 };
 
-struct dyld_cache_mapping_info {
-    uint64_t address;
-    uint64_t size;
-    uint64_t fileOffset;
-    uint32_t maxProt;
-    uint32_t initProt;
+// https://github.com/apple-oss-distributions/dyld/blob/c8a445f88f/cache-builder/dyld_cache_format.h#L142
+struct dyld_cache_image_info
+{
+    uint64_t    address;
+    uint64_t    modTime;
+    uint64_t    inode;
+    uint32_t    pathFileOffset;
+    uint32_t    pad;
 };
 
-struct dyld_cache_image_info {
-    uint64_t address;
-    uint64_t modTime;
-    uint64_t inode;
-    uint32_t pathFileOffset;
-    uint32_t pad;
-};
-
-#define MACOSX_DYLD_SHARED_CACHE_DIR "/var/db/dyld/"
-#define IPHONE_DYLD_SHARED_CACHE_DIR "/System/Library/Caches/com.apple.dyld/"
-#define DYLD_SHARED_CACHE_BASE_NAME "dyld_shared_cache_"
-/* end dyld/launch-cache/dyld_cache_format.h */
-
-/* from dyld/src/dyld.cpp */
-#if __i386__
-#    define ARCH_NAME                   "i386"
-#    define ARCH_CACHE_MAGIC "dyld_v1    i386"
-#elif __x86_64__
-#    define ARCH_NAME                 "x86_64"
-#    define ARCH_CACHE_MAGIC "dyld_v1  x86_64"
-#elif __ARM_ARCH_5TEJ__
-#    define ARCH_NAME                  "armv5"
-#    define ARCH_CACHE_MAGIC "dyld_v1   armv5"
-#elif __ARM_ARCH_6K__
-#    define ARCH_NAME                  "armv6"
-#    define ARCH_CACHE_MAGIC "dyld_v1   armv6"
-#elif __ARM_ARCH_7F__
-#    define ARCH_NAME                 "armv7f"
-#    define ARCH_CACHE_MAGIC "dyld_v1  armv7f"
-#elif __ARM_ARCH_7K__
-#    define ARCH_NAME                 "armv7k"
-#    define ARCH_CACHE_MAGIC "dyld_v1  armv7k"
-#elif __ARM_ARCH_7A__
-#    define ARCH_NAME                  "armv7"
-#    define ARCH_CACHE_MAGIC "dyld_v1   armv7"
-#elif __ARM_ARCH_7S__
-#    define ARCH_NAME                 "armv7s"
-#    define ARCH_CACHE_MAGIC "dyld_v1  armv7s"
-#elif __arm64__
-#    define ARCH_NAME                  "arm64"
-#    define ARCH_CACHE_MAGIC "dyld_v1   arm64"
-#endif
-/* end dyld/src/dyld.cpp */
-
-#if TARGET_OS_SIMULATOR
-#    warning This code is not intended to be run in a simulator, most likely the cache will not be found
-#endif
-
-// this check is not in the dyld source
-_Static_assert(sizeof(ARCH_CACHE_MAGIC) == sizeof(((struct dyld_cache_header *)0)->magic),
-               "Cache magic must match struct field size");
 
 @implementation CDUtilities
 
-+ (NSArray<NSString *> *)dynamicMachImages {
-    NSMutableSet<NSString *> *ret = [NSMutableSet setWithArray:[self _dyldImages]];
++ (NSArray<NSString *> *)dyldSharedCacheImagePaths {
+    // thanks to https://github.com/EthanArbuckle/dlopen_handle_info/blob/054ea7019a/dlopen_handle.m#L84
+    struct task_dyld_info dyld_info;
+    mach_msg_type_number_t count = TASK_DYLD_INFO_COUNT;
+    task_info(mach_task_self_, TASK_DYLD_INFO, (task_info_t)&dyld_info, &count);
     
-    NSArray<NSString *> *searchDirs = NSSearchPathForDirectoriesInDomains(NSAllLibrariesDirectory, NSAllDomainsMask, YES);
-    for (NSString *searchDir in searchDirs) {
-        [ret addObjectsFromArray:[self _imagePathsForBundleParentPath:[searchDir stringByAppendingPathComponent:@"Frameworks"]]];
-        [ret addObjectsFromArray:[self _imagePathsForBundleParentPath:[searchDir stringByAppendingPathComponent:@"PrivateFrameworks"]]];
-    }
+    struct dyld_all_image_infos *dyld_runtime_infos = (struct dyld_all_image_infos *)dyld_info.all_image_info_addr;
+    const void *const shared_cache_base = (const void *)dyld_runtime_infos->sharedCacheBaseAddress;
     
-    return ret.allObjects;
-}
-
-+ (NSArray<NSString *> *)_imagePathsForBundleParentPath:(NSString *)parentPath {
-    NSMutableArray<NSString *> *ret = [NSMutableArray array];
-    NSArray<NSString *> *contents = [NSFileManager.defaultManager contentsOfDirectoryAtPath:parentPath error:NULL];
-    for (NSString *content in contents) {
-        NSString *fullPath = [parentPath stringByAppendingPathComponent:content];
-        NSBundle *bundle = [NSBundle bundleWithPath:fullPath];
-        NSString *targetPath = bundle.executablePath.stringByResolvingSymlinksInPath;
-        if (targetPath) {
-            [ret addObject:targetPath];
-        }
-        [ret addObjectsFromArray:[self _imagePathsForBundleParentPath:bundle.sharedFrameworksPath]];
-        [ret addObjectsFromArray:[self _imagePathsForBundleParentPath:bundle.privateFrameworksPath]];
-    }
-    return ret;
-}
-
-+ (NSMutableArray<NSString *> *)_dyldImages {
-    const char *cache_file_dir = getenv("DYLD_SHARED_CACHE_DIR");
-    if (cache_file_dir == NULL) {
-#if TARGET_OS_IPHONE
-        cache_file_dir = IPHONE_DYLD_SHARED_CACHE_DIR;
-#else
-        cache_file_dir = MACOSX_DYLD_SHARED_CACHE_DIR;
-#endif
-    }
-    const size_t cache_file_dir_len = strlen(cache_file_dir);
-    const size_t cache_file_path_size = cache_file_dir_len + strlen(DYLD_SHARED_CACHE_BASE_NAME ARCH_NAME) + 2;
-    char cache_file_path[cache_file_path_size];
-    strncpy(cache_file_path, cache_file_dir, cache_file_path_size);
-    strncpy(cache_file_path + cache_file_dir_len, DYLD_SHARED_CACHE_BASE_NAME ARCH_NAME, cache_file_path_size);
-    // cache_file_path[cache_file_path_size - 2] is set to 0 by strncpy
-    cache_file_path[cache_file_path_size - 1] = '\0';
+    const struct dyld_cache_header *const cache_header = shared_cache_base;
     
-    /* modified from dyld/src/dyld.cpp */
-#if __x86_64__
-    struct host_basic_info hostInfo;
-    mach_msg_type_number_t basicHostInfoReq = HOST_BASIC_INFO_COUNT;
-    const mach_port_t hostPort = mach_host_self();
-    const kern_return_t hostInfoResult = host_info(hostPort, HOST_BASIC_INFO, (host_info_t)&hostInfo, &basicHostInfoReq);
-    mach_port_deallocate(mach_task_self_, hostPort);
-    if (hostInfoResult == KERN_SUCCESS && hostInfo.cpu_subtype == CPU_SUBTYPE_X86_64_H) {
-        cache_file_path[cache_file_path_size - 2] = 'h';
-    }
-#endif
-    /* end dyldsrc/dyld.cpp */
+    // I believe this changed with iOS 14
+    BOOL usesOld = (cache_header->imagesCountOld != 0);
+    const uint32_t images_offset = usesOld ? cache_header->imagesOffsetOld : cache_header->imagesOffset;
+    const uint32_t image_count = usesOld ? cache_header->imagesCountOld : cache_header->imagesCount;
     
-    /* modified from dyld/launch-cache/dsc_extractor.cpp */
-    struct stat statbuf;
-    if (stat(cache_file_path, &statbuf)) {
-        return NULL;
-    }
+    const struct dyld_cache_image_info *const image_info = shared_cache_base + images_offset;
     
-    const int cache_fd = open(cache_file_path, O_RDONLY);
-    if (cache_fd < 0) {
-        return NULL;
-    }
-    
-    const off_t cache_size = statbuf.st_size;
-    void *const mapped_cache = mmap(NULL, cache_size, PROT_READ, MAP_PRIVATE, cache_fd, 0);
-    close(cache_fd);
-    if (mapped_cache == MAP_FAILED) {
-        return NULL;
-    }
-    /* end dyld/launch-cache/dsc_extractor.cpp */
-    
-    /* modified from dyld/launch-cache/dsc_iterator.cpp */
-    if (cache_size < sizeof(struct dyld_cache_header)) {
-        munmap(mapped_cache, cache_size);
-        return NULL;
-    }
-    const struct dyld_cache_header     *const header = mapped_cache;
-    const struct dyld_cache_image_info *const dylibs = &mapped_cache[header->imagesOffset];
-    
-    NSMutableArray<NSString *> *ret = [NSMutableArray arrayWithCapacity:header->imagesCount];
-    for (uint32_t imageIndex = 0; imageIndex < header->imagesCount; imageIndex++) {
-        const char *dylibPath = mapped_cache + dylibs[imageIndex].pathFileOffset;
+    NSMutableArray<NSString *> *ret = [NSMutableArray arrayWithCapacity:image_count];
+    for (uint32_t imageIndex = 0; imageIndex < image_count; imageIndex++) {
+        const char *dylibPath = shared_cache_base + image_info[imageIndex].pathFileOffset;
         [ret addObject:@(dylibPath)];
     }
-    /* end dyld/launch-cache/dsc_iterator.cpp */
-    
-    munmap(mapped_cache, cache_size);
     return ret;
 }
 
