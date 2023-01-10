@@ -34,6 +34,14 @@
     return build;
 }
 
+- (NSSet<NSString *> *)classReferences {
+    return [self.pointee classReferences];
+}
+
+- (NSSet<NSString *> *)protocolReferences {
+    return [self.pointee protocolReferences];
+}
+
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[self class]]) {
         __typeof(self) casted = (__typeof(casted))object;

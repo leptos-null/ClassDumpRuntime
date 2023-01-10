@@ -43,4 +43,13 @@ OBJC_EXTERN NSString *_Nullable NSStringFromCDTypeModifier(CDTypeModifier);
 
 - (nonnull CDSemanticString *)modifiersSemanticString;
 
+/// Classes this type references
+///
+/// For example, `NSCache<NSFastEnumeration> *` references the "NSCache" class
+- (nullable NSSet<NSString *> *)classReferences;
+/// Protocols this type references
+///
+/// For example, `NSCache<NSFastEnumeration> *` references the "NSFastEnumeration" protocol
+- (nullable NSSet<NSString *> *)protocolReferences;
+
 @end

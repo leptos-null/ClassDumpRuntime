@@ -127,6 +127,36 @@ static size_t characterCount(const char *str, const char c) {
     return build;
 }
 
+- (NSSet<NSString *> *)classReferences {
+    NSMutableSet<NSString *> *build = [NSMutableSet set];
+    NSSet<NSString *> *returnReferences = [self.returnType classReferences];
+    if (returnReferences != nil) {
+        [build unionSet:returnReferences];
+    }
+    for (CDParseType *paramType in self.argumentTypes) {
+        NSSet<NSString *> *paramReferences = [paramType classReferences];
+        if (paramReferences != nil) {
+            [build unionSet:paramReferences];
+        }
+    }
+    return build;
+}
+
+- (NSSet<NSString *> *)protocolReferences {
+    NSMutableSet<NSString *> *build = [NSMutableSet set];
+    NSSet<NSString *> *returnReferences = [self.returnType protocolReferences];
+    if (returnReferences != nil) {
+        [build unionSet:returnReferences];
+    }
+    for (CDParseType *paramType in self.argumentTypes) {
+        NSSet<NSString *> *paramReferences = [paramType protocolReferences];
+        if (paramReferences != nil) {
+            [build unionSet:paramReferences];
+        }
+    }
+    return build;
+}
+
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[self class]]) {
         __typeof(self) casted = (__typeof(casted))object;

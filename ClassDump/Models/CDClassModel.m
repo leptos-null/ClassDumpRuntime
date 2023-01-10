@@ -299,6 +299,95 @@
     }
 }
 
+- (NSSet<NSString *> *)_forwardDeclarableClassReferences {
+    NSMutableSet<NSString *> *build = [NSMutableSet set];
+    
+    [self _unionReferences:build sources:self.classProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type classReferences];
+    }];
+    [self _unionReferences:build sources:self.instanceProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type classReferences];
+    }];
+    
+    [self _unionReferences:build sources:self.classMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model classReferences];
+    }];
+    [self _unionReferences:build sources:self.instanceMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model classReferences];
+    }];
+    
+    [self _unionReferences:build sources:self.ivars resolve:^NSSet<NSString *> *(CDIvarModel *model) {
+        return [model.type classReferences];
+    }];
+    
+    [build removeObject:self.name];
+    return build;
+}
+
+- (NSSet<NSString *> *)_forwardDeclarableProtocolReferences {
+    NSMutableSet<NSString *> *build = [NSMutableSet set];
+    
+    [self _unionReferences:build sources:self.classProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type protocolReferences];
+    }];
+    [self _unionReferences:build sources:self.instanceProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type protocolReferences];
+    }];
+    
+    [self _unionReferences:build sources:self.classMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model protocolReferences];
+    }];
+    [self _unionReferences:build sources:self.instanceMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model protocolReferences];
+    }];
+    
+    [self _unionReferences:build sources:self.ivars resolve:^NSSet<NSString *> *(CDIvarModel *model) {
+        return [model.type protocolReferences];
+    }];
+    
+    return build;
+}
+
+- (NSSet<NSString *> *)classReferences {
+    NSMutableSet<NSString *> *build = [NSMutableSet set];
+    
+    NSSet<NSString *> *forwardDeclarable = [self _forwardDeclarableClassReferences];
+    if (forwardDeclarable != nil) {
+        [build unionSet:forwardDeclarable];
+    }
+    
+    Class const superclass = class_getSuperclass(self.backing);
+    if (superclass != NULL) {
+        [build addObject:NSStringFromClass(superclass)];
+    }
+    
+    return build;
+}
+
+- (NSSet<NSString *> *)protocolReferences {
+    NSMutableSet<NSString *> *build = [NSMutableSet set];
+    
+    NSSet<NSString *> *forwardDeclarable = [self _forwardDeclarableProtocolReferences];
+    if (forwardDeclarable != nil) {
+        [build unionSet:forwardDeclarable];
+    }
+    
+    for (CDProtocolModel *protocol in self.protocols) {
+        [build addObject:protocol.name];
+    }
+    
+    return build;
+}
+
+- (void)_unionReferences:(NSMutableSet<NSString *> *)build sources:(NSArray *)sources resolve:(NSSet<NSString *> *(NS_NOESCAPE ^)(id))resolver {
+    for (id source in sources) {
+        NSSet<NSString *> *refs = resolver(source);
+        if (refs != nil) {
+            [build unionSet:refs];
+        }
+    }
+}
+
 - (NSString *)description {
     return self.name;
 }

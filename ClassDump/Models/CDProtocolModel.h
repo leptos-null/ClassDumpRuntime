@@ -42,4 +42,15 @@
 
 - (CDSemanticString *)semanticLinesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip;
 
+/// Classes the protocol references in the declaration
+///
+/// In other words, all the classes that the compiler would need to see
+/// for the header to pass the type checking stage of compilation.
+- (NSSet<NSString *> *)classReferences;
+/// Protocols the protocol references in the declaration
+///
+/// In other words, all the protocols that the compiler would need to see
+/// for the header to pass the type checking stage of compilation.
+- (NSSet<NSString *> *)protocolReferences;
+
 @end

@@ -51,6 +51,22 @@
     return build;
 }
 
+- (NSSet<NSString *> *)classReferences {
+    NSString *className = self.className;
+    if (className != nil) {
+        return [NSSet setWithObject:className];
+    }
+    return nil;
+}
+
+- (NSSet<NSString *> *)protocolReferences {
+    NSArray<NSString *> *protocolNames = self.protocolNames;
+    if (protocolNames != nil) {
+        return [NSSet setWithArray:protocolNames];
+    }
+    return nil;
+}
+
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[self class]]) {
         __typeof(self) casted = (__typeof(casted))object;

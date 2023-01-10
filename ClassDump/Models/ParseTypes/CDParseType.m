@@ -68,6 +68,14 @@ NSString *NSStringFromCDTypeModifier(CDTypeModifier modifier) {
     return build;
 }
 
+- (NSSet<NSString *> *)classReferences {
+    return nil;
+}
+
+- (NSSet<NSString *> *)protocolReferences {
+    return nil;
+}
+
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[self class]]) {
         __typeof(self) casted = (__typeof(casted))object;

@@ -280,6 +280,103 @@
     }
 }
 
+- (NSSet<NSString *> *)_forwardDeclarableClassReferences {
+    NSMutableSet<NSString *> *build = [NSMutableSet set];
+    
+    [self _unionReferences:build sources:self.requiredClassProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type classReferences];
+    }];
+    [self _unionReferences:build sources:self.requiredInstanceProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type classReferences];
+    }];
+    
+    [self _unionReferences:build sources:self.requiredClassMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model classReferences];
+    }];
+    [self _unionReferences:build sources:self.requiredInstanceMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model classReferences];
+    }];
+    
+    [self _unionReferences:build sources:self.optionalClassProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type classReferences];
+    }];
+    [self _unionReferences:build sources:self.optionalInstanceProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type classReferences];
+    }];
+    
+    [self _unionReferences:build sources:self.optionalClassMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model classReferences];
+    }];
+    [self _unionReferences:build sources:self.optionalInstanceMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model classReferences];
+    }];
+    
+    return build;
+}
+
+- (NSSet<NSString *> *)_forwardDeclarableProtocolReferences {
+    NSMutableSet<NSString *> *build = [NSMutableSet set];
+    
+    [self _unionReferences:build sources:self.requiredClassProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type protocolReferences];
+    }];
+    [self _unionReferences:build sources:self.requiredInstanceProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type protocolReferences];
+    }];
+    
+    [self _unionReferences:build sources:self.requiredClassMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model protocolReferences];
+    }];
+    [self _unionReferences:build sources:self.requiredInstanceMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model protocolReferences];
+    }];
+    
+    [self _unionReferences:build sources:self.optionalClassProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type protocolReferences];
+    }];
+    [self _unionReferences:build sources:self.optionalInstanceProperties resolve:^NSSet<NSString *> *(CDPropertyModel *model) {
+        return [model.type protocolReferences];
+    }];
+    
+    [self _unionReferences:build sources:self.optionalClassMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model protocolReferences];
+    }];
+    [self _unionReferences:build sources:self.optionalInstanceMethods resolve:^NSSet<NSString *> *(CDMethodModel *model) {
+        return [model protocolReferences];
+    }];
+    
+    [build removeObject:self.name];
+    return build;
+}
+
+- (NSSet<NSString *> *)classReferences {
+    return [self _forwardDeclarableClassReferences];
+}
+
+- (NSSet<NSString *> *)protocolReferences {
+    NSMutableSet<NSString *> *build = [NSMutableSet set];
+    
+    NSSet<NSString *> *forwardDeclarable = [self _forwardDeclarableProtocolReferences];
+    if (forwardDeclarable != nil) {
+        [build unionSet:forwardDeclarable];
+    }
+    
+    for (CDProtocolModel *protocol in self.protocols) {
+        [build addObject:protocol.name];
+    }
+    
+    return build;
+}
+
+- (void)_unionReferences:(NSMutableSet<NSString *> *)build sources:(NSArray *)sources resolve:(NSSet<NSString *> *(NS_NOESCAPE ^)(id))resolver {
+    for (id source in sources) {
+        NSSet<NSString *> *refs = resolver(source);
+        if (refs != nil) {
+            [build unionSet:refs];
+        }
+    }
+}
+
 - (NSString *)description {
     return self.name;
 }

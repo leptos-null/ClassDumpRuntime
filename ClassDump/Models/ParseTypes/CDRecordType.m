@@ -44,6 +44,28 @@
     return build;
 }
 
+- (NSSet<NSString *> *)classReferences {
+    NSMutableSet<NSString *> *build = [NSMutableSet set];
+    for (CDVariableModel *variableModel in self.fields) {
+        NSSet<NSString *> *paramReferences = [variableModel.type classReferences];
+        if (paramReferences != nil) {
+            [build unionSet:paramReferences];
+        }
+    }
+    return build;
+}
+
+- (NSSet<NSString *> *)protocolReferences {
+    NSMutableSet<NSString *> *build = [NSMutableSet set];
+    for (CDVariableModel *variableModel in self.fields) {
+        NSSet<NSString *> *paramReferences = [variableModel.type protocolReferences];
+        if (paramReferences != nil) {
+            [build unionSet:paramReferences];
+        }
+    }
+    return build;
+}
+
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[self class]]) {
         __typeof(self) casted = (__typeof(casted))object;
