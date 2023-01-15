@@ -389,10 +389,19 @@
                         blockType.returnType = [self typeForEncodingStart:chr end:parameterEncoding error:NULL];
                         chr = parameterEncoding;
                         
-                        NSAssert(chr[0] == '@' && chr[1], @"First block parameter should be itself");
+                        NSAssert(chr[0] == '@' && chr[1] == '?', @"First block parameter should be itself");
                         chr += 2; // skip first block parameter
                         
-                        const char *paramEnd = chr;
+                        // what we expect is that the input string looks something like:
+                        //   "@?<@?____>"
+                        //         ^
+                        // chr is currently pointing here. Initialize `paramEnd` on the
+                        // character before, since `paramEnd` is incremented before being read,
+                        // which would be an issue if the input string is
+                        //   "@?<@?>"
+                        //         ^
+                        // because chr points here, and we'd end up walking past the end of the type.
+                        const char *paramEnd = chr - 1;
                         unsigned openTokens = 1;
                         while (openTokens) {
                             switch (*++paramEnd) {
