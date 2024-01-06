@@ -1,7 +1,10 @@
 include $(THEOS)/makefiles/common.mk
 
-LIBRARY_NAME = ClassDumpRuntime
-ClassDumpRuntime_CFLAGS = -fobjc-arc
-ClassDumpRuntime_FILES = $(wildcard ClassDump/*/*.m) $(wildcard ClassDump/*/*/*.m)
+TOOL_NAME = classdumpctl
 
-include $(THEOS_MAKE_PATH)/library.mk
+classdumpctl_FILES = $(wildcard classdumpctl_src/*.m) $(wildcard ClassDump/*/*.m) $(wildcard ClassDump/*/*/*.m)
+classdumpctl_CFLAGS = -fobjc-arc -I.
+classdumpctl_CODESIGN_FLAGS = -Sentitlements.plist
+classdumpctl_INSTALL_PATH = /usr/local/bin
+
+include $(THEOS_MAKE_PATH)/tool.mk

@@ -1,8 +1,8 @@
-Package: null.leptos.classdumpruntime
-Name: ClassDumpRuntime
+Package: null.leptos.classdumpctl
+Name: classdumpctl
 Version: 0.0.1
 Architecture: iphoneos-arm
-Description: ClassDump utility intended to be used with Cycript
+Description: Command line tool to dump Obj-C headers
 Maintainer: Leptos <leptos.0.null@gmail.com>
 Author: Leptos <leptos.0.null@gmail.com>
 Section: System
