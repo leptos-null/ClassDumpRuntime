@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,7 @@
 		FA2A010323ADD2EA00B52F1D /* CDMethodModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2A00FA23ADD2EA00B52F1D /* CDMethodModel.m */; };
 		FA2A010423ADD2EA00B52F1D /* CDClassModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2A00FC23ADD2EA00B52F1D /* CDClassModel.m */; };
 		FA2A011C23AEB15700B52F1D /* CDParsePrimitiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2A011B23AEB15700B52F1D /* CDParsePrimitiveTests.m */; };
+		FA2A011E23AEB15700B52F1D /* ClassDump.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2A00DC23ADD19D00B52F1D /* ClassDump.framework */; };
 		FA5A1ED42962B117005A2A90 /* CDSemanticString.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5A1ED32962B117005A2A90 /* CDSemanticString.m */; };
 		FA829A0323BD250100FA4DC1 /* CDParseAdvancedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */; };
 		FA829A0523BD310600FA4DC1 /* CDParseCppTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */; };
@@ -38,7 +39,6 @@
 		FAE3C1262B81E1A000242A99 /* CDPropertyAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = FA06EA27296934A5008E133B /* CDPropertyAttribute.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAE3C1572B81E5AC00242A99 /* CDTypeParser.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2A00EF23ADD2EA00B52F1D /* CDTypeParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAE3C1592B81E5B300242A99 /* CDUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2A00F023ADD2EA00B52F1D /* CDUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FA2A011E23AEB15700B52F1D /* ClassDump.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2A00DC23ADD19D00B52F1D /* ClassDump.framework */; };
 		FAE3C1632B81E70D00242A99 /* ClassDump.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FA2A00DC23ADD19D00B52F1D /* ClassDump.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FAE71A7523DA0AB20079321A /* CDObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE71A7423DA0AB20079321A /* CDObjCTests.m */; };
 		FAF031E22942E4FF00B6C424 /* CDParseType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031E12942E4FF00B6C424 /* CDParseType.m */; };
@@ -330,7 +330,8 @@
 		FA2A00D423ADD19D00B52F1D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1410;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = Leptos;
 				TargetAttributes = {
 					FA2A00DB23ADD19D00B52F1D = {
@@ -455,6 +456,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -519,6 +521,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -545,14 +548,33 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7P56K8K4MY;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++17";
 				PRODUCT_BUNDLE_IDENTIFIER = null.leptos.ClassDump;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos appletvsimulator appletvos";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -560,14 +582,33 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7P56K8K4MY;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++17";
 				PRODUCT_BUNDLE_IDENTIFIER = null.leptos.ClassDump;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos appletvsimulator appletvos";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
