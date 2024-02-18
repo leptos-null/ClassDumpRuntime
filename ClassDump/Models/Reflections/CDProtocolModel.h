@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "CDPropertyModel.h"
-#import "CDMethodModel.h"
+#import <ClassDump/CDPropertyModel.h>
+#import <ClassDump/CDMethodModel.h>
 
 @interface CDProtocolModel : NSObject
 /// The Obj-C runtime @c Protocol

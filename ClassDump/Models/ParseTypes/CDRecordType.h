@@ -6,8 +6,8 @@
 //  Copyright © 2022 Leptos. All rights reserved.
 //
 
-#import "CDParseType.h"
-#import "../CDVariableModel.h"
+#import <ClassDump/CDParseType.h>
+#import <ClassDump/CDVariableModel.h>
 
 /// Type representing a @c struct or @c union
 @interface CDRecordType : CDParseType

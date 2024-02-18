@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-#import "ParseTypes/CDParseType.h"
+#import <ClassDump/CDParseType.h>
 
 @interface CDVariableModel : NSObject
 

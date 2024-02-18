@@ -16,10 +16,30 @@
 		FA2A010323ADD2EA00B52F1D /* CDMethodModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2A00FA23ADD2EA00B52F1D /* CDMethodModel.m */; };
 		FA2A010423ADD2EA00B52F1D /* CDClassModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2A00FC23ADD2EA00B52F1D /* CDClassModel.m */; };
 		FA2A011C23AEB15700B52F1D /* CDParsePrimitiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2A011B23AEB15700B52F1D /* CDParsePrimitiveTests.m */; };
-		FA2A011E23AEB15700B52F1D /* libClassDump.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2A00DC23ADD19D00B52F1D /* libClassDump.a */; };
 		FA5A1ED42962B117005A2A90 /* CDSemanticString.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5A1ED32962B117005A2A90 /* CDSemanticString.m */; };
 		FA829A0323BD250100FA4DC1 /* CDParseAdvancedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */; };
 		FA829A0523BD310600FA4DC1 /* CDParseCppTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */; };
+		FAE3C1102B81E11000242A99 /* CDVariableModel.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF031F22942FC3B00B6C424 /* CDVariableModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1112B81E11A00242A99 /* ClassDump.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2A00EB23ADD21200B52F1D /* ClassDump.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1182B81E1A000242A99 /* CDPrimitiveType.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF031E32942F6C400B6C424 /* CDPrimitiveType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1192B81E1A000242A99 /* CDArrayType.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF031F52942FF2A00B6C424 /* CDArrayType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C11A2B81E1A000242A99 /* CDProtocolModel.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2A00FB23ADD2EA00B52F1D /* CDProtocolModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C11B2B81E1A000242A99 /* CDSemanticString.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5A1ED22962B117005A2A90 /* CDSemanticString.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C11C2B81E1A000242A99 /* CDBitFieldType.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF031EF2942F90D00B6C424 /* CDBitFieldType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C11D2B81E1A000242A99 /* CDPointerType.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF031EC2942F8D300B6C424 /* CDPointerType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C11E2B81E1A000242A99 /* CDRecordType.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF031E62942F8C300B6C424 /* CDRecordType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C11F2B81E1A000242A99 /* CDClassModel.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2A00F723ADD2EA00B52F1D /* CDClassModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1202B81E1A000242A99 /* CDParseType.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF031E02942E4FF00B6C424 /* CDParseType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1212B81E1A000242A99 /* CDPropertyModel.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2A00F923ADD2EA00B52F1D /* CDPropertyModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1222B81E1A000242A99 /* CDObjectType.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF031F82943154B00B6C424 /* CDObjectType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1232B81E1A000242A99 /* CDIvarModel.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2A00F823ADD2EA00B52F1D /* CDIvarModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1242B81E1A000242A99 /* CDBlockType.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF031FB294C441E00B6C424 /* CDBlockType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1252B81E1A000242A99 /* CDMethodModel.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2A00F423ADD2EA00B52F1D /* CDMethodModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1262B81E1A000242A99 /* CDPropertyAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = FA06EA27296934A5008E133B /* CDPropertyAttribute.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1572B81E5AC00242A99 /* CDTypeParser.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2A00EF23ADD2EA00B52F1D /* CDTypeParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAE3C1592B81E5B300242A99 /* CDUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2A00F023ADD2EA00B52F1D /* CDUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FA2A011E23AEB15700B52F1D /* ClassDump.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2A00DC23ADD19D00B52F1D /* ClassDump.framework */; };
+		FAE3C1632B81E70D00242A99 /* ClassDump.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FA2A00DC23ADD19D00B52F1D /* ClassDump.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FAE71A7523DA0AB20079321A /* CDObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE71A7423DA0AB20079321A /* CDObjCTests.m */; };
 		FAF031E22942E4FF00B6C424 /* CDParseType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031E12942E4FF00B6C424 /* CDParseType.m */; };
 		FAF031E52942F6C400B6C424 /* CDPrimitiveType.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF031E42942F6C400B6C424 /* CDPrimitiveType.m */; };
@@ -43,13 +63,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		FA2A00DA23ADD19D00B52F1D /* CopyFiles */ = {
+		FAE3C1662B81E70D00242A99 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
+			dstPath = "";
+			dstSubfolderSpec = 10;
 			files = (
+				FAE3C1632B81E70D00242A99 /* ClassDump.framework in Embed Frameworks */,
 			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -57,7 +79,7 @@
 /* Begin PBXFileReference section */
 		FA06EA27296934A5008E133B /* CDPropertyAttribute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDPropertyAttribute.h; sourceTree = "<group>"; };
 		FA06EA28296934A5008E133B /* CDPropertyAttribute.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDPropertyAttribute.m; sourceTree = "<group>"; };
-		FA2A00DC23ADD19D00B52F1D /* libClassDump.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libClassDump.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA2A00DC23ADD19D00B52F1D /* ClassDump.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ClassDump.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA2A00EB23ADD21200B52F1D /* ClassDump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassDump.h; sourceTree = "<group>"; };
 		FA2A00EE23ADD2EA00B52F1D /* CDUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDUtilities.m; sourceTree = "<group>"; };
 		FA2A00EF23ADD2EA00B52F1D /* CDTypeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDTypeParser.h; sourceTree = "<group>"; };
@@ -113,7 +135,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA2A011E23AEB15700B52F1D /* libClassDump.a in Frameworks */,
+				FA2A011E23AEB15700B52F1D /* ClassDump.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,13 +167,14 @@
 				FA2A00DE23ADD19D00B52F1D /* ClassDump */,
 				FA2A011A23AEB15700B52F1D /* ClassDumpTests */,
 				FA2A00DD23ADD19D00B52F1D /* Products */,
+				FAE3C1122B81E17200242A99 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		FA2A00DD23ADD19D00B52F1D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FA2A00DC23ADD19D00B52F1D /* libClassDump.a */,
+				FA2A00DC23ADD19D00B52F1D /* ClassDump.framework */,
 				FA2A011923AEB15700B52F1D /* ClassDumpTests.xctest */,
 			);
 			name = Products;
@@ -203,6 +226,13 @@
 			path = ClassDumpTests;
 			sourceTree = "<group>";
 		};
+		FAE3C1122B81E17200242A99 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		FAF031DF2942E4D000B6C424 /* ParseTypes */ = {
 			isa = PBXGroup;
 			children = (
@@ -228,14 +258,43 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		FAE3C10F2B81E10700242A99 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAE3C1212B81E1A000242A99 /* CDPropertyModel.h in Headers */,
+				FAE3C11B2B81E1A000242A99 /* CDSemanticString.h in Headers */,
+				FAE3C11E2B81E1A000242A99 /* CDRecordType.h in Headers */,
+				FAE3C11C2B81E1A000242A99 /* CDBitFieldType.h in Headers */,
+				FAE3C11A2B81E1A000242A99 /* CDProtocolModel.h in Headers */,
+				FAE3C1102B81E11000242A99 /* CDVariableModel.h in Headers */,
+				FAE3C1202B81E1A000242A99 /* CDParseType.h in Headers */,
+				FAE3C1242B81E1A000242A99 /* CDBlockType.h in Headers */,
+				FAE3C1182B81E1A000242A99 /* CDPrimitiveType.h in Headers */,
+				FAE3C11F2B81E1A000242A99 /* CDClassModel.h in Headers */,
+				FAE3C1262B81E1A000242A99 /* CDPropertyAttribute.h in Headers */,
+				FAE3C1222B81E1A000242A99 /* CDObjectType.h in Headers */,
+				FAE3C1592B81E5B300242A99 /* CDUtilities.h in Headers */,
+				FAE3C1112B81E11A00242A99 /* ClassDump.h in Headers */,
+				FAE3C1232B81E1A000242A99 /* CDIvarModel.h in Headers */,
+				FAE3C1192B81E1A000242A99 /* CDArrayType.h in Headers */,
+				FAE3C1252B81E1A000242A99 /* CDMethodModel.h in Headers */,
+				FAE3C1572B81E5AC00242A99 /* CDTypeParser.h in Headers */,
+				FAE3C11D2B81E1A000242A99 /* CDPointerType.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		FA2A00DB23ADD19D00B52F1D /* ClassDump */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FA2A00E523ADD19D00B52F1D /* Build configuration list for PBXNativeTarget "ClassDump" */;
 			buildPhases = (
+				FAE3C10F2B81E10700242A99 /* Headers */,
 				FA2A00D823ADD19D00B52F1D /* Sources */,
 				FA2A00D923ADD19D00B52F1D /* Frameworks */,
-				FA2A00DA23ADD19D00B52F1D /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -243,8 +302,8 @@
 			);
 			name = ClassDump;
 			productName = ClassDump;
-			productReference = FA2A00DC23ADD19D00B52F1D /* libClassDump.a */;
-			productType = "com.apple.product-type.library.static";
+			productReference = FA2A00DC23ADD19D00B52F1D /* ClassDump.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		FA2A011823AEB15700B52F1D /* ClassDumpTests */ = {
 			isa = PBXNativeTarget;
@@ -253,6 +312,7 @@
 				FA2A011523AEB15700B52F1D /* Sources */,
 				FA2A011623AEB15700B52F1D /* Frameworks */,
 				FA2A011723AEB15700B52F1D /* Resources */,
+				FAE3C1662B81E70D00242A99 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -361,6 +421,7 @@
 		FA2A00E323ADD19D00B52F1D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -424,6 +485,7 @@
 		FA2A00E423ADD19D00B52F1D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -483,7 +545,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
-				OTHER_LDFLAGS = "-ObjC";
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 7P56K8K4MY;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = null.leptos.ClassDump;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos appletvsimulator appletvos";
@@ -494,7 +560,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
-				OTHER_LDFLAGS = "-ObjC";
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 7P56K8K4MY;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = null.leptos.ClassDump;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos appletvsimulator appletvos";

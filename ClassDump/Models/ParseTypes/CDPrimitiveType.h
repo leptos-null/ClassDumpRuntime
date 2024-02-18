@@ -6,7 +6,7 @@
 //  Copyright © 2022 Leptos. All rights reserved.
 //
 
-#import "CDParseType.h"
+#import <ClassDump/CDParseType.h>
 
 typedef NS_ENUM(NSUInteger, CDPrimitiveRawType) {
     CDPrimitiveRawTypeVoid,

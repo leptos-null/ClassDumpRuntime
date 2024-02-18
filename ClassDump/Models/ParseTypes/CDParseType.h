@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "../CDSemanticString.h"
+#import <ClassDump/CDSemanticString.h>
 
 typedef NS_ENUM(NSUInteger, CDTypeModifier) {
     CDTypeModifierConst,

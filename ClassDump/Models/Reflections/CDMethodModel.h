@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 
-#import "../ParseTypes/CDParseType.h"
+#import <ClassDump/CDParseType.h>
 
 @interface CDMethodModel : NSObject
 /// The Obj-C runtime @c objc_method_description

@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 
-#import "../ParseTypes/CDParseType.h"
-#import "CDPropertyAttribute.h"
+#import <ClassDump/CDParseType.h>
+#import <ClassDump/CDPropertyAttribute.h>
 
 @interface CDPropertyModel : NSObject
 /// The Obj-C runtime @c objc_property_t

@@ -6,7 +6,22 @@
 //  Copyright © 2019 Leptos. All rights reserved.
 //
 
-#import "Models/Reflections/CDClassModel.h"
-#import "Models/Reflections/CDProtocolModel.h"
-
-#import "Services/CDUtilities.h"
+#import <ClassDump/CDArrayType.h>
+#import <ClassDump/CDBitFieldType.h>
+#import <ClassDump/CDBlockType.h>
+#import <ClassDump/CDClassModel.h>
+#import <ClassDump/CDIvarModel.h>
+#import <ClassDump/CDMethodModel.h>
+#import <ClassDump/CDObjectType.h>
+#import <ClassDump/CDParseType.h>
+#import <ClassDump/CDPointerType.h>
+#import <ClassDump/CDPrimitiveType.h>
+#import <ClassDump/CDPropertyAttribute.h>
+#import <ClassDump/CDPropertyModel.h>
+#import <ClassDump/CDProtocolModel.h>
+#import <ClassDump/CDRecordType.h>
+#import <ClassDump/CDSemanticString.h>
+#import <ClassDump/CDTypeParser.h>
+#import <ClassDump/CDUtilities.h>
+#import <ClassDump/CDVariableModel.h>
+#import <ClassDump/ClassDump.h>

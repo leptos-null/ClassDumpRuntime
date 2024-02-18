@@ -6,7 +6,7 @@
 //  Copyright © 2022 Leptos. All rights reserved.
 //
 
-#import "CDParseType.h"
+#import <ClassDump/CDParseType.h>
 
 /// Type representing a bit-field in a record
 @interface CDBitFieldType : CDParseType
