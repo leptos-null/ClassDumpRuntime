@@ -11,9 +11,9 @@
 @interface CDUtilities : NSObject
 
 /// The paths of the images in the loaded dyld shared cache
-+ (NSArray<NSString *> *)dyldSharedCacheImagePaths;
++ (nonnull NSArray<NSString *> *)dyldSharedCacheImagePaths;
 
 /// Names of the Obj-C classes which are safe to access
-+ (NSArray<NSString *> *)safeClassNames;
++ (nonnull NSArray<NSString *> *)safeClassNames;
 
 @end
