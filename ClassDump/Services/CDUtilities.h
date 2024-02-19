@@ -13,4 +13,7 @@
 /// The paths of the images in the loaded dyld shared cache
 + (NSArray<NSString *> *)dyldSharedCacheImagePaths;
 
+/// Names of the Obj-C classes which are safe to access
++ (NSArray<NSString *> *)safeClassNames;
+
 @end

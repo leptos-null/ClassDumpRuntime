@@ -9,6 +9,7 @@
 #import "CDUtilities.h"
 
 #import <mach-o/dyld_images.h>
+#import <objc/runtime.h>
 
 
 /* Portions of code in this file have been explicitly copied from Apple's dyld
@@ -149,6 +150,24 @@ struct dyld_cache_image_info
         const char *dylibPath = shared_cache_base + image_info[imageIndex].pathFileOffset;
         [ret addObject:@(dylibPath)];
     }
+    return ret;
+}
+
+
++ (NSArray<NSString *> *)safeClassNames {
+    unsigned int classCount = 0;
+    Class *const classList = objc_copyClassList(&classCount);
+    
+    NSMutableArray<NSString *> *ret = [NSMutableArray arrayWithCapacity:classCount];
+    
+    for (unsigned int classIndex = 0; classIndex < classCount; classIndex++) {
+        Class const cls = classList[classIndex];
+        if (class_respondsToSelector(cls, @selector(respondsToSelector:))) { // safe
+            [ret addObject:NSStringFromClass(cls)];
+        }
+    }
+    free(classList);
+    
     return ret;
 }
 
