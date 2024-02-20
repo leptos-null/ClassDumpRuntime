@@ -13,7 +13,9 @@
 /// The paths of the images in the loaded dyld shared cache
 + (nonnull NSArray<NSString *> *)dyldSharedCacheImagePaths;
 
-/// Names of the Obj-C classes which are safe to access
-+ (nonnull NSArray<NSString *> *)safeClassNames;
+/// Names of all registered Obj-C classes
++ (nonnull NSArray<NSString *> *)classNames;
+/// Determines if the Obj-C class with the given name is safe to reference
++ (BOOL)isClassSafeToInspect:(nonnull NSString *)className;
 
 @end

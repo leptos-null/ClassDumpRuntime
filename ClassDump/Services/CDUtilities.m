@@ -153,22 +153,27 @@ struct dyld_cache_image_info
     return ret;
 }
 
-
-+ (NSArray<NSString *> *)safeClassNames {
++ (NSArray<NSString *> *)classNames {
     unsigned int classCount = 0;
     Class *const classList = objc_copyClassList(&classCount);
     
     NSMutableArray<NSString *> *ret = [NSMutableArray arrayWithCapacity:classCount];
     
     for (unsigned int classIndex = 0; classIndex < classCount; classIndex++) {
-        Class const cls = classList[classIndex];
-        if (class_respondsToSelector(cls, @selector(respondsToSelector:))) { // safe
-            [ret addObject:NSStringFromClass(cls)];
-        }
+        Class __unsafe_unretained const cls = classList[classIndex];
+        [ret addObject:NSStringFromClass(cls)];
     }
     free(classList);
     
     return ret;
+}
+
++ (BOOL)isClassSafeToInspect:(NSString *)className {
+    Class __unsafe_unretained const cls = NSClassFromString(className);
+    if (cls == NULL) {
+        return NO;
+    }
+    return class_respondsToSelector(cls, @selector(respondsToSelector:));
 }
 
 @end
