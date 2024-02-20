@@ -14,8 +14,10 @@
 #import <ClassDump/CDProtocolModel.h>
 
 @interface CDClassModel : NSObject
+// the Class property must be unsafe_unretained because not all
+// classes can be stored with either a strong or weak reference
 /// The Obj-C runtime @c Class
-@property (weak, nonatomic, readonly) Class backing;
+@property (unsafe_unretained, nonatomic, readonly) Class backing;
 /// The name of the class, e.g. @c NSObject
 @property (strong, nonatomic, readonly) NSString *name;
 /// The protocols the class conforms to
