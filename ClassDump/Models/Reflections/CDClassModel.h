@@ -13,11 +13,13 @@
 #import "CDPropertyModel.h"
 #import "CDMethodModel.h"
 #import "CDProtocolModel.h"
+#import "../CDGenerationOptions.h"
 #else
 #import <ClassDump/CDIvarModel.h>
 #import <ClassDump/CDPropertyModel.h>
 #import <ClassDump/CDMethodModel.h>
 #import <ClassDump/CDProtocolModel.h>
+#import <ClassDump/CDGenerationOptions.h>
 #endif
 
 @interface CDClassModel : NSObject
@@ -40,13 +42,20 @@
 
 - (instancetype)initWithClass:(Class)cls;
 + (instancetype)modelWithClass:(Class)cls;
+
 /// Generate an @c interface for the class
 /// @param comments Generate comments with information such as the
 ///   image or category the declaration was found in
 /// @param synthesizeStrip Remove methods and ivars synthesized from properties
 - (NSString *)linesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip;
-
+/// Generate an @c interface for the class
+/// @param comments Generate comments with information such as the
+///   image or category the declaration was found in
+/// @param synthesizeStrip Remove methods and ivars synthesized from properties
 - (CDSemanticString *)semanticLinesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip;
+
+/// Generate an @c interface for the class
+- (CDSemanticString *)semanticLinesWithOptions:(CDGenerationOptions *)options;
 
 /// Classes the class references in the declaration
 ///
