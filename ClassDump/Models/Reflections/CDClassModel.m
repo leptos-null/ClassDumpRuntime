@@ -142,10 +142,13 @@
 }
 
 - (NSString *)linesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip {
-    return [[self semanticLinesWithComments:comments synthesizeStrip:synthesizeStrip] string];
+    CDGenerationOptions *options = [CDGenerationOptions new];
+    options.addSymbolImageComments = comments;
+    options.stripSynthesized = synthesizeStrip;
+    return [[self semanticLinesWithOptions:options] string];
 }
 
-- (CDSemanticString *)semanticLinesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip {
+- (CDSemanticString *)semanticLinesWithOptions:(CDGenerationOptions *)options {
     Dl_info info;
     
     CDSemanticString *build = [CDSemanticString new];
@@ -188,7 +191,7 @@
         [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     }
     
-    if (comments) {
+    if (options.addSymbolImageComments) {
         NSString *comment = nil;
         if (dladdr((__bridge const void *)self.backing, &info)) {
             comment = [NSString stringWithFormat:@"/* %s in %s */", info.dli_sname ?: "(anonymous)", info.dli_fname];
@@ -223,7 +226,7 @@
     }
     
     NSArray<NSString *> *synthedClassMethds = nil, *synthedInstcMethds = nil, *synthedVars = nil;
-    if (synthesizeStrip) {
+    if (options.stripSynthesized) {
         synthedClassMethds = _classPropertySynthesizedMethods;
         synthedInstcMethds = _instancePropertySynthesizedMethods;
         synthedVars = _instancePropertySynthesizedVars;
@@ -235,7 +238,7 @@
             if ([synthedVars containsObject:ivar.name]) {
                 continue;
             }
-            if (comments) {
+            if (options.addSymbolImageComments) {
                 NSString *comment = nil;
                 if (dladdr(ivar.backing, &info)) {
                     comment = [NSString stringWithFormat:@"/* in %s */", info.dli_fname];
@@ -257,11 +260,11 @@
     
     // todo: add stripping of protocol conformance
     
-    [self _appendLines:build properties:self.classProperties comments:comments];
-    [self _appendLines:build properties:self.instanceProperties comments:comments];
+    [self _appendLines:build properties:self.classProperties comments:options.addSymbolImageComments];
+    [self _appendLines:build properties:self.instanceProperties comments:options.addSymbolImageComments];
     
-    [self _appendLines:build methods:self.classMethods synthesized:synthedClassMethds comments:comments];
-    [self _appendLines:build methods:self.instanceMethods synthesized:synthedInstcMethds comments:comments];
+    [self _appendLines:build methods:self.classMethods synthesized:synthedClassMethds comments:options.addSymbolImageComments];
+    [self _appendLines:build methods:self.instanceMethods synthesized:synthedInstcMethds comments:options.addSymbolImageComments];
     
     [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     [build appendString:@"@end" semanticType:CDSemanticTypeKeyword];

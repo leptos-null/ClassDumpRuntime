@@ -11,9 +11,11 @@
 #if SWIFT_PACKAGE
 #import "CDPropertyModel.h"
 #import "CDMethodModel.h"
+#import "../CDGenerationOptions.h"
 #else
 #import <ClassDump/CDPropertyModel.h>
 #import <ClassDump/CDMethodModel.h>
+#import <ClassDump/CDGenerationOptions.h>
 #endif
 
 @interface CDProtocolModel : NSObject
@@ -45,7 +47,8 @@
 /// @param synthesizeStrip Remove methods and ivars synthesized from properties
 - (NSString *)linesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip;
 
-- (CDSemanticString *)semanticLinesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip;
+/// Generate an @c interface for the protocol
+- (CDSemanticString *)semanticLinesWithOptions:(CDGenerationOptions *)options;
 
 /// Classes the protocol references in the declaration
 ///

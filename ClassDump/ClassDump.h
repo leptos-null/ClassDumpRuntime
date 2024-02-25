@@ -33,6 +33,6 @@
 #import <ClassDump/CDTypeParser.h>
 #import <ClassDump/CDUtilities.h>
 #import <ClassDump/CDVariableModel.h>
-#import <ClassDump/ClassDump.h>
+#import <ClassDump/CDGenerationOptions.h>
 
 #endif /* SWIFT_PACKAGE */

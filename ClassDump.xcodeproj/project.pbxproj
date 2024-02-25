@@ -20,6 +20,8 @@
 		FA5A1ED42962B117005A2A90 /* CDSemanticString.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5A1ED32962B117005A2A90 /* CDSemanticString.m */; };
 		FA829A0323BD250100FA4DC1 /* CDParseAdvancedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */; };
 		FA829A0523BD310600FA4DC1 /* CDParseCppTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */; };
+		FAAA8C482B8BCCE900BD85B4 /* CDGenerationOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = FAAA8C462B8BCCE900BD85B4 /* CDGenerationOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAAA8C492B8BCCE900BD85B4 /* CDGenerationOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = FAAA8C472B8BCCE900BD85B4 /* CDGenerationOptions.m */; };
 		FAE3C1102B81E11000242A99 /* CDVariableModel.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF031F22942FC3B00B6C424 /* CDVariableModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAE3C1112B81E11A00242A99 /* ClassDump.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2A00EB23ADD21200B52F1D /* ClassDump.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAE3C1182B81E1A000242A99 /* CDPrimitiveType.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF031E32942F6C400B6C424 /* CDPrimitiveType.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -102,6 +104,8 @@
 		FA5A1ED32962B117005A2A90 /* CDSemanticString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDSemanticString.m; sourceTree = "<group>"; };
 		FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDParseAdvancedTests.m; sourceTree = "<group>"; };
 		FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CDParseCppTests.mm; sourceTree = "<group>"; };
+		FAAA8C462B8BCCE900BD85B4 /* CDGenerationOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDGenerationOptions.h; sourceTree = "<group>"; };
+		FAAA8C472B8BCCE900BD85B4 /* CDGenerationOptions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDGenerationOptions.m; sourceTree = "<group>"; };
 		FAE71A7423DA0AB20079321A /* CDObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDObjCTests.m; sourceTree = "<group>"; };
 		FAF031E02942E4FF00B6C424 /* CDParseType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDParseType.h; sourceTree = "<group>"; };
 		FAF031E12942E4FF00B6C424 /* CDParseType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDParseType.m; sourceTree = "<group>"; };
@@ -211,6 +215,8 @@
 				FAF031F32942FC3B00B6C424 /* CDVariableModel.m */,
 				FA5A1ED22962B117005A2A90 /* CDSemanticString.h */,
 				FA5A1ED32962B117005A2A90 /* CDSemanticString.m */,
+				FAAA8C462B8BCCE900BD85B4 /* CDGenerationOptions.h */,
+				FAAA8C472B8BCCE900BD85B4 /* CDGenerationOptions.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -281,6 +287,7 @@
 				FAE3C1192B81E1A000242A99 /* CDArrayType.h in Headers */,
 				FAE3C1252B81E1A000242A99 /* CDMethodModel.h in Headers */,
 				FAE3C1572B81E5AC00242A99 /* CDTypeParser.h in Headers */,
+				FAAA8C482B8BCCE900BD85B4 /* CDGenerationOptions.h in Headers */,
 				FAE3C11D2B81E1A000242A99 /* CDPointerType.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -376,6 +383,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAAA8C492B8BCCE900BD85B4 /* CDGenerationOptions.m in Sources */,
 				FAF031EE2942F8D300B6C424 /* CDPointerType.m in Sources */,
 				FA2A00FE23ADD2EA00B52F1D /* CDUtilities.m in Sources */,
 				FAF031E52942F6C400B6C424 /* CDPrimitiveType.m in Sources */,
