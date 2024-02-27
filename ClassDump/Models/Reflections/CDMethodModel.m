@@ -167,6 +167,10 @@ static size_t characterCount(const char *str, const char c) {
     return NO;
 }
 
+- (NSUInteger)hash {
+    return self.name.hash;
+}
+
 - (NSString *)description {
     return [[self semanticString] string];
 }
