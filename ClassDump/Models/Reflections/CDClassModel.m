@@ -8,6 +8,7 @@
 
 #import "CDClassModel.h"
 #import "../../Services/CDTypeParser.h"
+#import "../NSArray+CDFiltering.h"
 
 #import <dlfcn.h>
 
@@ -264,11 +265,25 @@
     
     // todo: add stripping of protocol conformance
     
-    [self _appendLines:build properties:self.classProperties comments:options.addSymbolImageComments];
-    [self _appendLines:build properties:self.instanceProperties comments:options.addSymbolImageComments];
+    NSArray<CDPropertyModel *> *classProperties = self.classProperties;
+    NSArray<CDPropertyModel *> *instanceProperties = self.instanceProperties;
     
-    [self _appendLines:build methods:self.classMethods synthesized:synthedClassMethds comments:options.addSymbolImageComments];
-    [self _appendLines:build methods:self.instanceMethods synthesized:synthedInstcMethds comments:options.addSymbolImageComments];
+    NSArray<CDMethodModel *> *classMethods = self.classMethods;
+    NSArray<CDMethodModel *> *instanceMethods = self.instanceMethods;
+    
+    if (options.stripDuplicates) {
+        classProperties = [classProperties cd_uniqueObjects];
+        instanceProperties = [instanceProperties cd_uniqueObjects];
+        
+        classMethods = [classMethods cd_uniqueObjects];
+        instanceMethods = [instanceMethods cd_uniqueObjects];
+    }
+    
+    [self _appendLines:build properties:classProperties comments:options.addSymbolImageComments];
+    [self _appendLines:build properties:instanceProperties comments:options.addSymbolImageComments];
+    
+    [self _appendLines:build methods:classMethods synthesized:synthedClassMethds comments:options.addSymbolImageComments];
+    [self _appendLines:build methods:instanceMethods synthesized:synthedInstcMethds comments:options.addSymbolImageComments];
     
     [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     [build appendString:@"@end" semanticType:CDSemanticTypeKeyword];
