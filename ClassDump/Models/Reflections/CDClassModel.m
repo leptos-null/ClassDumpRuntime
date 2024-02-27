@@ -263,6 +263,59 @@
     
     [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     
+    NSMutableSet<CDPropertyModel *> *classPropertyIgnoreSet = [NSMutableSet set];
+    NSMutableSet<CDPropertyModel *> *instancePropertyIgnoreSet = [NSMutableSet set];
+    
+    NSMutableSet<CDMethodModel *> *classMethodIgnoreSet = [NSMutableSet set];
+    NSMutableSet<CDMethodModel *> *instanceMethodIgnoreSet = [NSMutableSet set];
+    
+    if (options.stripOverrides) {
+        NSMutableSet<NSString *> *classPropertyIgnoreNames = [NSMutableSet set];
+        NSMutableSet<NSString *> *instancePropertyIgnoreNames = [NSMutableSet set];
+        
+        NSMutableSet<NSString *> *classMethodIgnoreNames = [NSMutableSet set];
+        NSMutableSet<NSString *> *instanceMethodIgnoreNames = [NSMutableSet set];
+        
+        Class checkClass = class_getSuperclass(self.backing);
+        while (checkClass != NULL) {
+            CDClassModel *superclassModel = [CDClassModel modelWithClass:checkClass];
+            
+            for (CDPropertyModel *property in superclassModel.classProperties) {
+                if ([classPropertyIgnoreNames containsObject:property.name]) {
+                    continue;
+                }
+                [classPropertyIgnoreNames addObject:property.name];
+                [classPropertyIgnoreSet addObject:property];
+            }
+            
+            for (CDPropertyModel *property in superclassModel.instanceProperties) {
+                if ([instancePropertyIgnoreNames containsObject:property.name]) {
+                    continue;
+                }
+                [instancePropertyIgnoreNames addObject:property.name];
+                [instancePropertyIgnoreSet addObject:property];
+            }
+            
+            for (CDMethodModel *method in superclassModel.classMethods) {
+                if ([classMethodIgnoreNames containsObject:method.name]) {
+                    continue;
+                }
+                [classMethodIgnoreNames addObject:method.name];
+                [classMethodIgnoreSet addObject:method];
+            }
+            
+            for (CDMethodModel *method in superclassModel.instanceMethods) {
+                if ([instanceMethodIgnoreNames containsObject:method.name]) {
+                    continue;
+                }
+                [instanceMethodIgnoreNames addObject:method.name];
+                [instanceMethodIgnoreSet addObject:method];
+            }
+            
+            checkClass = class_getSuperclass(checkClass);
+        }
+    }
+    
     // todo: add stripping of protocol conformance
     
     NSArray<CDPropertyModel *> *classProperties = self.classProperties;
@@ -278,6 +331,12 @@
         classMethods = [classMethods cd_uniqueObjects];
         instanceMethods = [instanceMethods cd_uniqueObjects];
     }
+    
+    classProperties = [classProperties cd_filterObjectsIgnoring:classPropertyIgnoreSet];
+    instanceProperties = [instanceProperties cd_filterObjectsIgnoring:instancePropertyIgnoreSet];
+    
+    classMethods = [classMethods cd_filterObjectsIgnoring:classMethodIgnoreSet];
+    instanceMethods = [instanceMethods cd_filterObjectsIgnoring:instanceMethodIgnoreSet];
     
     [self _appendLines:build properties:classProperties comments:options.addSymbolImageComments];
     [self _appendLines:build properties:instanceProperties comments:options.addSymbolImageComments];
