@@ -7,6 +7,7 @@
 //
 
 #import "CDClassModel.h"
+#import "CDProtocolModel+Conformance.h"
 #import "../../Services/CDTypeParser.h"
 #import "../NSArray+CDFiltering.h"
 
@@ -316,7 +317,12 @@
         }
     }
     
-    // todo: add stripping of protocol conformance
+    if (options.stripProtocolConformance) {
+        [classPropertyIgnoreSet addObjectsFromArray:[CDProtocolModel requiredClassPropertiesToConform:self.protocols]];
+        [instancePropertyIgnoreSet addObjectsFromArray:[CDProtocolModel requiredInstancePropertiesToConform:self.protocols]];
+        [classMethodIgnoreSet addObjectsFromArray:[CDProtocolModel requiredClassMethodsToConform:self.protocols]];
+        [instanceMethodIgnoreSet addObjectsFromArray:[CDProtocolModel requiredInstanceMethodsToConform:self.protocols]];
+    }
     
     NSArray<CDPropertyModel *> *classProperties = self.classProperties;
     NSArray<CDPropertyModel *> *instanceProperties = self.instanceProperties;
