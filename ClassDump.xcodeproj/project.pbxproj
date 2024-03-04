@@ -22,6 +22,7 @@
 		FA53C6A92B8DA96E00FC1A15 /* NSArray+CDFiltering.h in Headers */ = {isa = PBXBuildFile; fileRef = FA53C6A52B8DA8E200FC1A15 /* NSArray+CDFiltering.h */; };
 		FA53C6C72B9533A400FC1A15 /* CDProtocolModel+Conformance.h in Headers */ = {isa = PBXBuildFile; fileRef = FA53C6C52B9533A300FC1A15 /* CDProtocolModel+Conformance.h */; };
 		FA53C6C82B9533A400FC1A15 /* CDProtocolModel+Conformance.m in Sources */ = {isa = PBXBuildFile; fileRef = FA53C6C62B9533A300FC1A15 /* CDProtocolModel+Conformance.m */; };
+		FA53C6CA2B959A8100FC1A15 /* CDProtocolTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA53C6C92B959A8100FC1A15 /* CDProtocolTest.m */; };
 		FA5A1ED42962B117005A2A90 /* CDSemanticString.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5A1ED32962B117005A2A90 /* CDSemanticString.m */; };
 		FA829A0323BD250100FA4DC1 /* CDParseAdvancedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */; };
 		FA829A0523BD310600FA4DC1 /* CDParseCppTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */; };
@@ -109,6 +110,7 @@
 		FA53C6A52B8DA8E200FC1A15 /* NSArray+CDFiltering.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray+CDFiltering.h"; sourceTree = "<group>"; };
 		FA53C6C52B9533A300FC1A15 /* CDProtocolModel+Conformance.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CDProtocolModel+Conformance.h"; sourceTree = "<group>"; };
 		FA53C6C62B9533A300FC1A15 /* CDProtocolModel+Conformance.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CDProtocolModel+Conformance.m"; sourceTree = "<group>"; };
+		FA53C6C92B959A8100FC1A15 /* CDProtocolTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDProtocolTest.m; sourceTree = "<group>"; };
 		FA5A1ED22962B117005A2A90 /* CDSemanticString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDSemanticString.h; sourceTree = "<group>"; };
 		FA5A1ED32962B117005A2A90 /* CDSemanticString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDSemanticString.m; sourceTree = "<group>"; };
 		FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDParseAdvancedTests.m; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 				FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */,
 				FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */,
 				FAE71A7423DA0AB20079321A /* CDObjCTests.m */,
+				FA53C6C92B959A8100FC1A15 /* CDProtocolTest.m */,
 			);
 			path = ClassDumpTests;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAE71A7523DA0AB20079321A /* CDObjCTests.m in Sources */,
+				FA53C6CA2B959A8100FC1A15 /* CDProtocolTest.m in Sources */,
 				FA2A011C23AEB15700B52F1D /* CDParsePrimitiveTests.m in Sources */,
 				FA829A0523BD310600FA4DC1 /* CDParseCppTests.mm in Sources */,
 				FA829A0323BD250100FA4DC1 /* CDParseAdvancedTests.m in Sources */,
