@@ -338,6 +338,21 @@
         instanceMethods = [instanceMethods cd_uniqueObjects];
     }
     
+    if (options.stripCtorMethod) {
+        struct objc_method_description ctorDescription;
+        ctorDescription.name = sel_getUid(".cxx_construct");
+        ctorDescription.types = "@16@0:8";
+        CDMethodModel *ctorModel = [CDMethodModel modelWithMethod:ctorDescription isClass:NO];
+        [instanceMethodIgnoreSet addObject:ctorModel];
+    }
+    if (options.stripDtorMethod) {
+        struct objc_method_description dtorDescription;
+        dtorDescription.name = sel_getUid(".cxx_destruct");
+        dtorDescription.types = "v16@0:8";
+        CDMethodModel *dtorModel = [CDMethodModel modelWithMethod:dtorDescription isClass:NO];
+        [instanceMethodIgnoreSet addObject:dtorModel];
+    }
+    
     classProperties = [classProperties cd_filterObjectsIgnoring:classPropertyIgnoreSet];
     instanceProperties = [instanceProperties cd_filterObjectsIgnoring:instancePropertyIgnoreSet];
     

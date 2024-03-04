@@ -30,6 +30,16 @@
 @property (nonatomic) BOOL stripDuplicates;
 /// @c YES means hide methods and ivars that are synthesized from a property
 @property (nonatomic) BOOL stripSynthesized;
+/// @c YES means hide @c .cxx_construct method,
+/// @c NO means show the method if it exists
+///
+/// This property only applies to classes.
+@property (nonatomic) BOOL stripCtorMethod;
+/// @c YES means hide @c .cxx_destruct method,
+/// @c NO means show the method if it exists
+///
+/// This property only applies to classes.
+@property (nonatomic) BOOL stripDtorMethod;
 /// @c YES means add comments above each eligible declaration
 /// with the symbol name and image path the object is found in,
 /// @c NO means do not add comments for symbol or image source
