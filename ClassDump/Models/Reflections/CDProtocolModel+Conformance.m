@@ -53,7 +53,7 @@
             id const identifier = identifiableResolver(object);
             
             if ([trackingSet containsObject:identifier]) {
-                return;
+                continue;
             }
             [trackingSet addObject:identifier];
             [build addObject:object];
