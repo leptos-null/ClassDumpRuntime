@@ -8,8 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+#if SWIFT_PACKAGE
+#import "CDPropertyModel.h"
+#import "CDMethodModel.h"
+#else
 #import <ClassDump/CDPropertyModel.h>
 #import <ClassDump/CDMethodModel.h>
+#endif
 
 @interface CDProtocolModel : NSObject
 /// The Obj-C runtime @c Protocol
