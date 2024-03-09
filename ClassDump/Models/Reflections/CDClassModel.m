@@ -338,21 +338,6 @@
         instanceMethods = [instanceMethods cd_uniqueObjects];
     }
     
-    if (options.stripCtorMethod) {
-        struct objc_method_description ctorDescription;
-        ctorDescription.name = sel_getUid(".cxx_construct");
-        ctorDescription.types = "@16@0:8";
-        CDMethodModel *ctorModel = [CDMethodModel modelWithMethod:ctorDescription isClass:NO];
-        [instanceMethodIgnoreSet addObject:ctorModel];
-    }
-    if (options.stripDtorMethod) {
-        struct objc_method_description dtorDescription;
-        dtorDescription.name = sel_getUid(".cxx_destruct");
-        dtorDescription.types = "v16@0:8";
-        CDMethodModel *dtorModel = [CDMethodModel modelWithMethod:dtorDescription isClass:NO];
-        [instanceMethodIgnoreSet addObject:dtorModel];
-    }
-    
     classProperties = [classProperties cd_filterObjectsIgnoring:classPropertyIgnoreSet];
     instanceProperties = [instanceProperties cd_filterObjectsIgnoring:instancePropertyIgnoreSet];
     
@@ -362,8 +347,8 @@
     [self _appendLines:build properties:classProperties comments:options.addSymbolImageComments];
     [self _appendLines:build properties:instanceProperties comments:options.addSymbolImageComments];
     
-    [self _appendLines:build methods:classMethods synthesized:synthedClassMethds comments:options.addSymbolImageComments];
-    [self _appendLines:build methods:instanceMethods synthesized:synthedInstcMethds comments:options.addSymbolImageComments];
+    [self _appendLines:build methods:classMethods synthesized:synthedClassMethds comments:options.addSymbolImageComments stripCtor:NO stripDtor:NO];
+    [self _appendLines:build methods:instanceMethods synthesized:synthedInstcMethds comments:options.addSymbolImageComments stripCtor:options.stripCtorMethod stripDtor:options.stripDtorMethod];
     
     [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     [build appendString:@"@end" semanticType:CDSemanticTypeKeyword];
@@ -395,12 +380,18 @@
     }
 }
 
-- (void)_appendLines:(CDSemanticString *)build methods:(NSArray<CDMethodModel *> *)methods synthesized:(NSArray<NSString *> *)synthesized comments:(BOOL)comments {
+- (void)_appendLines:(CDSemanticString *)build methods:(NSArray<CDMethodModel *> *)methods synthesized:(NSArray<NSString *> *)synthesized comments:(BOOL)comments stripCtor:(BOOL)stripCtor stripDtor:(BOOL)stripDtor {
     if (methods.count - synthesized.count) {
         [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
         
         Dl_info info;
         NSMutableArray<NSString *> *synthed = [NSMutableArray arrayWithArray:synthesized];
+        if (stripCtor) {
+            [synthed addObject:@".cxx_construct"];
+        }
+        if (stripDtor) {
+            [synthed addObject:@".cxx_destruct"];
+        }
         NSUInteger synthedCount = synthed.count;
         for (CDMethodModel *methd in methods) {
             // find and remove instead of just find so we don't have to search the entire
