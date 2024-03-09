@@ -29,6 +29,8 @@
 /// @c NO means transcribe the objects reported by the runtime
 @property (nonatomic) BOOL stripDuplicates;
 /// @c YES means hide methods and ivars that are synthesized from a property
+///
+/// This property applies to both classes and protocols.
 @property (nonatomic) BOOL stripSynthesized;
 /// @c YES means hide @c .cxx_construct method,
 /// @c NO means show the method if it exists
@@ -43,6 +45,8 @@
 /// @c YES means add comments above each eligible declaration
 /// with the symbol name and image path the object is found in,
 /// @c NO means do not add comments for symbol or image source
+///
+/// This property applies to both classes and protocols.
 @property (nonatomic) BOOL addSymbolImageComments;
 
 @end
