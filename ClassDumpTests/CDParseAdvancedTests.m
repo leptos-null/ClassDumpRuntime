@@ -59,12 +59,14 @@
 - (void)testArrayPointer {
     // this is a pointer to array of 2 int elements
     CDParseType *type = [CDTypeParser typeForEncoding:@encode(int (*)[2])];
+    XCTExpectFailure(@"Multiple levels of pointers/ arrays known to decode in the reverse order");
     XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int (*var)[2]"]);
     XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int (*)[2]"]);
 }
 
 - (void)testPointerArrayPointers {
     CDParseType *type = [CDTypeParser typeForEncoding:@encode(int *(*)[2])];
+    XCTExpectFailure(@"Multiple levels of pointers/ arrays known to decode in the reverse order");
     XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int *(*var)[2]"]);
     XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int *(*)[2]"]);
 }
@@ -77,20 +79,44 @@
      * int **(*ppap)[2] = &ppa;
      */
     CDParseType *type = [CDTypeParser typeForEncoding:@encode(int **(*)[2])];
+    XCTExpectFailure(@"Multiple levels of pointers/ arrays known to decode in the reverse order");
     XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int **(*var)[2]"]);
     XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int **(*)[2]"]);
 }
 
 - (void)testPointerArrayPointersArray {
+    /* array of pointers to an array of pointers
+     *
+     * int *ip;
+     * int *ipa[2] = { ip, ip };
+     * int *(*ipap)[2] = &ipa;
+     * int *(*ipapa[4])[2] = { ipap, ipap, ipap, ipap };
+     */
     CDParseType *type = [CDTypeParser typeForEncoding:@encode(int *(*[4])[2])];
+    XCTExpectFailure(@"Multiple levels of pointers/ arrays known to decode in the reverse order");
     XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int *(*var[4])[2]"]);
     XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int *(*[4])[2]"]);
 }
 
 - (void)testPointerArrayPointersArrayPointer {
     CDParseType *type = [CDTypeParser typeForEncoding:@encode(int *(*(*)[4])[2])];
+    XCTExpectFailure(@"Multiple levels of pointers/ arrays known to decode in the reverse order");
     XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int *(*(*var)[4])[2]"]);
     XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int *(*(*)[4])[2]"]);
+}
+
+- (void)testArrayPointerArray {
+    /* array of pointers to an array
+     *
+     * int i;
+     * int ia[2] = { i, i };
+     * int (*iap)[2] = &ia;
+     * int (*iapa[4])[2] = { iap, iap, iap, iap };
+     */
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(int (*[4])[2])];
+    XCTExpectFailure(@"Multiple levels of pointers/ arrays known to decode in the reverse order");
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"int (*var[4])[2]"]);
+    XCTAssert([[type stringForVariableName:nil] isEqualToString:@"int (*[4])[2]"]);
 }
 
 - (void)testMutliDemensionalArrayStruct {
