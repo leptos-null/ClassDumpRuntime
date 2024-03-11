@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+
+#if SWIFT_PACKAGE
+#import "../Models/ParseTypes/CDParseType.h"
+#else
 #import <ClassDump/CDParseType.h>
+#endif
 
 @interface CDTypeParser : NSObject
 

@@ -9,8 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 
+#if SWIFT_PACKAGE
+#import "../ParseTypes/CDParseType.h"
+#import "CDPropertyAttribute.h"
+#else
 #import <ClassDump/CDParseType.h>
 #import <ClassDump/CDPropertyAttribute.h>
+#endif
 
 @interface CDPropertyModel : NSObject
 /// The Obj-C runtime @c objc_property_t

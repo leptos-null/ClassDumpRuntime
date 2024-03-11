@@ -8,10 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+#if SWIFT_PACKAGE
+#import "CDIvarModel.h"
+#import "CDPropertyModel.h"
+#import "CDMethodModel.h"
+#import "CDProtocolModel.h"
+#else
 #import <ClassDump/CDIvarModel.h>
 #import <ClassDump/CDPropertyModel.h>
 #import <ClassDump/CDMethodModel.h>
 #import <ClassDump/CDProtocolModel.h>
+#endif
 
 @interface CDClassModel : NSObject
 // the Class property must be unsafe_unretained because not all

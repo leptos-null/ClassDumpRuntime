@@ -6,8 +6,13 @@
 //  Copyright © 2022 Leptos. All rights reserved.
 //
 
+#if SWIFT_PACKAGE
+#import "CDParseType.h"
+#import "../CDVariableModel.h"
+#else
 #import <ClassDump/CDParseType.h>
 #import <ClassDump/CDVariableModel.h>
+#endif
 
 /// Type representing a @c struct or @c union
 @interface CDRecordType : CDParseType

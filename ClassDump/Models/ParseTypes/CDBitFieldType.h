@@ -6,7 +6,11 @@
 //  Copyright © 2022 Leptos. All rights reserved.
 //
 
+#if SWIFT_PACKAGE
+#import "CDParseType.h"
+#else
 #import <ClassDump/CDParseType.h>
+#endif
 
 /// Type representing a bit-field in a record
 @interface CDBitFieldType : CDParseType
