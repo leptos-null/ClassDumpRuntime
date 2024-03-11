@@ -22,11 +22,13 @@ let package = Package(
     targets: [
         .target(
             name: "ClassDumpRuntime",
-            path: "ClassDump"
+            path: "ClassDump",
+            publicHeadersPath: ""
         ),
         .testTarget(
             name: "ClassDumpRuntimeTests",
-            dependencies: ["ClassDumpRuntime"]
+            dependencies: ["ClassDumpRuntime"],
+            path: "ClassDumpTests"
         ),
     ]
 )
