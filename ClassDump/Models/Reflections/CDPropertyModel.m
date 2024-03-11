@@ -75,7 +75,7 @@
                 attributeValue = [[NSString alloc] initWithBytes:attribHead length:valueLen encoding:NSUTF8StringEncoding];
             }
             
-            /* per https://github.com/llvm/llvm-project/blob/63d46869ea/clang/lib/AST/ASTContext.cpp#L7827-L7918
+            /* per https://github.com/llvm/llvm-project/blob/b7f97d3661/clang/lib/AST/ASTContext.cpp#L7878-L7973
              *
              *  enum PropertyAttributes {
              *      kPropertyReadOnly          = 'R', // property is read-only.
@@ -88,8 +88,9 @@
              *      kPropertyType              = 'T', // followed by old-style type encoding.
              *      kPropertyWeak              = 'W', // 'weak' property
              *      kPropertyStrong            = 'P', // property GC'able
-             *      kPropertyNonAtomic         = 'N'  // property non-atomic
-             *  };
+             *      kPropertyNonAtomic         = 'N', // property non-atomic
+             *      kPropertyOptional          = '?', // property optional
+             * };
              */
             switch (switchOnMe) {
                 case 'R':
@@ -127,6 +128,9 @@
                     break;
                 case 'N':
                     attributeName = @"nonatomic";
+                    break;
+                case '?':
+                    // @optional in a protocol
                     break;
                 default:
                     NSAssert(NO, @"Unknown attribute code: %c", switchOnMe);
