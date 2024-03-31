@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 
-#if SWIFT_PACKAGE
+#if !__has_include(<ClassDump/ClassDump.h>)
 #import "../ParseTypes/CDParseType.h"
 #import "CDPropertyAttribute.h"
 #else

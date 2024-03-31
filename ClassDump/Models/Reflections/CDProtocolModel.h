@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#if SWIFT_PACKAGE
+#if !__has_include(<ClassDump/ClassDump.h>)
 #import "CDPropertyModel.h"
 #import "CDMethodModel.h"
 #else
