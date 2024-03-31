@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#if SWIFT_PACKAGE
+#if !__has_include(<ClassDump/ClassDump.h>)
 #import "../CDSemanticString.h"
 #else
 #import <ClassDump/CDSemanticString.h>

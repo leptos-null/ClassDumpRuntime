@@ -6,7 +6,7 @@
 //  Copyright © 2019 Leptos. All rights reserved.
 //
 
-#if SWIFT_PACKAGE
+#if !__has_include(<ClassDump/ClassDump.h>)
 
 #import "Models/Reflections/CDClassModel.h"
 #import "Models/Reflections/CDProtocolModel.h"
@@ -35,4 +35,4 @@
 #import <ClassDump/CDVariableModel.h>
 #import <ClassDump/ClassDump.h>
 
-#endif /* SWIFT_PACKAGE */
+#endif /* !__has_include(<ClassDump/ClassDump.h>) */

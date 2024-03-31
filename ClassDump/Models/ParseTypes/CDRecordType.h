@@ -6,7 +6,7 @@
 //  Copyright © 2022 Leptos. All rights reserved.
 //
 
-#if SWIFT_PACKAGE
+#if !__has_include(<ClassDump/ClassDump.h>)
 #import "CDParseType.h"
 #import "../CDVariableModel.h"
 #else
