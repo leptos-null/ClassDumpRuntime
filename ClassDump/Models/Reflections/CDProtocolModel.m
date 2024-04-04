@@ -162,6 +162,13 @@
 }
 
 - (CDSemanticString *)semanticLinesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip {
+    CDGenerationOptions *options = [CDGenerationOptions new];
+    options.addSymbolImageComments = comments;
+    options.stripSynthesized = synthesizeStrip;
+    return [self semanticLinesWithOptions:options];
+}
+
+- (CDSemanticString *)semanticLinesWithOptions:(CDGenerationOptions *)options {
     CDSemanticString *build = [CDSemanticString new];
     
     NSSet<NSString *> *forwardClasses = [self _forwardDeclarableClassReferences];
@@ -202,7 +209,7 @@
         [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     }
     
-    if (comments) {
+    if (options.addSymbolImageComments) {
         NSString *comment = nil;
         Dl_info info;
         if (dladdr((__bridge void *)self.backing, &info)) {
@@ -232,11 +239,11 @@
     }
     [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     
-    [self _appendLines:build properties:self.requiredClassProperties comments:comments];
-    [self _appendLines:build methods:self.requiredClassMethods synthesized:(synthesizeStrip ? _classPropertySynthesizedMethods : nil) comments:comments];
+    [self _appendLines:build properties:self.requiredClassProperties comments:options.addSymbolImageComments];
+    [self _appendLines:build methods:self.requiredClassMethods synthesized:(options.stripSynthesized ? _classPropertySynthesizedMethods : nil) comments:options.addSymbolImageComments];
     
-    [self _appendLines:build properties:self.requiredInstanceProperties comments:comments];
-    [self _appendLines:build methods:self.requiredInstanceMethods synthesized:(synthesizeStrip ? _instancePropertySynthesizedMethods : nil) comments:comments];
+    [self _appendLines:build properties:self.requiredInstanceProperties comments:options.addSymbolImageComments];
+    [self _appendLines:build methods:self.requiredInstanceMethods synthesized:(options.stripSynthesized ? _instancePropertySynthesizedMethods : nil) comments:options.addSymbolImageComments];
     
     if (self.optionalClassProperties.count || self.optionalClassMethods.count ||
         self.optionalInstanceProperties.count || self.optionalInstanceMethods.count) {
@@ -245,11 +252,11 @@
         [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     }
     
-    [self _appendLines:build properties:self.optionalClassProperties comments:comments];
-    [self _appendLines:build methods:self.optionalClassMethods synthesized:(synthesizeStrip ? _classPropertySynthesizedMethods : nil) comments:comments];
+    [self _appendLines:build properties:self.optionalClassProperties comments:options.addSymbolImageComments];
+    [self _appendLines:build methods:self.optionalClassMethods synthesized:(options.stripSynthesized ? _classPropertySynthesizedMethods : nil) comments:options.addSymbolImageComments];
     
-    [self _appendLines:build properties:self.optionalInstanceProperties comments:comments];
-    [self _appendLines:build methods:self.optionalInstanceMethods synthesized:(synthesizeStrip ? _instancePropertySynthesizedMethods : nil) comments:comments];
+    [self _appendLines:build properties:self.optionalInstanceProperties comments:options.addSymbolImageComments];
+    [self _appendLines:build methods:self.optionalInstanceMethods synthesized:(options.stripSynthesized ? _instancePropertySynthesizedMethods : nil) comments:options.addSymbolImageComments];
     
     [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     [build appendString:@"@end" semanticType:CDSemanticTypeKeyword];

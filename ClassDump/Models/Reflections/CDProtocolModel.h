@@ -11,9 +11,11 @@
 #if !__has_include(<ClassDump/ClassDump.h>)
 #import "CDPropertyModel.h"
 #import "CDMethodModel.h"
+#import "../CDGenerationOptions.h"
 #else
 #import <ClassDump/CDPropertyModel.h>
 #import <ClassDump/CDMethodModel.h>
+#import <ClassDump/CDGenerationOptions.h>
 #endif
 
 @interface CDProtocolModel : NSObject
@@ -44,8 +46,14 @@
 ///   image the declaration was found in
 /// @param synthesizeStrip Remove methods and ivars synthesized from properties
 - (NSString *)linesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip;
-
+/// Generate an @c interface for the protocol
+/// @param comments Generate comments with information such as the
+///   image the declaration was found in
+/// @param synthesizeStrip Remove methods and ivars synthesized from properties
 - (CDSemanticString *)semanticLinesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip;
+
+/// Generate an @c interface for the protocol
+- (CDSemanticString *)semanticLinesWithOptions:(CDGenerationOptions *)options;
 
 /// Classes the protocol references in the declaration
 ///

@@ -7,7 +7,9 @@
 //
 
 #import "CDClassModel.h"
+#import "CDProtocolModel+Conformance.h"
 #import "../../Services/CDTypeParser.h"
+#import "../NSArray+CDFiltering.h"
 
 #import <dlfcn.h>
 
@@ -146,6 +148,13 @@
 }
 
 - (CDSemanticString *)semanticLinesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip {
+    CDGenerationOptions *options = [CDGenerationOptions new];
+    options.addSymbolImageComments = comments;
+    options.stripSynthesized = synthesizeStrip;
+    return [self semanticLinesWithOptions:options];
+}
+
+- (CDSemanticString *)semanticLinesWithOptions:(CDGenerationOptions *)options {
     Dl_info info;
     
     CDSemanticString *build = [CDSemanticString new];
@@ -188,7 +197,7 @@
         [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     }
     
-    if (comments) {
+    if (options.addSymbolImageComments) {
         NSString *comment = nil;
         if (dladdr((__bridge const void *)self.backing, &info)) {
             comment = [NSString stringWithFormat:@"/* %s in %s */", info.dli_sname ?: "(anonymous)", info.dli_fname];
@@ -223,7 +232,7 @@
     }
     
     NSArray<NSString *> *synthedClassMethds = nil, *synthedInstcMethds = nil, *synthedVars = nil;
-    if (synthesizeStrip) {
+    if (options.stripSynthesized) {
         synthedClassMethds = _classPropertySynthesizedMethods;
         synthedInstcMethds = _instancePropertySynthesizedMethods;
         synthedVars = _instancePropertySynthesizedVars;
@@ -235,7 +244,7 @@
             if ([synthedVars containsObject:ivar.name]) {
                 continue;
             }
-            if (comments) {
+            if (options.addSymbolImageComments) {
                 NSString *comment = nil;
                 if (dladdr(ivar.backing, &info)) {
                     comment = [NSString stringWithFormat:@"/* in %s */", info.dli_fname];
@@ -255,13 +264,91 @@
     
     [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     
-    // todo: add stripping of protocol conformance
+    NSMutableSet<CDPropertyModel *> *classPropertyIgnoreSet = [NSMutableSet set];
+    NSMutableSet<CDPropertyModel *> *instancePropertyIgnoreSet = [NSMutableSet set];
     
-    [self _appendLines:build properties:self.classProperties comments:comments];
-    [self _appendLines:build properties:self.instanceProperties comments:comments];
+    NSMutableSet<CDMethodModel *> *classMethodIgnoreSet = [NSMutableSet set];
+    NSMutableSet<CDMethodModel *> *instanceMethodIgnoreSet = [NSMutableSet set];
     
-    [self _appendLines:build methods:self.classMethods synthesized:synthedClassMethds comments:comments];
-    [self _appendLines:build methods:self.instanceMethods synthesized:synthedInstcMethds comments:comments];
+    if (options.stripOverrides) {
+        NSMutableSet<NSString *> *classPropertyIgnoreNames = [NSMutableSet set];
+        NSMutableSet<NSString *> *instancePropertyIgnoreNames = [NSMutableSet set];
+        
+        NSMutableSet<NSString *> *classMethodIgnoreNames = [NSMutableSet set];
+        NSMutableSet<NSString *> *instanceMethodIgnoreNames = [NSMutableSet set];
+        
+        Class checkClass = class_getSuperclass(self.backing);
+        while (checkClass != NULL) {
+            CDClassModel *superclassModel = [CDClassModel modelWithClass:checkClass];
+            
+            for (CDPropertyModel *property in superclassModel.classProperties) {
+                if ([classPropertyIgnoreNames containsObject:property.name]) {
+                    continue;
+                }
+                [classPropertyIgnoreNames addObject:property.name];
+                [classPropertyIgnoreSet addObject:property];
+            }
+            
+            for (CDPropertyModel *property in superclassModel.instanceProperties) {
+                if ([instancePropertyIgnoreNames containsObject:property.name]) {
+                    continue;
+                }
+                [instancePropertyIgnoreNames addObject:property.name];
+                [instancePropertyIgnoreSet addObject:property];
+            }
+            
+            for (CDMethodModel *method in superclassModel.classMethods) {
+                if ([classMethodIgnoreNames containsObject:method.name]) {
+                    continue;
+                }
+                [classMethodIgnoreNames addObject:method.name];
+                [classMethodIgnoreSet addObject:method];
+            }
+            
+            for (CDMethodModel *method in superclassModel.instanceMethods) {
+                if ([instanceMethodIgnoreNames containsObject:method.name]) {
+                    continue;
+                }
+                [instanceMethodIgnoreNames addObject:method.name];
+                [instanceMethodIgnoreSet addObject:method];
+            }
+            
+            checkClass = class_getSuperclass(checkClass);
+        }
+    }
+    
+    if (options.stripProtocolConformance) {
+        [classPropertyIgnoreSet addObjectsFromArray:[CDProtocolModel requiredClassPropertiesToConform:self.protocols]];
+        [instancePropertyIgnoreSet addObjectsFromArray:[CDProtocolModel requiredInstancePropertiesToConform:self.protocols]];
+        [classMethodIgnoreSet addObjectsFromArray:[CDProtocolModel requiredClassMethodsToConform:self.protocols]];
+        [instanceMethodIgnoreSet addObjectsFromArray:[CDProtocolModel requiredInstanceMethodsToConform:self.protocols]];
+    }
+    
+    NSArray<CDPropertyModel *> *classProperties = self.classProperties;
+    NSArray<CDPropertyModel *> *instanceProperties = self.instanceProperties;
+    
+    NSArray<CDMethodModel *> *classMethods = self.classMethods;
+    NSArray<CDMethodModel *> *instanceMethods = self.instanceMethods;
+    
+    if (options.stripDuplicates) {
+        classProperties = [classProperties cd_uniqueObjects];
+        instanceProperties = [instanceProperties cd_uniqueObjects];
+        
+        classMethods = [classMethods cd_uniqueObjects];
+        instanceMethods = [instanceMethods cd_uniqueObjects];
+    }
+    
+    classProperties = [classProperties cd_filterObjectsIgnoring:classPropertyIgnoreSet];
+    instanceProperties = [instanceProperties cd_filterObjectsIgnoring:instancePropertyIgnoreSet];
+    
+    classMethods = [classMethods cd_filterObjectsIgnoring:classMethodIgnoreSet];
+    instanceMethods = [instanceMethods cd_filterObjectsIgnoring:instanceMethodIgnoreSet];
+    
+    [self _appendLines:build properties:classProperties comments:options.addSymbolImageComments];
+    [self _appendLines:build properties:instanceProperties comments:options.addSymbolImageComments];
+    
+    [self _appendLines:build methods:classMethods synthesized:synthedClassMethds comments:options.addSymbolImageComments stripCtor:NO stripDtor:NO];
+    [self _appendLines:build methods:instanceMethods synthesized:synthedInstcMethds comments:options.addSymbolImageComments stripCtor:options.stripCtorMethod stripDtor:options.stripDtorMethod];
     
     [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     [build appendString:@"@end" semanticType:CDSemanticTypeKeyword];
@@ -293,12 +380,18 @@
     }
 }
 
-- (void)_appendLines:(CDSemanticString *)build methods:(NSArray<CDMethodModel *> *)methods synthesized:(NSArray<NSString *> *)synthesized comments:(BOOL)comments {
+- (void)_appendLines:(CDSemanticString *)build methods:(NSArray<CDMethodModel *> *)methods synthesized:(NSArray<NSString *> *)synthesized comments:(BOOL)comments stripCtor:(BOOL)stripCtor stripDtor:(BOOL)stripDtor {
     if (methods.count - synthesized.count) {
         [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
         
         Dl_info info;
         NSMutableArray<NSString *> *synthed = [NSMutableArray arrayWithArray:synthesized];
+        if (stripCtor) {
+            [synthed addObject:@".cxx_construct"];
+        }
+        if (stripDtor) {
+            [synthed addObject:@".cxx_destruct"];
+        }
         NSUInteger synthedCount = synthed.count;
         for (CDMethodModel *methd in methods) {
             // find and remove instead of just find so we don't have to search the entire

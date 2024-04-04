@@ -203,6 +203,10 @@ static BOOL _NSStringNullableEqual(NSString *a, NSString *b) {
     return NO;
 }
 
+- (NSUInteger)hash {
+    return self.name.hash;
+}
+
 - (NSString *)description {
     return [[self semanticString] string];
 }
