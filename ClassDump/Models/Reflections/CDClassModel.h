@@ -8,19 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-#if !__has_include(<ClassDump/ClassDump.h>)
-#import "CDIvarModel.h"
-#import "CDPropertyModel.h"
-#import "CDMethodModel.h"
-#import "CDProtocolModel.h"
-#import "../CDGenerationOptions.h"
-#else
 #import <ClassDump/CDIvarModel.h>
 #import <ClassDump/CDPropertyModel.h>
 #import <ClassDump/CDMethodModel.h>
 #import <ClassDump/CDProtocolModel.h>
 #import <ClassDump/CDGenerationOptions.h>
-#endif
 
 @interface CDClassModel : NSObject
 // the Class property must be unsafe_unretained because not all

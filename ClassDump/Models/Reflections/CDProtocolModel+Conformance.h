@@ -6,12 +6,7 @@
 //  Copyright © 2024 Leptos. All rights reserved.
 //
 
-#if !__has_include(<ClassDump/ClassDump.h>)
-#import "CDProtocolModel.h"
-#else
 #import <ClassDump/CDProtocolModel.h>
-#endif
-
 
 @interface CDProtocolModel (Conformance)
 

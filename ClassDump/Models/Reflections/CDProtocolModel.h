@@ -8,15 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-#if !__has_include(<ClassDump/ClassDump.h>)
-#import "CDPropertyModel.h"
-#import "CDMethodModel.h"
-#import "../CDGenerationOptions.h"
-#else
 #import <ClassDump/CDPropertyModel.h>
 #import <ClassDump/CDMethodModel.h>
 #import <ClassDump/CDGenerationOptions.h>
-#endif
 
 @interface CDProtocolModel : NSObject
 /// The Obj-C runtime @c Protocol

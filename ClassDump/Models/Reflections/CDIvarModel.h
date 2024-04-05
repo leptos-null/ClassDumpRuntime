@@ -9,11 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 
-#if !__has_include(<ClassDump/ClassDump.h>)
-#import "../ParseTypes/CDParseType.h"
-#else
 #import <ClassDump/CDParseType.h>
-#endif
 
 @interface CDIvarModel : NSObject
 /// The Obj-C runtime @c Ivar

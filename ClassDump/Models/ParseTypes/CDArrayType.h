@@ -6,11 +6,7 @@
 //  Copyright © 2022 Leptos. All rights reserved.
 //
 
-#if !__has_include(<ClassDump/ClassDump.h>)
-#import "CDParseType.h"
-#else
 #import <ClassDump/CDParseType.h>
-#endif
 
 /// Type representing a C array
 @interface CDArrayType : CDParseType
