@@ -10,6 +10,10 @@
 // all headers that are marked as "public" for the Xcode framework
 // should have a symlink in `Sources/ClassDumpRuntime/include/ClassDump`;
 // all those files should then be imported below.
+//
+// you can generate these imports using a shell script such as
+//   `ls ClassDump/*.h | while read HEADER; do printf "#import <${HEADER}>\n"; done`
+// (run from `Sources/ClassDumpRuntime/include`)
 
 #import <ClassDump/CDArrayType.h>
 #import <ClassDump/CDBitFieldType.h>
@@ -24,6 +28,7 @@
 #import <ClassDump/CDPrimitiveType.h>
 #import <ClassDump/CDPropertyAttribute.h>
 #import <ClassDump/CDPropertyModel.h>
+#import <ClassDump/CDProtocolModel+Conformance.h>
 #import <ClassDump/CDProtocolModel.h>
 #import <ClassDump/CDRecordType.h>
 #import <ClassDump/CDSemanticString.h>

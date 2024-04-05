@@ -20,7 +20,7 @@
 		FA53C6A42B8DA8C700FC1A15 /* NSArray+CDFiltering.m in Sources */ = {isa = PBXBuildFile; fileRef = FA53C6A32B8DA8C700FC1A15 /* NSArray+CDFiltering.m */; };
 		FA53C6A62B8DA8E200FC1A15 /* NSArray+CDFiltering.h in Sources */ = {isa = PBXBuildFile; fileRef = FA53C6A52B8DA8E200FC1A15 /* NSArray+CDFiltering.h */; };
 		FA53C6A92B8DA96E00FC1A15 /* NSArray+CDFiltering.h in Headers */ = {isa = PBXBuildFile; fileRef = FA53C6A52B8DA8E200FC1A15 /* NSArray+CDFiltering.h */; };
-		FA53C6C72B9533A400FC1A15 /* CDProtocolModel+Conformance.h in Headers */ = {isa = PBXBuildFile; fileRef = FA53C6C52B9533A300FC1A15 /* CDProtocolModel+Conformance.h */; };
+		FA53C6C72B9533A400FC1A15 /* CDProtocolModel+Conformance.h in Headers */ = {isa = PBXBuildFile; fileRef = FA53C6C52B9533A300FC1A15 /* CDProtocolModel+Conformance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FA53C6C82B9533A400FC1A15 /* CDProtocolModel+Conformance.m in Sources */ = {isa = PBXBuildFile; fileRef = FA53C6C62B9533A300FC1A15 /* CDProtocolModel+Conformance.m */; };
 		FA53C6CA2B959A8100FC1A15 /* CDProtocolTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA53C6C92B959A8100FC1A15 /* CDProtocolTest.m */; };
 		FA5A1ED42962B117005A2A90 /* CDSemanticString.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5A1ED32962B117005A2A90 /* CDSemanticString.m */; };
