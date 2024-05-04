@@ -7,8 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "../ClassDump/ClassDump.h"
-#import "../ClassDump/Services/CDTypeParser.h"
+#import <ClassDump/ClassDump.h>
 
 @interface CDObjCTests : XCTestCase
 
