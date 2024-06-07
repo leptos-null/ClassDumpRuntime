@@ -8,6 +8,8 @@
 
 #import <ClassDump/CDParseType.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 /// Type representing a C array
 @interface CDArrayType : CDParseType
 /// Type of elements in the array
@@ -16,3 +18,5 @@
 @property (nonatomic) NSUInteger size;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

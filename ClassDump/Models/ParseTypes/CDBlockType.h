@@ -8,6 +8,8 @@
 
 #import <ClassDump/CDParseType.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 /// Type representing a block
 @interface CDBlockType : CDParseType
 /// The type that this block returns
@@ -16,3 +18,5 @@
 @property (nullable, strong, nonatomic) NSArray<CDParseType *> *parameterTypes;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

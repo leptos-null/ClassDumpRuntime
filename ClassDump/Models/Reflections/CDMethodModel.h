@@ -11,6 +11,8 @@
 
 #import <ClassDump/CDParseType.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 @interface CDMethodModel : NSObject
 /// The Obj-C runtime @c objc_method_description
 @property (nonatomic, readonly) struct objc_method_description backing;
@@ -40,3 +42,5 @@
 - (NSSet<NSString *> *)protocolReferences;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

@@ -8,6 +8,8 @@
 
 #import <ClassDump/CDProtocolModel.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 @interface CDProtocolModel (Conformance)
 
 /// The class properties required for a type conforming to the given protocols to provide
@@ -29,3 +31,5 @@
 + (NSArray<CDMethodModel *> *)requiredInstanceMethodsToConform:(NSArray<CDProtocolModel *> *)protocols;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

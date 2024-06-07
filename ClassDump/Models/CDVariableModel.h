@@ -10,9 +10,13 @@
 
 #import <ClassDump/CDParseType.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 @interface CDVariableModel : NSObject
 
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) CDParseType *type;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

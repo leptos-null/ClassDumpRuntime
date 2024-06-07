@@ -8,6 +8,8 @@
 
 #import <ClassDump/CDParseType.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 /// Type representing an Objective-C object
 @interface CDObjectType : CDParseType
 /// The name of the class of the object
@@ -18,3 +20,5 @@
 @property (nullable, strong, nonatomic) NSArray<NSString *> *protocolNames;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

@@ -14,6 +14,8 @@
 #import <ClassDump/CDProtocolModel.h>
 #import <ClassDump/CDGenerationOptions.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 @interface CDClassModel : NSObject
 // the Class property must be unsafe_unretained because not all
 // classes can be stored with either a strong or weak reference
@@ -22,15 +24,15 @@
 /// The name of the class, e.g. @c NSObject
 @property (strong, nonatomic, readonly) NSString *name;
 /// The protocols the class conforms to
-@property (strong, nonatomic, readonly) NSArray<CDProtocolModel *> *protocols;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDProtocolModel *> *protocols;
 
-@property (strong, nonatomic, readonly) NSArray<CDPropertyModel *> *classProperties;
-@property (strong, nonatomic, readonly) NSArray<CDPropertyModel *> *instanceProperties;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDPropertyModel *> *classProperties;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDPropertyModel *> *instanceProperties;
 
-@property (strong, nonatomic, readonly) NSArray<CDMethodModel *> *classMethods;
-@property (strong, nonatomic, readonly) NSArray<CDMethodModel *> *instanceMethods;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDMethodModel *> *classMethods;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDMethodModel *> *instanceMethods;
 /// Instance variables, including values synthesized from properties
-@property (strong, nonatomic, readonly) NSArray<CDIvarModel *> *ivars;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDIvarModel *> *ivars;
 
 - (instancetype)initWithClass:(Class)cls;
 + (instancetype)modelWithClass:(Class)cls;
@@ -61,3 +63,5 @@
 - (NSSet<NSString *> *)protocolReferences;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

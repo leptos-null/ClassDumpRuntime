@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 /// Options with which a header file may be generated with
 @interface CDGenerationOptions : NSObject
 /// @c YES means hide properties and methods that are required by a protocol the type conforms to
@@ -50,3 +52,5 @@
 @property (nonatomic) BOOL addSymbolImageComments;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

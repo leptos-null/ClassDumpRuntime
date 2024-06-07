@@ -11,6 +11,8 @@
 
 #import <ClassDump/CDParseType.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 @interface CDIvarModel : NSObject
 /// The Obj-C runtime @c Ivar
 @property (nonatomic, readonly) Ivar backing;
@@ -25,3 +27,5 @@
 - (CDSemanticString *)semanticString;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

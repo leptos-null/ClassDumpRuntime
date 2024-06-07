@@ -9,6 +9,8 @@
 #import <ClassDump/CDParseType.h>
 #import <ClassDump/CDVariableModel.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 /// Type representing a @c struct or @c union
 @interface CDRecordType : CDParseType
 /// The name of the record
@@ -29,3 +31,5 @@
 @property (nullable, strong, nonatomic) NSArray<CDVariableModel *> *fields;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

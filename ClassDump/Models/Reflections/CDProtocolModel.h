@@ -12,25 +12,27 @@
 #import <ClassDump/CDMethodModel.h>
 #import <ClassDump/CDGenerationOptions.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 @interface CDProtocolModel : NSObject
 /// The Obj-C runtime @c Protocol
 @property (strong, nonatomic, readonly) Protocol *backing;
 /// The name of the protocol, e.g. @c NSObject
 @property (strong, nonatomic, readonly) NSString *name;
 /// The protocols the protocol conforms to
-@property (strong, nonatomic, readonly) NSArray<CDProtocolModel *> *protocols;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDProtocolModel *> *protocols;
 
-@property (strong, nonatomic, readonly) NSArray<CDPropertyModel *> *requiredClassProperties;
-@property (strong, nonatomic, readonly) NSArray<CDPropertyModel *> *requiredInstanceProperties;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDPropertyModel *> *requiredClassProperties;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDPropertyModel *> *requiredInstanceProperties;
 
-@property (strong, nonatomic, readonly) NSArray<CDMethodModel *> *requiredClassMethods;
-@property (strong, nonatomic, readonly) NSArray<CDMethodModel *> *requiredInstanceMethods;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDMethodModel *> *requiredClassMethods;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDMethodModel *> *requiredInstanceMethods;
 
-@property (strong, nonatomic, readonly) NSArray<CDPropertyModel *> *optionalClassProperties;
-@property (strong, nonatomic, readonly) NSArray<CDPropertyModel *> *optionalInstanceProperties;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDPropertyModel *> *optionalClassProperties;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDPropertyModel *> *optionalInstanceProperties;
 
-@property (strong, nonatomic, readonly) NSArray<CDMethodModel *> *optionalClassMethods;
-@property (strong, nonatomic, readonly) NSArray<CDMethodModel *> *optionalInstanceMethods;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDMethodModel *> *optionalClassMethods;
+@property (strong, nonatomic, readonly, nullable) NSArray<CDMethodModel *> *optionalInstanceMethods;
 
 - (instancetype)initWithProtocol:(Protocol *)prcl;
 + (instancetype)modelWithProtocol:(Protocol *)prcl;
@@ -61,3 +63,6 @@
 - (NSSet<NSString *> *)protocolReferences;
 
 @end
+
+
+NS_HEADER_AUDIT_END(nullability)

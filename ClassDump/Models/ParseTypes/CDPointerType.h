@@ -8,11 +8,15 @@
 
 #import <ClassDump/CDParseType.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 /// Type representing a pointer
 @interface CDPointerType : CDParseType
 /// The type that this pointer points to
 @property (nullable, strong, nonatomic) CDParseType *pointee;
 
-+ (nonnull instancetype)pointerToPointee:(nonnull CDParseType *)pointee;
++ (instancetype)pointerToPointee:(nonnull CDParseType *)pointee;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

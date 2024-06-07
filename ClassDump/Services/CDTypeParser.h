@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <ClassDump/CDParseType.h>
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 @interface CDTypeParser : NSObject
 
 /// Find the end of an Objective-C type encoding
@@ -23,6 +25,8 @@
 /// @param start A pointer to the start of an encoded value as returned by @c \@encode
 /// @param end A pointer to the first byte out-of-bounds from @c start
 /// @param error Set to @c YES if an error occurs during proccessing
-+ (CDParseType *)typeForEncodingStart:(const char *const)start end:(const char *const)end error:(inout BOOL *)error;
++ (CDParseType *)typeForEncodingStart:(const char *const)start end:(const char *const)end error:(nullable inout BOOL *)error;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

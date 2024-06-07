@@ -32,13 +32,15 @@ typedef NS_ENUM(NSUInteger, CDSemanticType) {
     CDSemanticTypeCount
 };
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 /// A string composed of substrings that may have different semantic meanings
 @interface CDSemanticString : NSObject
 /// The length of the string
 @property (readonly) NSUInteger length;
 /// Append another semantic string to the end of this string,
 /// keeping all of the semantics of both the parameter and receiver
-- (void)appendSemanticString:(nonnull CDSemanticString *)semanticString;
+- (void)appendSemanticString:(CDSemanticString *)semanticString;
 /// Append a string with a semantic type to the end of this string
 - (void)appendString:(nullable NSString *)string semanticType:(CDSemanticType)type;
 /// Whether the first character in this string is equal to @c character
@@ -46,14 +48,16 @@ typedef NS_ENUM(NSUInteger, CDSemanticType) {
 /// Whether the last character in this string is equal to @c character
 - (BOOL)endWithChar:(char)character;
 /// Enumerate the substrings and the associated semantic type that compose this string
-- (void)enumerateTypesUsingBlock:(void (NS_NOESCAPE ^_Nonnull)(NSString *_Nonnull string, CDSemanticType type))block;
+- (void)enumerateTypesUsingBlock:(void (NS_NOESCAPE ^)(NSString *string, CDSemanticType type))block;
 /// Enumerate the longest effective substrings and the associated semantic type that compose this string
 ///
 /// Each invocation of @c block will have the longest substring of @c type such that the next
 /// invocation will have a different @c type
-- (void)enumerateLongestEffectiveRangesUsingBlock:(void (NS_NOESCAPE ^_Nonnull)(NSString *_Nonnull string, CDSemanticType type))block;
+- (void)enumerateLongestEffectiveRangesUsingBlock:(void (NS_NOESCAPE ^)(NSString *string, CDSemanticType type))block;
 
 /// The string representation without semantics
-- (nonnull NSString *)string;
+- (NSString *)string;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

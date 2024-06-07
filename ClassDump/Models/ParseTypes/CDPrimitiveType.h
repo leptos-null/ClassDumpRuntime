@@ -50,12 +50,16 @@ typedef NS_ENUM(NSUInteger, CDPrimitiveRawType) {
     CDPrimitiveRawTypeEmpty,
 };
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 OBJC_EXTERN NSString *_Nullable NSStringFromCDPrimitiveRawType(CDPrimitiveRawType);
 
 @interface CDPrimitiveType : CDParseType
 
 @property (nonatomic) CDPrimitiveRawType rawType;
 
-+ (nonnull instancetype)primitiveWithRawType:(CDPrimitiveRawType)rawType;
++ (instancetype)primitiveWithRawType:(CDPrimitiveRawType)rawType;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)

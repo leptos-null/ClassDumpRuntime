@@ -25,6 +25,8 @@ typedef NS_ENUM(NSUInteger, CDTypeModifier) {
     CDTypeModifierCount
 };
 
+NS_HEADER_AUDIT_BEGIN(nullability)
+
 OBJC_EXTERN NSString *_Nullable NSStringFromCDTypeModifier(CDTypeModifier);
 
 /// Base class to represent a type that a variable may be
@@ -35,13 +37,13 @@ OBJC_EXTERN NSString *_Nullable NSStringFromCDTypeModifier(CDTypeModifier);
 /// A string as this type would appear in code for a given variable name.
 ///
 /// @param varName The name of the variable this type is for
-- (nonnull NSString *)stringForVariableName:(nullable NSString *)varName;
+- (NSString *)stringForVariableName:(nullable NSString *)varName;
 
-- (nonnull NSString *)modifiersString;
+- (NSString *)modifiersString;
 
-- (nonnull CDSemanticString *)semanticStringForVariableName:(nullable NSString *)varName;
+- (CDSemanticString *)semanticStringForVariableName:(nullable NSString *)varName;
 
-- (nonnull CDSemanticString *)modifiersSemanticString;
+- (CDSemanticString *)modifiersSemanticString;
 
 /// Classes this type references
 ///
@@ -53,3 +55,5 @@ OBJC_EXTERN NSString *_Nullable NSStringFromCDTypeModifier(CDTypeModifier);
 - (nullable NSSet<NSString *> *)protocolReferences;
 
 @end
+
+NS_HEADER_AUDIT_END(nullability)
