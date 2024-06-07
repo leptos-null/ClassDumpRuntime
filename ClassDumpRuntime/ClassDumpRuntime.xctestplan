@@ -18,9 +18,9 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:ClassDump.xcodeproj",
+        "containerPath" : "container:ClassDumpRuntime.xcodeproj",
         "identifier" : "FA2A011823AEB15700B52F1D",
-        "name" : "ClassDumpTests"
+        "name" : "ClassDumpRuntimeTests"
       }
     }
   ],
