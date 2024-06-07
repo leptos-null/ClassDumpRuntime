@@ -111,7 +111,7 @@ static size_t characterCount(const char *str, const char c) {
         NSArray<NSString *> *brokenupName = [self.name componentsSeparatedByString:@":"];
         
         [argumentTypes enumerateObjectsUsingBlock:^(CDParseType *argumentType, NSUInteger idx, BOOL *stop) {
-            [build appendString:brokenupName[idx] semanticType:CDSemanticTypeStandard];
+            [build appendString:brokenupName[idx] semanticType:CDSemanticTypeMethod];
             [build appendString:@":" semanticType:CDSemanticTypeStandard];
             [build appendString:@"(" semanticType:CDSemanticTypeStandard];
             [build appendSemanticString:[argumentType semanticStringForVariableName:nil]];
@@ -122,7 +122,7 @@ static size_t characterCount(const char *str, const char c) {
             }
         }];
     } else {
-        [build appendString:self.name semanticType:CDSemanticTypeStandard];
+        [build appendString:self.name semanticType:CDSemanticTypeMethod];
     }
     return build;
 }

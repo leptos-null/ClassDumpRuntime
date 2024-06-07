@@ -27,7 +27,8 @@ typedef NS_ENUM(NSUInteger, CDSemanticType) {
     CDSemanticTypeProtocol,
     // a number literal (e.g. 2, 18, 1e5, 7.1)
     CDSemanticTypeNumeric,
-    
+    // an Obj-C method (e.g. initWithFrame)
+    CDSemanticTypeMethod,
     /// The number of valid cases there are in @c CDSemanticType
     CDSemanticTypeCount
 };
