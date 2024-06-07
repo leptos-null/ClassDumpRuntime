@@ -116,7 +116,7 @@ static size_t characterCount(const char *str, const char c) {
             [build appendString:@"(" semanticType:CDSemanticTypeStandard];
             [build appendSemanticString:[argumentType semanticStringForVariableName:nil]];
             [build appendString:@")" semanticType:CDSemanticTypeStandard];
-            [build appendString:[NSString stringWithFormat:@"a%lu", (unsigned long)idx] semanticType:CDSemanticTypeVariable];
+            [build appendString:[NSString stringWithFormat:@"a%lu", (unsigned long)idx] semanticType:CDSemanticTypeMethodArgument];
             if ((idx + 1) < argumentTypeCount) { // if there are still arguments left, add a space to separate
                 [build appendString:@" " semanticType:CDSemanticTypeStandard];
             }
