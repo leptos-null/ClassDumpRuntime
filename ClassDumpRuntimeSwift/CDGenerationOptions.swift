@@ -61,3 +61,15 @@ extension CDGenerationOptions: ReferenceConvertible {
         description
     }
 }
+
+extension CDClassModel {
+    public func semanticLines(with options: CDGenerationOptions) -> CDSemanticString {
+        __semanticLines(with: options as __CDGenerationOptions)
+    }
+}
+
+extension CDProtocolModel {
+    public func semanticLines(with options: CDGenerationOptions) -> CDSemanticString {
+        __semanticLines(with: options as __CDGenerationOptions)
+    }
+}
