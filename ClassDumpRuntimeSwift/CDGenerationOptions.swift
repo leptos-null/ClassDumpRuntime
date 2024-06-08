@@ -1,7 +1,7 @@
 import Foundation
 import ClassDumpRuntime
 
-public struct CDGenerationOptions {
+public struct CDGenerationOptions: Codable, Hashable, Identifiable {
     public var stripProtocolConformance: Bool
     public var stripOverrides: Bool
     public var stripDuplicates: Bool
@@ -9,6 +9,7 @@ public struct CDGenerationOptions {
     public var stripCtorMethod: Bool
     public var stripDtorMethod: Bool
     public var addSymbolImageComments: Bool
+    public var id: Self { self }
 
     public init(stripProtocolConformance: Bool = false, stripOverrides: Bool = false, stripDuplicates: Bool = false, stripSynthesized: Bool = false, stripCtorMethod: Bool = false, stripDtorMethod: Bool = false, addSymbolImageComments: Bool = false) {
         self.stripProtocolConformance = stripProtocolConformance
@@ -19,6 +20,7 @@ public struct CDGenerationOptions {
         self.stripDtorMethod = stripDtorMethod
         self.addSymbolImageComments = addSymbolImageComments
     }
+    
 }
 
 extension CDGenerationOptions: ReferenceConvertible {
