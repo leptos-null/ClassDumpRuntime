@@ -20,6 +20,8 @@ NS_HEADER_AUDIT_BEGIN(nullability)
 @property (strong, nonatomic, readonly) NSString *name;
 /// The type of the ivar
 @property (strong, nonatomic, readonly) CDParseType *type;
+/// The offset of the ivar
+@property (nonatomic, readonly) ptrdiff_t offset;
 
 - (instancetype)initWithIvar:(Ivar)ivar;
 + (instancetype)modelWithIvar:(Ivar)ivar;

@@ -19,6 +19,7 @@
     options.stripCtorMethod = _stripCtorMethod;
     options.stripDtorMethod = _stripDtorMethod;
     options.addSymbolImageComments = _addSymbolImageComments;
+    options.addIvarOffsetComments = _addIvarOffsetComments;
     return options;
 }
 

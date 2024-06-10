@@ -11,7 +11,6 @@
 NS_HEADER_AUDIT_BEGIN(nullability)
 
 /// Options with which a header file may be generated with
-NS_REFINED_FOR_SWIFT
 @interface CDGenerationOptions : NSObject <NSCopying>
 /// @c YES means hide properties and methods that are required by a protocol the type conforms to
 ///
@@ -51,6 +50,8 @@ NS_REFINED_FOR_SWIFT
 ///
 /// This property applies to both classes and protocols.
 @property (nonatomic) BOOL addSymbolImageComments;
+
+@property (nonatomic) BOOL addIvarOffsetComments;
 
 @end
 

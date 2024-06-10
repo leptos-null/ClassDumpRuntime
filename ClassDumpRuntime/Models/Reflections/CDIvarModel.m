@@ -20,6 +20,7 @@
         _backing = ivar;
         _name = @(ivar_getName(ivar));
         _type = [CDTypeParser typeForEncoding:(ivar_getTypeEncoding(ivar) ?: "")];
+        _offset = ivar_getOffset(ivar);
     }
     return self;
 }

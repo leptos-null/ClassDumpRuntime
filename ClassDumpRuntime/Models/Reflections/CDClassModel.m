@@ -257,7 +257,11 @@
             }
             [build appendString:@"    " semanticType:CDSemanticTypeStandard];
             [build appendSemanticString:[ivar semanticString]];
-            [build appendString:@";\n" semanticType:CDSemanticTypeStandard];
+            [build appendString:@";" semanticType:CDSemanticTypeStandard];
+            if (options.addIvarOffsetComments) {
+                [build appendString:[NSString stringWithFormat:@" // offset: %"PRIdPTR"", ivar.offset] semanticType:CDSemanticTypeComment];
+            }
+            [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
         }
         [build appendString:@"}" semanticType:CDSemanticTypeStandard];
     }
