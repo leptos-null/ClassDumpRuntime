@@ -49,7 +49,7 @@ NS_HEADER_AUDIT_BEGIN(nullability)
 - (CDSemanticString *)semanticLinesWithComments:(BOOL)comments synthesizeStrip:(BOOL)synthesizeStrip;
 
 /// Generate an @c interface for the class
-- (CDSemanticString *)semanticLinesWithOptions:(CDGenerationOptions *)options;
+- (CDSemanticString *)semanticLinesWithOptions:(CDGenerationOptions *)options NS_REFINED_FOR_SWIFT;
 
 /// Classes the class references in the declaration
 ///
