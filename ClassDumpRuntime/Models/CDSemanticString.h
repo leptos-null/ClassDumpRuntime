@@ -38,7 +38,7 @@ typedef NS_ENUM(NSUInteger, CDSemanticType) {
 NS_HEADER_AUDIT_BEGIN(nullability)
 
 /// A string composed of substrings that may have different semantic meanings
-@interface CDSemanticString : NSObject
+@interface CDSemanticString : NSObject <NSSecureCoding>
 /// The length of the string
 @property (readonly) NSUInteger length;
 /// Append another semantic string to the end of this string,

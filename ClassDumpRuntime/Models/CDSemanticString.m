@@ -8,12 +8,30 @@
 
 #import "CDSemanticString.h"
 
-@interface CDSemanticStringStaple : NSObject
+@interface CDSemanticStringStaple : NSObject <NSSecureCoding>
 @property (strong, nonatomic) NSString *string;
 @property (nonatomic) CDSemanticType type;
 @end
 
 @implementation CDSemanticStringStaple
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    if (self = [super init]) {
+        _string = [coder decodeObjectOfClass:[NSString class] forKey:NSStringFromSelector(@selector(string))];
+        _type = [coder decodeIntegerForKey:NSStringFromSelector(@selector(type))];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+    [coder encodeObject:_string forKey:NSStringFromSelector(@selector(string))];
+    [coder encodeInteger:_type forKey:NSStringFromSelector(@selector(type))];
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 @end
 
 
@@ -27,6 +45,23 @@
         _components = [NSMutableArray array];
     }
     return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    if (self = [super init]) {
+        _components = [coder decodeObjectOfClasses:[NSSet setWithObjects:[CDSemanticStringStaple class], [NSMutableArray class], nil] forKey:@"components"];
+        _length = [coder decodeIntegerForKey:NSStringFromSelector(@selector(length))];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+    [coder encodeObject:_components forKey:@"components"];
+    [coder encodeInteger:_length forKey:NSStringFromSelector(@selector(length))];
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 - (void)appendSemanticString:(CDSemanticString *)semanticString {
