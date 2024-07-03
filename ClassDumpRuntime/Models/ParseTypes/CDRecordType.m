@@ -26,14 +26,28 @@
         [build appendString:@" { " semanticType:CDSemanticTypeStandard];
         
         unsigned fieldName = 0;
-        
+        if (self.isExpand) {
+            [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
+        }
         for (CDVariableModel *variableModel in self.fields) {
+            if (self.isExpand) {
+                [build appendString:@"    " semanticType:CDSemanticTypeStandard];
+                for (NSInteger i = 0; i < self.indentLevel; i++) {
+                    [build appendString:@"    " semanticType:CDSemanticTypeStandard];
+                }
+            }
             NSString *variableName = variableModel.name;
             if (variableName == nil) {
                 variableName = [NSString stringWithFormat:@"x%u", fieldName++];
             }
             [build appendSemanticString:[variableModel.type semanticStringForVariableName:variableName]];
             [build appendString:@"; " semanticType:CDSemanticTypeStandard];
+            if (self.isExpand) {
+                [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
+            }
+        }
+        for (NSInteger i = 0; i < self.indentLevel; i++) {
+            [build appendString:@"    " semanticType:CDSemanticTypeStandard];
         }
         [build appendString:@"}" semanticType:CDSemanticTypeStandard];
     }

@@ -8,7 +8,7 @@
 
 #import "CDIvarModel.h"
 #import "../../Services/CDTypeParser.h"
-
+#import "../ParseTypes/CDRecordType.h"
 @implementation CDIvarModel
 
 + (instancetype)modelWithIvar:(Ivar)ivar {
@@ -21,6 +21,11 @@
         _name = @(ivar_getName(ivar));
         _type = [CDTypeParser typeForEncoding:(ivar_getTypeEncoding(ivar) ?: "")];
         _offset = ivar_getOffset(ivar);
+        if ([_type isKindOfClass:[CDRecordType class]]) {
+            CDRecordType *recordType = (CDRecordType *)_type;
+            recordType.indentLevel = 1;
+            recordType.expand = YES;
+        }
     }
     return self;
 }

@@ -30,6 +30,10 @@ NS_HEADER_AUDIT_BEGIN(nullability)
 /// the record is defined to have no fields.
 @property (nullable, strong, nonatomic) NSArray<CDVariableModel *> *fields;
 
+@property (nonatomic, getter=isExpand) BOOL expand;
+@property (nonatomic) NSInteger indentLevel;
+
+
 @end
 
 NS_HEADER_AUDIT_END(nullability)
