@@ -53,6 +53,8 @@ NS_REFINED_FOR_SWIFT
 
 @property (nonatomic) BOOL addIvarOffsetComments;
 
+@property (nonatomic) BOOL expandIvarRecordTypeMembers;
+
 @end
 
 NS_HEADER_AUDIT_END(nullability)

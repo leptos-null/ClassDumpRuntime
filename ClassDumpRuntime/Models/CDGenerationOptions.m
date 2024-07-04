@@ -20,6 +20,7 @@
     options.stripDtorMethod = _stripDtorMethod;
     options.addSymbolImageComments = _addSymbolImageComments;
     options.addIvarOffsetComments = _addIvarOffsetComments;
+    options.expandIvarRecordTypeMembers = _expandIvarRecordTypeMembers;
     return options;
 }
 

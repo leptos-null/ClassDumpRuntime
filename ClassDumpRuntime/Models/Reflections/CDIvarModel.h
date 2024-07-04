@@ -10,7 +10,7 @@
 #import <objc/runtime.h>
 
 #import <ClassDumpRuntime/CDParseType.h>
-
+#import <ClassDumpRuntime/CDGenerationOptions.h>
 NS_HEADER_AUDIT_BEGIN(nullability)
 
 @interface CDIvarModel : NSObject
@@ -26,7 +26,7 @@ NS_HEADER_AUDIT_BEGIN(nullability)
 - (instancetype)initWithIvar:(Ivar)ivar;
 + (instancetype)modelWithIvar:(Ivar)ivar;
 
-- (CDSemanticString *)semanticString;
+- (CDSemanticString *)semanticStringWithOptions:(CDGenerationOptions *)options;
 
 @end
 

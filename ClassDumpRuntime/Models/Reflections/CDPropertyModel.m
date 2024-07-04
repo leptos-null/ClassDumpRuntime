@@ -101,7 +101,7 @@
                     attributeName = @"copy";
                     break;
                 case '&':
-                    attributeName = @"retain";
+                    attributeName = @"strong";
                     break;
                 case 'D':
                     isDynamic = YES;
