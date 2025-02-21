@@ -194,16 +194,41 @@
         unsigned __int128 f : 100;
         unsigned g : 10;
         unsigned h : 15;
+        struct BitfieldTestB {
+            unsigned a : 18;
+            unsigned b : 2;
+            unsigned c : 30;
+            unsigned long d : 34;
+            unsigned e : 1;
+            unsigned __int128 f : 100;
+            unsigned g : 10;
+            unsigned h : 15;
+        } nested;
     };
-    CDRecordType *type = [CDTypeParser typeForEncoding:@encode(struct BitfieldTest)];
+    CDRecordType *type = (CDRecordType *)[CDTypeParser typeForEncoding:@encode(struct BitfieldTest)];
     type.expand = YES;
-    NSLog(@"%@", [type stringForVariableName:@"var"]);
-//    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"struct BitfieldTest { "
-//               "unsigned int x0 : 18; unsigned char x1 : 2; "
-//               "unsigned int x2 : 30; unsigned long x3 : 34; "
-//               "unsigned char x4 : 1; unsigned __int128 x5 : 100; "
-//               "unsigned short x6 : 10; unsigned short x7 : 15; "
-//               "} var"]);
+    NSString *expected =
+    @"struct BitfieldTest { \n"\
+    "    unsigned int x0 : 18; \n"\
+    "    unsigned char x1 : 2; \n"\
+    "    unsigned int x2 : 30; \n"\
+    "    unsigned long x3 : 34; \n"\
+    "    unsigned char x4 : 1; \n"\
+    "    unsigned __int128 x5 : 100; \n"\
+    "    unsigned short x6 : 10; \n"\
+    "    unsigned short x7 : 15; \n"\
+    "    struct BitfieldTestB { \n"\
+    "        unsigned int x0 : 18; \n"\
+    "        unsigned char x1 : 2; \n"\
+    "        unsigned int x2 : 30; \n"\
+    "        unsigned long x3 : 34; \n"\
+    "        unsigned char x4 : 1; \n"\
+    "        unsigned __int128 x5 : 100; \n"\
+    "        unsigned short x6 : 10; \n"\
+    "        unsigned short x7 : 15; \n"\
+    "    } x8; \n"\
+    "} var";
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:expected]);
 }
 
 - (void)testModifiedFields {

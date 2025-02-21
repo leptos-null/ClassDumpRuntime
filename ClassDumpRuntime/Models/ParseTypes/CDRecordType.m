@@ -96,4 +96,18 @@
             [self class], self, [self modifiersString], self.name, self.isUnion ? @"YES" : @"NO", self.fields.debugDescription];
 }
 
+- (void)setExpand:(BOOL)expand {
+    _expand = expand;
+    
+    if (self.fields) {
+        for (CDVariableModel *variableModel in self.fields) {
+            if ([variableModel.type isKindOfClass:[CDRecordType class]]) {
+                CDRecordType *recordType = (CDRecordType *)variableModel.type;
+                recordType.indentLevel = self.indentLevel + 1;
+                recordType.expand = expand;
+            }
+        }
+    }
+}
+
 @end
