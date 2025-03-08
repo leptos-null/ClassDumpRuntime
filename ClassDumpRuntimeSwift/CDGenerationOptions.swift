@@ -10,6 +10,7 @@ public struct CDGenerationOptions: Codable, Hashable, Identifiable {
     public var stripDtorMethod: Bool
     public var addSymbolImageComments: Bool
     public var addIvarOffsetComments: Bool
+    public var expandIvarRecordTypeMembers: Bool
     public var id: Self { self }
 
     public init(
@@ -20,7 +21,8 @@ public struct CDGenerationOptions: Codable, Hashable, Identifiable {
         stripCtorMethod: Bool = false,
         stripDtorMethod: Bool = false,
         addSymbolImageComments: Bool = false,
-        addIvarOffsetComments: Bool = false
+        addIvarOffsetComments: Bool = false,
+        expandIvarRecordTypeMembers: Bool = false
     ) {
         self.stripProtocolConformance = stripProtocolConformance
         self.stripOverrides = stripOverrides
@@ -30,6 +32,7 @@ public struct CDGenerationOptions: Codable, Hashable, Identifiable {
         self.stripDtorMethod = stripDtorMethod
         self.addSymbolImageComments = addSymbolImageComments
         self.addIvarOffsetComments = addIvarOffsetComments
+        self.expandIvarRecordTypeMembers = expandIvarRecordTypeMembers
     }
     
 }
@@ -46,6 +49,7 @@ extension CDGenerationOptions: ReferenceConvertible {
         options.stripDtorMethod = stripDtorMethod
         options.addSymbolImageComments = addSymbolImageComments
         options.addIvarOffsetComments = addIvarOffsetComments
+        options.expandIvarRecordTypeMembers = expandIvarRecordTypeMembers
         return options
     }
 
@@ -58,7 +62,8 @@ extension CDGenerationOptions: ReferenceConvertible {
             stripCtorMethod: source.stripCtorMethod,
             stripDtorMethod: source.stripDtorMethod,
             addSymbolImageComments: source.addSymbolImageComments,
-            addIvarOffsetComments: source.addIvarOffsetComments
+            addIvarOffsetComments: source.addIvarOffsetComments,
+            expandIvarRecordTypeMembers: source.expandIvarRecordTypeMembers
         )
     }
 
