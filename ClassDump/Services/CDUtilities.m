@@ -161,7 +161,10 @@ struct dyld_cache_image_info
     
     for (unsigned int classIndex = 0; classIndex < classCount; classIndex++) {
         Class __unsafe_unretained const cls = classList[classIndex];
-        [ret addObject:NSStringFromClass(cls)];
+        NSString *className = NSStringFromClass(cls);
+        if (className != nil) {
+            [ret addObject:className];
+        }
     }
     free(classList);
     
