@@ -13,6 +13,19 @@
 
 #import <dlfcn.h>
 
+struct objc_class {
+    uintptr_t isa;
+    uintptr_t superclass;
+    uintptr_t cache1;
+    uintptr_t cache2;
+    uintptr_t bits;
+};
+
+// class is a Swift class from the pre-stable Swift ABI
+#define FAST_IS_SWIFT_LEGACY    (1UL<<0)
+// class is a Swift class from the stable Swift ABI
+#define FAST_IS_SWIFT_STABLE    (1UL<<1)
+
 @implementation CDClassModel {
     NSArray<NSString *> *_classPropertySynthesizedMethods;
     NSArray<NSString *> *_instancePropertySynthesizedMethods;
@@ -522,6 +535,11 @@
             [build unionSet:refs];
         }
     }
+}
+
+- (BOOL)isSwiftClass {
+    struct objc_class *objcClass = (__bridge struct objc_class *)_backing;
+    return (objcClass->bits & FAST_IS_SWIFT_LEGACY) == FAST_IS_SWIFT_LEGACY || (objcClass->bits & FAST_IS_SWIFT_STABLE) == FAST_IS_SWIFT_STABLE;
 }
 
 - (NSString *)description {

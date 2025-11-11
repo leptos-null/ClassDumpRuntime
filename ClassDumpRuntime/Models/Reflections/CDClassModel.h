@@ -34,6 +34,9 @@ NS_HEADER_AUDIT_BEGIN(nullability)
 /// Instance variables, including values synthesized from properties
 @property (strong, nonatomic, readonly, nullable) NSArray<CDIvarModel *> *ivars;
 
+@property (nonatomic, readonly) BOOL isSwiftClass;
+
+
 - (instancetype)initWithClass:(Class)cls;
 + (instancetype)modelWithClass:(Class)cls;
 
