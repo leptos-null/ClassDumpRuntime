@@ -16,17 +16,35 @@ let package = Package(
     products: [
         .library(
             name: "ClassDumpRuntime",
-            targets: ["ClassDumpRuntime"]
+            targets: [
+                "ClassDumpRuntime",
+            ]
+        ),
+        .library(
+            name: "ClassDumpRuntimeSwift",
+            targets: [
+                "ClassDumpRuntime",
+                "ClassDumpRuntimeSwift",
+            ]
         ),
     ],
     targets: [
         .target(
             name: "ClassDumpRuntime"
         ),
+        .target(
+            name: "ClassDumpRuntimeSwift",
+            dependencies: [
+                "ClassDumpRuntime",
+            ],
+            path: "ClassDumpRuntimeSwift"
+        ),
         .testTarget(
             name: "ClassDumpRuntimeTests",
-            dependencies: ["ClassDumpRuntime"],
-            path: "ClassDumpTests"
+            dependencies: [
+                "ClassDumpRuntime",
+            ],
+            path: "ClassDumpRuntimeTests"
         ),
     ]
 )
