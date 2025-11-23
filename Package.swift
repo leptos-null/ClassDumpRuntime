@@ -28,5 +28,6 @@ let package = Package(
             dependencies: ["ClassDumpRuntime"],
             path: "ClassDumpTests"
         ),
-    ]
+    ],
+    cxxLanguageStandard: .cxx20
 )

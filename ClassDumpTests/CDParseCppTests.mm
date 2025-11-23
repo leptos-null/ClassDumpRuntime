@@ -35,6 +35,17 @@ namespace ClassDump {
     };
 }
 
+
+struct MatrixDimensions {
+    unsigned width, height;
+};
+
+template<MatrixDimensions Dimensions>
+class MatrixFixedPoint {
+    short storage[Dimensions.height][Dimensions.width];
+};
+
+
 - (void)testClass {
     CDParseType *type = [CDTypeParser typeForEncoding:@encode(SuperUser)];
     XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"struct SuperUser { "
@@ -56,6 +67,13 @@ namespace ClassDump {
     type = [CDTypeParser typeForEncoding:@encode(BinaryArray<ClassDump::Chocolate>)];
     XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"struct BinaryArray<ClassDump::Chocolate> { "
                "struct Chocolate { float x0; } x0[2]; "
+               "} var"]);
+}
+
+- (void)testStructuralGenerics {
+    CDParseType *type = [CDTypeParser typeForEncoding:@encode(MatrixFixedPoint<MatrixDimensions { 32, 8 }>)];
+    XCTAssert([[type stringForVariableName:@"var"] isEqualToString:@"struct MatrixFixedPoint<MatrixDimensions{32, 8}> { "
+               "short x0[8][32]; "
                "} var"]);
 }
 

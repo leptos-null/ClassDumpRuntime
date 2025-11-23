@@ -538,24 +538,60 @@
     CDRecordType *record = [CDRecordType new];
     record.isUnion = isUnion;
     
-    size_t nameOffset = 1;
-    while (start[nameOffset] != '=' && start[nameOffset] != '}') {
-        nameOffset++;
+    const char *chr = start;
+    
+    unsigned openTokens = 1;
+    while (1) {
+        const char token = *++chr;
+        
+        if (isStruct) {
+            switch (token) {
+                case '{':
+                    openTokens++;
+                    break;
+                case '}':
+                    openTokens--;
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        if (isUnion) {
+            switch (token) {
+                case '(':
+                    openTokens++;
+                    break;
+                case ')':
+                    openTokens--;
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        if (openTokens == 0) {
+            break; // we've reached the end - we're done
+        }
+        if (openTokens == 1 && token == '=') {
+            break; // we hit the name indicator for the current "scope"
+        }
     }
-    nameOffset++;
+    // we've already read this token, move over
+    chr++;
     
     // anonymous indicator
-    if (nameOffset != 3 && start[1] != '?') {
-        record.name = [[NSString alloc] initWithBytes:(start + 1) length:(nameOffset - 2) encoding:NSUTF8StringEncoding];
+    if (chr != (start + 3) && start[1] != '?') {
+        record.name = [[NSString alloc] initWithBytes:(start + 1) length:((chr - start) - 2) encoding:NSUTF8StringEncoding];
     }
     // no content, usually caused by multiple levels of indirection
-    if (nameOffset == (end - start)) {
+    if (chr == end) {
         return record;
     }
     
     NSMutableArray<CDVariableModel *> *fields = [NSMutableArray array];
     
-    for (const char *chr = start + nameOffset; chr < endToken;) {
+    while (chr < endToken) {
         CDVariableModel *variableModel = [CDVariableModel new];
         
         if (*chr == '"') {
