@@ -385,24 +385,15 @@
         [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
         
         Dl_info info;
-        NSMutableArray<NSString *> *synthed = [NSMutableArray arrayWithArray:synthesized];
+        NSMutableSet<NSString *> *synthed = [NSMutableSet setWithArray:synthesized];
         if (stripCtor) {
             [synthed addObject:@".cxx_construct"];
         }
         if (stripDtor) {
             [synthed addObject:@".cxx_destruct"];
         }
-        NSUInteger synthedCount = synthed.count;
         for (CDMethodModel *methd in methods) {
-            // find and remove instead of just find so we don't have to search the entire
-            // array everytime, when we know the objects that we've already filtered out won't come up again
-            NSUInteger const searchResult = [synthed indexOfObject:methd.name inRange:NSMakeRange(0, synthedCount)];
-            if (searchResult != NSNotFound) {
-                synthedCount--;
-                // optimized version of remove since the
-                // order of synthed doesn't matter to us.
-                // exchange is O(1) instead of remove is O(n)
-                [synthed exchangeObjectAtIndex:searchResult withObjectAtIndex:synthedCount];
+            if ([synthed containsObject:methd.name]) {
                 continue;
             }
             
