@@ -30,7 +30,7 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 
-/// Returns the number of times a character occurs in a null-terminated stringb
+/// Returns the number of times a character occurs in a null-terminated string
 static size_t characterCount(const char *str, const char c) {
     size_t ret = 0;
     while (*str) {

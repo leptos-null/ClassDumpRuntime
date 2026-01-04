@@ -14,12 +14,12 @@
 ///
 /// This property applies to both classes and protocols.
 @property (nonatomic) BOOL stripProtocolConformance;
-/// @c YES means hide properties and methods that are inherited from the class hierachy
+/// @c YES means hide properties and methods that are inherited from the class hierarchy
 ///
 /// This property only applies to classes. Protocols can require conformances to other
 /// protocols, however they do not have inheritance.
 /// Eligible properties are only hidden if the types match between the property in the
-/// current class and class nearest in the hierachy.
+/// current class and class nearest in the hierarchy.
 /// For example, if `AAView` has a property `AALayer *layer`
 /// and a subclass `BBView` has a property `BBLayer *layer`,
 /// the property would not be hidden since the types are different.

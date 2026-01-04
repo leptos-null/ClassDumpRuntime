@@ -22,7 +22,7 @@
 /// Get an object representing the type encoded
 /// @param start A pointer to the start of an encoded value as returned by @c \@encode
 /// @param end A pointer to the first byte out-of-bounds from @c start
-/// @param error Set to @c YES if an error occurs during proccessing
+/// @param error Set to @c YES if an error occurs during processing
 + (CDParseType *)typeForEncodingStart:(const char *const)start end:(const char *const)end error:(inout BOOL *)error;
 
 @end
