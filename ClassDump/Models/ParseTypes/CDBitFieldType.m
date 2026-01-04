@@ -7,6 +7,7 @@
 //
 
 #import "CDBitFieldType.h"
+#import "../../Services/CDStringFormatting.h"
 
 @implementation CDBitFieldType
 
@@ -66,7 +67,7 @@
     }
     
     [build appendString:@" : " semanticType:CDSemanticTypeStandard];
-    [build appendString:[NSString stringWithFormat:@"%lu", (unsigned long)self.width] semanticType:CDSemanticTypeNumeric];
+    [build appendString:NSStringFromNSUInteger(self.width) semanticType:CDSemanticTypeNumeric];
     return build;
 }
 

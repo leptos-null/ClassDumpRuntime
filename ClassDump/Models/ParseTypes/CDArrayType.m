@@ -7,6 +7,7 @@
 //
 
 #import "CDArrayType.h"
+#import "../../Services/CDStringFormatting.h"
 
 @implementation CDArrayType
 
@@ -31,7 +32,7 @@
     
     [arrayStack enumerateObjectsUsingBlock:^(CDArrayType *arrayType, NSUInteger idx, BOOL *stop) {
         [build appendString:@"[" semanticType:CDSemanticTypeStandard];
-        [build appendString:[NSString stringWithFormat:@"%lu", (unsigned long)arrayType.size] semanticType:CDSemanticTypeNumeric];
+        [build appendString:NSStringFromNSUInteger(arrayType.size) semanticType:CDSemanticTypeNumeric];
         [build appendString:@"]" semanticType:CDSemanticTypeStandard];
     }];
     
