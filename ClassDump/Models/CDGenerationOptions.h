@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import <ClassDump/CDMethodParameterNameResolver.h>
+
 /// Options with which a header file may be generated with
 @interface CDGenerationOptions : NSObject
 /// @c YES means hide properties and methods that are required by a protocol the type conforms to
@@ -48,5 +50,9 @@
 ///
 /// This property applies to both classes and protocols.
 @property (nonatomic) BOOL addSymbolImageComments;
+/// The resolver with which to resolve parameter names in methods
+///
+/// If this property is `NULL` or if the resolver returns `nil`, a default resolver will be used.
+@property (nonatomic, nullable) CDMethodParameterNameResolver methodParameterNameResolver;
 
 @end

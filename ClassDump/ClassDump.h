@@ -22,14 +22,15 @@
 #import <ClassDump/CDGenerationOptions.h>
 #import <ClassDump/CDIvarModel.h>
 #import <ClassDump/CDMethodModel.h>
+#import <ClassDump/CDMethodParameterNameResolver.h>
 #import <ClassDump/CDObjectType.h>
 #import <ClassDump/CDParseType.h>
 #import <ClassDump/CDPointerType.h>
 #import <ClassDump/CDPrimitiveType.h>
 #import <ClassDump/CDPropertyAttribute.h>
 #import <ClassDump/CDPropertyModel.h>
-#import <ClassDump/CDProtocolModel+Conformance.h>
 #import <ClassDump/CDProtocolModel.h>
+#import <ClassDump/CDProtocolModel+Conformance.h>
 #import <ClassDump/CDRecordType.h>
 #import <ClassDump/CDSemanticString.h>
 #import <ClassDump/CDTypeParser.h>

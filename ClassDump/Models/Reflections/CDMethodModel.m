@@ -8,7 +8,6 @@
 
 #import "CDMethodModel.h"
 #import "../../Services/CDTypeParser.h"
-#import "../../Services/CDStringFormatting.h"
 
 /*
  * @APPLE_LICENSE_HEADER_START@
@@ -99,7 +98,7 @@ static size_t characterCount(const char *str, const char c) {
     return self;
 }
 
-- (CDSemanticString *)semanticString {
+- (CDSemanticString *)semanticStringWithParameterNameResolver:(CDMethodParameterNameResolver)parameterNameResolver {
     CDSemanticString *build = [CDSemanticString new];
     [build appendString:(self.isClass ? @"+" : @"-") semanticType:CDSemanticTypeStandard];
     [build appendString:@" (" semanticType:CDSemanticTypeStandard];
@@ -117,7 +116,16 @@ static size_t characterCount(const char *str, const char c) {
             [build appendString:@"(" semanticType:CDSemanticTypeStandard];
             [build appendSemanticString:[argumentType semanticStringForVariableName:nil]];
             [build appendString:@")" semanticType:CDSemanticTypeStandard];
-            [build appendString:[@"a" stringByAppendingString:NSStringFromNSUInteger(idx)] semanticType:CDSemanticTypeVariable];
+            
+            NSString *parameterName = nil;
+            if (parameterNameResolver != NULL) {
+                parameterName = parameterNameResolver(brokenupName, idx);
+            }
+            if (parameterName == nil) {
+                parameterName = CDMethodParameterNameNumberedResolver(brokenupName, idx);
+            }
+            
+            [build appendString:parameterName semanticType:CDSemanticTypeVariable];
             if ((idx + 1) < argumentTypeCount) { // if there are still arguments left, add a space to separate
                 [build appendString:@" " semanticType:CDSemanticTypeStandard];
             }
@@ -173,7 +181,7 @@ static size_t characterCount(const char *str, const char c) {
 }
 
 - (NSString *)description {
-    return [[self semanticString] string];
+    return [[self semanticStringWithParameterNameResolver:NULL] string];
 }
 
 - (NSString *)debugDescription {

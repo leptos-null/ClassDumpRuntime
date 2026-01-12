@@ -347,8 +347,8 @@
     [self _appendLines:build properties:classProperties comments:options.addSymbolImageComments];
     [self _appendLines:build properties:instanceProperties comments:options.addSymbolImageComments];
     
-    [self _appendLines:build methods:classMethods synthesized:synthedClassMethds comments:options.addSymbolImageComments stripCtor:NO stripDtor:NO];
-    [self _appendLines:build methods:instanceMethods synthesized:synthedInstcMethds comments:options.addSymbolImageComments stripCtor:options.stripCtorMethod stripDtor:options.stripDtorMethod];
+    [self _appendLines:build methods:classMethods synthesized:synthedClassMethds comments:options.addSymbolImageComments stripCtor:NO stripDtor:NO parameterNameResolver:options.methodParameterNameResolver];
+    [self _appendLines:build methods:instanceMethods synthesized:synthedInstcMethds comments:options.addSymbolImageComments stripCtor:options.stripCtorMethod stripDtor:options.stripDtorMethod parameterNameResolver:options.methodParameterNameResolver];
     
     [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     [build appendString:@"@end" semanticType:CDSemanticTypeKeyword];
@@ -380,7 +380,7 @@
     }
 }
 
-- (void)_appendLines:(CDSemanticString *)build methods:(NSArray<CDMethodModel *> *)methods synthesized:(NSArray<NSString *> *)synthesized comments:(BOOL)comments stripCtor:(BOOL)stripCtor stripDtor:(BOOL)stripDtor {
+- (void)_appendLines:(CDSemanticString *)build methods:(NSArray<CDMethodModel *> *)methods synthesized:(NSArray<NSString *> *)synthesized comments:(BOOL)comments stripCtor:(BOOL)stripCtor stripDtor:(BOOL)stripDtor parameterNameResolver:(CDMethodParameterNameResolver)parameterNameResolver {
     if (methods.count - synthesized.count) {
         [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
         
@@ -416,7 +416,7 @@
                 [build appendString:comment semanticType:CDSemanticTypeComment];
                 [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
             }
-            [build appendSemanticString:[methd semanticString]];
+            [build appendSemanticString:[methd semanticStringWithParameterNameResolver:parameterNameResolver]];
             [build appendString:@";\n" semanticType:CDSemanticTypeStandard];
         }
     }

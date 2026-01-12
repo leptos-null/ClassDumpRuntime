@@ -240,10 +240,10 @@
     [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     
     [self _appendLines:build properties:self.requiredClassProperties comments:options.addSymbolImageComments];
-    [self _appendLines:build methods:self.requiredClassMethods synthesized:(options.stripSynthesized ? _classPropertySynthesizedMethods : nil) comments:options.addSymbolImageComments];
+    [self _appendLines:build methods:self.requiredClassMethods synthesized:(options.stripSynthesized ? _classPropertySynthesizedMethods : nil) comments:options.addSymbolImageComments parameterNameResolver:options.methodParameterNameResolver];
     
     [self _appendLines:build properties:self.requiredInstanceProperties comments:options.addSymbolImageComments];
-    [self _appendLines:build methods:self.requiredInstanceMethods synthesized:(options.stripSynthesized ? _instancePropertySynthesizedMethods : nil) comments:options.addSymbolImageComments];
+    [self _appendLines:build methods:self.requiredInstanceMethods synthesized:(options.stripSynthesized ? _instancePropertySynthesizedMethods : nil) comments:options.addSymbolImageComments parameterNameResolver:options.methodParameterNameResolver];
     
     if (self.optionalClassProperties.count || self.optionalClassMethods.count ||
         self.optionalInstanceProperties.count || self.optionalInstanceMethods.count) {
@@ -253,10 +253,10 @@
     }
     
     [self _appendLines:build properties:self.optionalClassProperties comments:options.addSymbolImageComments];
-    [self _appendLines:build methods:self.optionalClassMethods synthesized:(options.stripSynthesized ? _classPropertySynthesizedMethods : nil) comments:options.addSymbolImageComments];
+    [self _appendLines:build methods:self.optionalClassMethods synthesized:(options.stripSynthesized ? _classPropertySynthesizedMethods : nil) comments:options.addSymbolImageComments parameterNameResolver:options.methodParameterNameResolver];
     
     [self _appendLines:build properties:self.optionalInstanceProperties comments:options.addSymbolImageComments];
-    [self _appendLines:build methods:self.optionalInstanceMethods synthesized:(options.stripSynthesized ? _instancePropertySynthesizedMethods : nil) comments:options.addSymbolImageComments];
+    [self _appendLines:build methods:self.optionalInstanceMethods synthesized:(options.stripSynthesized ? _instancePropertySynthesizedMethods : nil) comments:options.addSymbolImageComments parameterNameResolver:options.methodParameterNameResolver];
     
     [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
     [build appendString:@"@end" semanticType:CDSemanticTypeKeyword];
@@ -288,7 +288,7 @@
     }
 }
 
-- (void)_appendLines:(CDSemanticString *)build methods:(NSArray<CDMethodModel *> *)methods synthesized:(NSArray<NSString *> *)synthesized comments:(BOOL)comments {
+- (void)_appendLines:(CDSemanticString *)build methods:(NSArray<CDMethodModel *> *)methods synthesized:(NSArray<NSString *> *)synthesized comments:(BOOL)comments parameterNameResolver:(CDMethodParameterNameResolver)parameterNameResolver {
     if (methods.count) {
         [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
         
@@ -319,7 +319,7 @@
                 [build appendString:comment semanticType:CDSemanticTypeComment];
                 [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
             }
-            [build appendSemanticString:[methd semanticString]];
+            [build appendSemanticString:[methd semanticStringWithParameterNameResolver:parameterNameResolver]];
             [build appendString:@";\n" semanticType:CDSemanticTypeStandard];
         }
     }

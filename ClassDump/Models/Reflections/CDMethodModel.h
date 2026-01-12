@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 
 #import <ClassDump/CDParseType.h>
+#import <ClassDump/CDMethodParameterNameResolver.h>
 
 @interface CDMethodModel : NSObject
 /// The Obj-C runtime @c objc_method_description
@@ -26,7 +27,7 @@
 - (instancetype)initWithMethod:(struct objc_method_description)methd isClass:(BOOL)isClass;
 + (instancetype)modelWithMethod:(struct objc_method_description)methd isClass:(BOOL)isClass;
 
-- (CDSemanticString *)semanticString;
+- (CDSemanticString *)semanticStringWithParameterNameResolver:(CDMethodParameterNameResolver)parameterNameResolver;
 
 /// Classes the method references in the declaration
 ///
