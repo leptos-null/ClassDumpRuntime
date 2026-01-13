@@ -108,10 +108,11 @@ static size_t characterCount(const char *str, const char c) {
     NSArray<CDParseType *> *argumentTypes = self.argumentTypes;
     NSUInteger const argumentTypeCount = argumentTypes.count;
     if (argumentTypeCount > 0) {
-        NSArray<NSString *> *brokenupName = [self.name componentsSeparatedByString:@":"];
+        NSArray<NSString *> *const nameComponents = [self.name componentsSeparatedByString:@":"];
+        NSArray<NSString *> *const selectorComponents = [nameComponents subarrayWithRange:NSMakeRange(0, argumentTypeCount)];
         
         [argumentTypes enumerateObjectsUsingBlock:^(CDParseType *argumentType, NSUInteger idx, BOOL *stop) {
-            [build appendString:brokenupName[idx] semanticType:CDSemanticTypeStandard];
+            [build appendString:selectorComponents[idx] semanticType:CDSemanticTypeStandard];
             [build appendString:@":" semanticType:CDSemanticTypeStandard];
             [build appendString:@"(" semanticType:CDSemanticTypeStandard];
             [build appendSemanticString:[argumentType semanticStringForVariableName:nil]];
@@ -119,10 +120,10 @@ static size_t characterCount(const char *str, const char c) {
             
             NSString *parameterName = nil;
             if (parameterNameResolver != NULL) {
-                parameterName = parameterNameResolver(brokenupName, idx);
+                parameterName = parameterNameResolver(selectorComponents, idx);
             }
             if (parameterName == nil) {
-                parameterName = CDMethodParameterNameNumberedResolver(brokenupName, idx);
+                parameterName = CDMethodParameterNameNumberedResolver(selectorComponents, idx);
             }
             
             [build appendString:parameterName semanticType:CDSemanticTypeVariable];
