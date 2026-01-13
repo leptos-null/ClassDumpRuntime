@@ -72,6 +72,22 @@ NSString *CDMethodParameterNameSimpleTransformResolver(NSArray<NSString *> *sele
     if ([lastWordLowerCase isEqualToString:@"named"]) {
         return @"name";
     }
+    if ([lastWordLowerCase isEqualToString:@"with"]) {
+        return nil;
+    }
+    if ([lastWordLowerCase isEqualToString:@"for"]) {
+        return nil;
+    }
+    if ([lastWordLowerCase isEqualToString:@"to"]) {
+        return nil;
+    }
+    if (componentIndex != 0 && words.count == 2 && [words.firstObject isEqualToString:@"is"]) {
+        return selectorComponent;
+    }
+    if (lastWordLowerCase.length == 0) {
+        return nil;
+    }
+    
     NSSet<NSString *> *const reservedIdentifiers = CDReservedLanguageKeywords();
     if ([reservedIdentifiers containsObject:lastWordLowerCase]) {
         return nil;
