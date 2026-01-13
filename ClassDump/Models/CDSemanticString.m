@@ -9,8 +9,12 @@
 #import "CDSemanticString.h"
 
 @interface CDSemanticStringStaple : NSObject
+
 @property (strong, nonatomic) NSString *string;
 @property (nonatomic) CDSemanticType type;
+
+@property (nonatomic) CDSemanticStringStaple *next;
+
 @end
 
 @implementation CDSemanticStringStaple
@@ -18,19 +22,33 @@
 
 
 @implementation CDSemanticString {
-    NSMutableArray<CDSemanticStringStaple *> *_components;
+    CDSemanticStringStaple *_head;
+    CDSemanticStringStaple *_tail;
 }
 
 - (instancetype)init {
     if (self = [super init]) {
         _length = 0;
-        _components = [NSMutableArray array];
     }
     return self;
 }
 
+- (void)dealloc {
+    CDSemanticStringStaple *head = _head;
+    _head = nil; // i.e. release
+    while (head != nil) {
+        /* `head` gets released because it's no longer referenced here */
+        head = head.next;
+    }
+}
+
 - (void)appendSemanticString:(CDSemanticString *)semanticString {
-    [_components addObjectsFromArray:semanticString->_components];
+    if (_tail) {
+        _tail.next = semanticString->_head;
+    } else {
+        _head = semanticString->_head;
+    }
+    _tail = semanticString->_tail;
     _length += semanticString.length;
 }
 
@@ -39,25 +57,32 @@
         CDSemanticStringStaple *staple = [CDSemanticStringStaple new];
         staple.string = string;
         staple.type = type;
-        [_components addObject:staple];
+        
+        _tail.next = staple;
+        _tail = staple;
+        
+        if (_head == nil) {
+            _head = staple;
+        }
+        
         _length += string.length;
     }
 }
 
 - (BOOL)startsWithChar:(char)character {
     char *bytes = &character;
-    NSString *suffix = [[NSString alloc] initWithBytesNoCopy:bytes length:1 encoding:NSASCIIStringEncoding freeWhenDone:NO];
-    return [_components.firstObject.string hasPrefix:suffix];
+    NSString *prefix = [[NSString alloc] initWithBytesNoCopy:bytes length:1 encoding:NSASCIIStringEncoding freeWhenDone:NO];
+    return [_head.string hasPrefix:prefix];
 }
 
 - (BOOL)endWithChar:(char)character {
     char *bytes = &character;
     NSString *suffix = [[NSString alloc] initWithBytesNoCopy:bytes length:1 encoding:NSASCIIStringEncoding freeWhenDone:NO];
-    return [_components.lastObject.string hasSuffix:suffix];
+    return [_tail.string hasSuffix:suffix];
 }
 
 - (void)enumerateTypesUsingBlock:(void (NS_NOESCAPE ^)(NSString *string, CDSemanticType type))block {
-    for (CDSemanticStringStaple *staple in _components) {
+    for (CDSemanticStringStaple *staple = _head; staple != nil; staple = staple.next) {
         block(staple.string, staple.type);
     }
 }
@@ -65,7 +90,7 @@
 - (void)enumerateLongestEffectiveRangesUsingBlock:(void (NS_NOESCAPE ^)(NSString *string, CDSemanticType type))block {
     CDSemanticType activeStapleType = CDSemanticTypeStandard;
     NSMutableString *concatString = nil;
-    for (CDSemanticStringStaple *staple in _components) {
+    for (CDSemanticStringStaple *staple = _head; staple != nil; staple = staple.next) {
         if ((concatString == nil) || (staple.type != activeStapleType)) {
             if (concatString != nil) {
                 block([concatString copy], activeStapleType);
@@ -83,7 +108,7 @@
 
 - (NSString *)string {
     NSMutableString *build = [NSMutableString string];
-    for (CDSemanticStringStaple *staple in _components) {
+    for (CDSemanticStringStaple *staple = _head; staple != nil; staple = staple.next) {
         [build appendString:staple.string];
     }
     return [build copy];
