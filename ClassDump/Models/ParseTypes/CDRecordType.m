@@ -7,6 +7,7 @@
 //
 
 #import "CDRecordType.h"
+#import "../../Services/CDStringFormatting.h"
 
 @implementation CDRecordType
 
@@ -25,12 +26,12 @@
     if (self.fields != nil) {
         [build appendString:@" { " semanticType:CDSemanticTypeStandard];
         
-        unsigned fieldName = 0;
+        NSUInteger fieldNumber = 0;
         
         for (CDVariableModel *variableModel in self.fields) {
             NSString *variableName = variableModel.name;
             if (variableName == nil) {
-                variableName = [NSString stringWithFormat:@"x%u", fieldName++];
+                variableName = [@"x" stringByAppendingString:NSStringFromNSUInteger(fieldNumber++)];
             }
             [build appendSemanticString:[variableModel.type semanticStringForVariableName:variableName]];
             [build appendString:@"; " semanticType:CDSemanticTypeStandard];
