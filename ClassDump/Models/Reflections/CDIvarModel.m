@@ -8,6 +8,7 @@
 
 #import "CDIvarModel.h"
 #import "../../Services/CDTypeParser.h"
+#import "../ParseTypes/CDParseType+Convenience.h"
 
 @implementation CDIvarModel
 

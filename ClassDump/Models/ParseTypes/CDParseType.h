@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <ClassDump/CDSemanticString.h>
+#import <ClassDump/CDTypeFormatOptions.h>
 
 typedef NS_ENUM(NSUInteger, CDTypeModifier) {
     CDTypeModifierConst,
@@ -32,16 +33,11 @@ OBJC_EXTERN NSString *_Nullable NSStringFromCDTypeModifier(CDTypeModifier);
 
 @property (nullable, strong, nonatomic) NSArray<NSNumber *> *modifiers; // array of CDTypeModifier
 
-/// A string as this type would appear in code for a given variable name.
-///
-/// @param varName The name of the variable this type is for
-- (nonnull NSString *)stringForVariableName:(nullable NSString *)varName;
-
 - (nonnull NSString *)modifiersString;
 
-- (nonnull CDSemanticString *)semanticStringForVariableName:(nullable NSString *)varName;
-
 - (nonnull CDSemanticString *)modifiersSemanticString;
+
+- (nonnull CDSemanticString *)semanticStringForVariableName:(nullable NSString *)varName indentationLevel:(NSUInteger)indentationLevel formatOptions:(nullable CDTypeFormatOptions *)formatOptions;
 
 /// Classes this type references
 ///

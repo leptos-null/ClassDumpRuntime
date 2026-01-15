@@ -10,12 +10,12 @@
 
 @implementation CDBlockType
 
-- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName indentationLevel:(NSUInteger)indentationLevel formatOptions:(CDTypeFormatOptions *)formatOptions {
     CDSemanticString *build = [CDSemanticString new];
     CDSemanticString *modifiersString = [self modifiersSemanticString];
     
     if (self.returnType != nil && self.parameterTypes != nil) {
-        [build appendSemanticString:[self.returnType semanticStringForVariableName:nil]];
+        [build appendSemanticString:[self.returnType semanticStringForVariableName:nil indentationLevel:indentationLevel formatOptions:formatOptions]];
         [build appendString:@" (^" semanticType:CDSemanticTypeStandard];
         
         if (modifiersString.length > 0) {
@@ -34,7 +34,7 @@
             [build appendString:@"void" semanticType:CDSemanticTypeKeyword];
         } else {
             [self.parameterTypes enumerateObjectsUsingBlock:^(CDParseType *paramType, NSUInteger idx, BOOL *stop) {
-                [build appendSemanticString:[paramType semanticStringForVariableName:nil]];
+                [build appendSemanticString:[paramType semanticStringForVariableName:nil indentationLevel:indentationLevel formatOptions:formatOptions]];
                 if ((idx + 1) < paramCount) {
                     [build appendString:@", " semanticType:CDSemanticTypeStandard];
                 }

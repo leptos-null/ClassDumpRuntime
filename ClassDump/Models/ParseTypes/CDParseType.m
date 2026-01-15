@@ -7,6 +7,7 @@
 //
 
 #import "CDParseType.h"
+#import "CDParseType+Convenience.h"
 
 NSString *NSStringFromCDTypeModifier(CDTypeModifier modifier) {
     switch (modifier) {
@@ -36,15 +37,6 @@ NSString *NSStringFromCDTypeModifier(CDTypeModifier modifier) {
 
 @implementation CDParseType
 
-- (NSString *)stringForVariableName:(NSString *)varName {
-    return [[self semanticStringForVariableName:varName] string];
-}
-
-- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
-    NSAssert(NO, @"Subclasses must implement %@", NSStringFromSelector(_cmd));
-    return [CDSemanticString new];
-}
-
 - (NSString *)modifiersString {
     NSArray<NSNumber *> *const modifiers = self.modifiers;
     NSMutableArray<NSString *> *strings = [NSMutableArray arrayWithCapacity:modifiers.count];
@@ -66,6 +58,11 @@ NSString *NSStringFromCDTypeModifier(CDTypeModifier modifier) {
         }
     }];
     return build;
+}
+
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName indentationLevel:(NSUInteger)indentationLevel formatOptions:(CDTypeFormatOptions *)formatOptions {
+    NSAssert(NO, @"Subclasses must implement %@", NSStringFromSelector(_cmd));
+    return [CDSemanticString new];
 }
 
 - (NSSet<NSString *> *)classReferences {

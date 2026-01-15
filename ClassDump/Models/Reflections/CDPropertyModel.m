@@ -8,6 +8,7 @@
 
 #import "CDPropertyModel.h"
 #import "../../Services/CDTypeParser.h"
+#import "../ParseTypes/CDParseType+Convenience.h"
 
 @implementation CDPropertyModel
 

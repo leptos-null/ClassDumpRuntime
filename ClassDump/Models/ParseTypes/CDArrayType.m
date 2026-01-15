@@ -11,7 +11,7 @@
 
 @implementation CDArrayType
 
-- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName indentationLevel:(NSUInteger)indentationLevel formatOptions:(CDTypeFormatOptions *)formatOptions {
     CDSemanticString *build = [CDSemanticString new];
     CDSemanticString *modifiersString = [self modifiersSemanticString];
     if (modifiersString.length > 0) {
@@ -28,7 +28,7 @@
         headType = arrayType.type;
     }
     
-    [build appendSemanticString:[headType semanticStringForVariableName:varName]];
+    [build appendSemanticString:[headType semanticStringForVariableName:varName indentationLevel:indentationLevel formatOptions:formatOptions]];
     
     [arrayStack enumerateObjectsUsingBlock:^(CDArrayType *arrayType, NSUInteger idx, BOOL *stop) {
         [build appendString:@"[" semanticType:CDSemanticTypeStandard];

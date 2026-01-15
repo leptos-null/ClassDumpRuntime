@@ -11,7 +11,7 @@
 
 @implementation CDRecordType
 
-- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName indentationLevel:(NSUInteger)indentationLevel formatOptions:(CDTypeFormatOptions *)formatOptions {
     CDSemanticString *build = [CDSemanticString new];
     CDSemanticString *modifiersString = [self modifiersSemanticString];
     if (modifiersString.length > 0) {
@@ -24,7 +24,10 @@
         [build appendString:self.name semanticType:CDSemanticTypeRecordName];
     }
     if (self.fields != nil) {
-        [build appendString:@" { " semanticType:CDSemanticTypeStandard];
+        BOOL const isMultiline = formatOptions.multilineRecords;
+        NSString *const indentString = formatOptions.indentString ?: @"    ";
+        
+        [build appendString:(isMultiline ? @" {\n" : @" { ") semanticType:CDSemanticTypeStandard];
         
         NSUInteger fieldNumber = 0;
         
@@ -33,8 +36,19 @@
             if (variableName == nil) {
                 variableName = [@"x" stringByAppendingString:NSStringFromNSUInteger(fieldNumber++)];
             }
-            [build appendSemanticString:[variableModel.type semanticStringForVariableName:variableName]];
-            [build appendString:@"; " semanticType:CDSemanticTypeStandard];
+            if (isMultiline) {
+                for (NSUInteger i = 0; i < (indentationLevel + 1); i++) {
+                    [build appendString:indentString semanticType:CDSemanticTypeStandard];
+                }
+            }
+            [build appendSemanticString:[variableModel.type semanticStringForVariableName:variableName indentationLevel:(indentationLevel + 1) formatOptions:formatOptions]];
+            [build appendString:(isMultiline ? @";\n" : @"; ") semanticType:CDSemanticTypeStandard];
+        }
+        
+        if (isMultiline) {
+            for (NSUInteger i = 0; i < indentationLevel; i++) {
+                [build appendString:indentString semanticType:CDSemanticTypeStandard];
+            }
         }
         [build appendString:@"}" semanticType:CDSemanticTypeStandard];
     }

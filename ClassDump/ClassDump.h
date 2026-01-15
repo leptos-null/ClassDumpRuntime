@@ -25,6 +25,7 @@
 #import <ClassDump/CDMethodParameterNameResolver.h>
 #import <ClassDump/CDObjectType.h>
 #import <ClassDump/CDParseType.h>
+#import <ClassDump/CDParseType+Convenience.h>
 #import <ClassDump/CDPointerType.h>
 #import <ClassDump/CDPrimitiveType.h>
 #import <ClassDump/CDPropertyAttribute.h>
@@ -33,6 +34,7 @@
 #import <ClassDump/CDProtocolModel+Conformance.h>
 #import <ClassDump/CDRecordType.h>
 #import <ClassDump/CDSemanticString.h>
+#import <ClassDump/CDTypeFormatOptions.h>
 #import <ClassDump/CDTypeParser.h>
 #import <ClassDump/CDUtilities.h>
 #import <ClassDump/CDVariableModel.h>

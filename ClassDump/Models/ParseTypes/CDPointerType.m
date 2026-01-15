@@ -16,14 +16,14 @@
     return ret;
 }
 
-- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName indentationLevel:(NSUInteger)indentationLevel formatOptions:(CDTypeFormatOptions *)formatOptions {
     CDSemanticString *build = [CDSemanticString new];
     CDSemanticString *modifiersString = [self modifiersSemanticString];
     if (modifiersString.length > 0) {
         [build appendSemanticString:modifiersString];
         [build appendString:@" " semanticType:CDSemanticTypeStandard];
     }
-    [build appendSemanticString:[self.pointee semanticStringForVariableName:nil]];
+    [build appendSemanticString:[self.pointee semanticStringForVariableName:nil indentationLevel:indentationLevel formatOptions:formatOptions]];
     if (![build endWithChar:'*']) {
         [build appendString:@" " semanticType:CDSemanticTypeStandard];
     }

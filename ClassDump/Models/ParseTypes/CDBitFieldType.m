@@ -11,7 +11,7 @@
 
 @implementation CDBitFieldType
 
-- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName {
+- (CDSemanticString *)semanticStringForVariableName:(NSString *)varName indentationLevel:(NSUInteger)indentationLevel formatOptions:(CDTypeFormatOptions *)formatOptions {
     CDSemanticString *build = [CDSemanticString new];
     CDSemanticString *modifiersString = [self modifiersSemanticString];
     if (modifiersString.length > 0) {

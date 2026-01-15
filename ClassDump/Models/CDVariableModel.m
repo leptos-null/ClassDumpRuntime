@@ -7,6 +7,7 @@
 //
 
 #import "CDVariableModel.h"
+#import "ParseTypes/CDParseType+Convenience.h"
 
 @implementation CDVariableModel
 

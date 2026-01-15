@@ -8,6 +8,7 @@
 
 #import "CDMethodModel.h"
 #import "../../Services/CDTypeParser.h"
+#import "../ParseTypes/CDParseType+Convenience.h"
 
 /*
  * @APPLE_LICENSE_HEADER_START@

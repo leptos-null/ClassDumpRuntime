@@ -27,6 +27,11 @@
 		FA53C6C82B9533A400FC1A15 /* CDProtocolModel+Conformance.m in Sources */ = {isa = PBXBuildFile; fileRef = FA53C6C62B9533A300FC1A15 /* CDProtocolModel+Conformance.m */; };
 		FA53C6CA2B959A8100FC1A15 /* CDProtocolTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA53C6C92B959A8100FC1A15 /* CDProtocolTest.m */; };
 		FA5A1ED42962B117005A2A90 /* CDSemanticString.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5A1ED32962B117005A2A90 /* CDSemanticString.m */; };
+		FA6B6D492F18C8B70085FE8B /* CDTypeFormatOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6B6D482F18C8B70085FE8B /* CDTypeFormatOptions.m */; };
+		FA6B6D4A2F18C8B70085FE8B /* CDTypeFormatOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = FA6B6D472F18C8B70085FE8B /* CDTypeFormatOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FA6B73CF2F1998A50085FE8B /* CDParseType+Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6B73CE2F1998A50085FE8B /* CDParseType+Convenience.m */; };
+		FA6B73D02F1998A50085FE8B /* CDParseType+Convenience.h in Headers */ = {isa = PBXBuildFile; fileRef = FA6B73CD2F1998A50085FE8B /* CDParseType+Convenience.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FA6B73D22F199D780085FE8B /* CDTypeFormatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6B73D12F199D780085FE8B /* CDTypeFormatTests.m */; };
 		FA829A0323BD250100FA4DC1 /* CDParseAdvancedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */; };
 		FA829A0523BD310600FA4DC1 /* CDParseCppTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */; };
 		FAAA8C482B8BCCE900BD85B4 /* CDGenerationOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = FAAA8C462B8BCCE900BD85B4 /* CDGenerationOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -122,6 +127,11 @@
 		FA53C6C92B959A8100FC1A15 /* CDProtocolTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDProtocolTest.m; sourceTree = "<group>"; };
 		FA5A1ED22962B117005A2A90 /* CDSemanticString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDSemanticString.h; sourceTree = "<group>"; };
 		FA5A1ED32962B117005A2A90 /* CDSemanticString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDSemanticString.m; sourceTree = "<group>"; };
+		FA6B6D472F18C8B70085FE8B /* CDTypeFormatOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDTypeFormatOptions.h; sourceTree = "<group>"; };
+		FA6B6D482F18C8B70085FE8B /* CDTypeFormatOptions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDTypeFormatOptions.m; sourceTree = "<group>"; };
+		FA6B73CD2F1998A50085FE8B /* CDParseType+Convenience.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CDParseType+Convenience.h"; sourceTree = "<group>"; };
+		FA6B73CE2F1998A50085FE8B /* CDParseType+Convenience.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CDParseType+Convenience.m"; sourceTree = "<group>"; };
+		FA6B73D12F199D780085FE8B /* CDTypeFormatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDTypeFormatTests.m; sourceTree = "<group>"; };
 		FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDParseAdvancedTests.m; sourceTree = "<group>"; };
 		FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CDParseCppTests.mm; sourceTree = "<group>"; };
 		FAAA8C462B8BCCE900BD85B4 /* CDGenerationOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDGenerationOptions.h; sourceTree = "<group>"; };
@@ -246,6 +256,8 @@
 				FA5A1ED32962B117005A2A90 /* CDSemanticString.m */,
 				FAAA8C462B8BCCE900BD85B4 /* CDGenerationOptions.h */,
 				FAAA8C472B8BCCE900BD85B4 /* CDGenerationOptions.m */,
+				FA6B6D472F18C8B70085FE8B /* CDTypeFormatOptions.h */,
+				FA6B6D482F18C8B70085FE8B /* CDTypeFormatOptions.m */,
 				FA53C6A52B8DA8E200FC1A15 /* NSArray+CDFiltering.h */,
 				FA53C6A32B8DA8C700FC1A15 /* NSArray+CDFiltering.m */,
 			);
@@ -257,6 +269,7 @@
 			children = (
 				FA2A011B23AEB15700B52F1D /* CDParsePrimitiveTests.m */,
 				FA829A0223BD250100FA4DC1 /* CDParseAdvancedTests.m */,
+				FA6B73D12F199D780085FE8B /* CDTypeFormatTests.m */,
 				FA829A0423BD310600FA4DC1 /* CDParseCppTests.mm */,
 				FAE71A7423DA0AB20079321A /* CDObjCTests.m */,
 				FA53C6C92B959A8100FC1A15 /* CDProtocolTest.m */,
@@ -278,6 +291,8 @@
 			children = (
 				FAF031E02942E4FF00B6C424 /* CDParseType.h */,
 				FAF031E12942E4FF00B6C424 /* CDParseType.m */,
+				FA6B73CD2F1998A50085FE8B /* CDParseType+Convenience.h */,
+				FA6B73CE2F1998A50085FE8B /* CDParseType+Convenience.m */,
 				FAF031E32942F6C400B6C424 /* CDPrimitiveType.h */,
 				FAF031E42942F6C400B6C424 /* CDPrimitiveType.m */,
 				FAF031F82943154B00B6C424 /* CDObjectType.h */,
@@ -310,6 +325,7 @@
 				FAE3C11A2B81E1A000242A99 /* CDProtocolModel.h in Headers */,
 				FAE3C1102B81E11000242A99 /* CDVariableModel.h in Headers */,
 				FAE3C1202B81E1A000242A99 /* CDParseType.h in Headers */,
+				FA6B6D4A2F18C8B70085FE8B /* CDTypeFormatOptions.h in Headers */,
 				FAE3C1242B81E1A000242A99 /* CDBlockType.h in Headers */,
 				FAE3C1182B81E1A000242A99 /* CDPrimitiveType.h in Headers */,
 				FAE3C11F2B81E1A000242A99 /* CDClassModel.h in Headers */,
@@ -320,6 +336,7 @@
 				FA53C6C72B9533A400FC1A15 /* CDProtocolModel+Conformance.h in Headers */,
 				FAE3C1232B81E1A000242A99 /* CDIvarModel.h in Headers */,
 				FAE3C1192B81E1A000242A99 /* CDArrayType.h in Headers */,
+				FA6B73D02F1998A50085FE8B /* CDParseType+Convenience.h in Headers */,
 				FA1AB5092F1465FA003A056C /* CDMethodParameterNameResolver.h in Headers */,
 				FAE3C1252B81E1A000242A99 /* CDMethodModel.h in Headers */,
 				FAE3C1572B81E5AC00242A99 /* CDTypeParser.h in Headers */,
@@ -435,6 +452,7 @@
 				FA06EA29296934A5008E133B /* CDPropertyAttribute.m in Sources */,
 				FAB999B62F09E19100847625 /* CDStringFormatting.m in Sources */,
 				FAF031FA2943154B00B6C424 /* CDObjectType.m in Sources */,
+				FA6B73CF2F1998A50085FE8B /* CDParseType+Convenience.m in Sources */,
 				FA1AB50A2F1465FA003A056C /* CDMethodParameterNameResolver.m in Sources */,
 				FA2A00FF23ADD2EA00B52F1D /* CDTypeParser.m in Sources */,
 				FAF031F72942FF2A00B6C424 /* CDArrayType.m in Sources */,
@@ -443,6 +461,7 @@
 				FA2A010223ADD2EA00B52F1D /* CDIvarModel.m in Sources */,
 				FA5A1ED42962B117005A2A90 /* CDSemanticString.m in Sources */,
 				FAF031F42942FC3B00B6C424 /* CDVariableModel.m in Sources */,
+				FA6B6D492F18C8B70085FE8B /* CDTypeFormatOptions.m in Sources */,
 				FA2A010423ADD2EA00B52F1D /* CDClassModel.m in Sources */,
 				FA53C6C82B9533A400FC1A15 /* CDProtocolModel+Conformance.m in Sources */,
 			);
@@ -455,6 +474,7 @@
 				FA1AB50C2F147635003A056C /* CDMethodParameterNameResolverTests.m in Sources */,
 				FAE71A7523DA0AB20079321A /* CDObjCTests.m in Sources */,
 				FA53C6CA2B959A8100FC1A15 /* CDProtocolTest.m in Sources */,
+				FA6B73D22F199D780085FE8B /* CDTypeFormatTests.m in Sources */,
 				FAB999BA2F09E28A00847625 /* CDStringFormattingTests.m in Sources */,
 				FA2A011C23AEB15700B52F1D /* CDParsePrimitiveTests.m in Sources */,
 				FA829A0523BD310600FA4DC1 /* CDParseCppTests.mm in Sources */,
