@@ -239,6 +239,10 @@
     }
     
     if (self.ivars.count - synthedVars.count) {
+        CDTypeFormatOptions *formatOptions = [CDTypeFormatOptions new];
+        formatOptions.indentString = @"    ";
+        formatOptions.multilineRecords = options.expandIvarRecordTypes;
+        
         [build appendString:@" {\n" semanticType:CDSemanticTypeStandard];
         for (CDIvarModel *ivar in self.ivars) {
             if ([synthedVars containsObject:ivar.name]) {
@@ -256,7 +260,7 @@
                 [build appendString:@"\n" semanticType:CDSemanticTypeStandard];
             }
             [build appendString:@"    " semanticType:CDSemanticTypeStandard];
-            [build appendSemanticString:[ivar semanticString]];
+            [build appendSemanticString:[ivar.type semanticStringForVariableName:ivar.name indentationLevel:1 formatOptions:formatOptions]];
             [build appendString:@";\n" semanticType:CDSemanticTypeStandard];
         }
         [build appendString:@"}" semanticType:CDSemanticTypeStandard];

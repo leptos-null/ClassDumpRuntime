@@ -50,6 +50,11 @@
 ///
 /// This property applies to both classes and protocols.
 @property (nonatomic) BOOL addSymbolImageComments;
+/// @c YES means ivars which are records (`struct`/`union`) are formatted across multiple lines,
+/// @c NO means each ivar is formatted on a single line
+///
+/// This property only applies to classes.
+@property (nonatomic) BOOL expandIvarRecordTypes;
 /// The resolver with which to resolve parameter names in methods
 ///
 /// If this property is `NULL` or if the resolver returns `nil`, a default resolver will be used.
