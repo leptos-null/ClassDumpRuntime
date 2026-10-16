@@ -19,6 +19,60 @@
     return [[self alloc] initWithProtocol:prcl];
 }
 
+/// @param requiredProperties @c YES returns required properties, @c NO returns optional properties
+/// @param instanceProperties @c YES returns instance properties, @c NO returns class properties
+/// @param synthMeths A mutable array to append synthesized method names to
++ (NSArray<CDPropertyModel *> *)_propertiesForProtocol:(nonnull Protocol *)prcl requiredProperties:(BOOL)requiredProperties instanceProperties:(BOOL)instanceProperties synthMeths:(nullable NSMutableArray<NSString *> *)synthMeths {
+    unsigned int count, index;
+    
+    objc_property_t *props = NULL;
+    if (@available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *)) {
+        props = protocol_copyPropertyList2(prcl, &count, requiredProperties, instanceProperties);
+    } else if (requiredProperties && instanceProperties) {
+        props = protocol_copyPropertyList(prcl, &count);
+    } else {
+        return nil;
+    }
+    if (!props) {
+        return nil;
+    }
+    
+    NSMutableArray<CDPropertyModel *> *properties = [NSMutableArray arrayWithCapacity:count];
+    for (index = 0; index < count; index++) {
+        CDPropertyModel *propertyRep = [CDPropertyModel modelWithProperty:props[index] isClass:(!instanceProperties)];
+        [properties addObject:propertyRep];
+        NSString *synthMethodName;
+        if ((synthMethodName = propertyRep.getter)) {
+            [synthMeths addObject:synthMethodName];
+        }
+        if ((synthMethodName = propertyRep.setter)) {
+            [synthMeths addObject:synthMethodName];
+        }
+    }
+    free(props);
+    
+    return [properties copy];
+}
+
+/// @param requiredMethods @c YES returns required methods, @c NO returns optional methods
+/// @param instanceMethods @c YES returns instance methods, @c NO returns class methods
++ (NSArray<CDMethodModel *> *)_methodsForProtocol:(nonnull Protocol *)prcl requiredMethods:(BOOL)requiredMethods instanceMethods:(BOOL)instanceMethods {
+    unsigned int count, index;
+    
+    struct objc_method_description *meths = protocol_copyMethodDescriptionList(prcl, requiredMethods, instanceMethods, &count);
+    if (!meths) {
+        return nil;
+    }
+    
+    NSMutableArray<CDMethodModel *> *methods = [NSMutableArray arrayWithCapacity:count];
+    for (index = 0; index < count; index++) {
+        [methods addObject:[CDMethodModel modelWithMethod:meths[index] isClass:(!instanceMethods)]];
+    }
+    free(meths);
+    
+    return [methods copy];
+}
+
 - (instancetype)initWithProtocol:(Protocol *)prcl {
     if (self = [self init]) {
         _backing = prcl;
@@ -42,114 +96,18 @@
         NSMutableArray<NSString *> *instcSynthMeths = [NSMutableArray array];
         
 #if 0 /* this appears to not be working properly, depending on version combinations between runtime environment and target image */
-        objc_property_t *reqClassProps = protocol_copyPropertyList2(prcl, &count, YES, NO);
-        if (reqClassProps) {
-            NSMutableArray<CDPropertyModel *> *properties = [NSMutableArray arrayWithCapacity:count];
-            for (index = 0; index < count; index++) {
-                CDPropertyModel *propertyRep = [CDPropertyModel modelWithProperty:reqClassProps[index] isClass:YES];
-                [properties addObject:propertyRep];
-                NSString *synthMethodName;
-                if ((synthMethodName = propertyRep.getter)) {
-                    [classSynthMeths addObject:synthMethodName];
-                }
-                if ((synthMethodName = propertyRep.setter)) {
-                    [classSynthMeths addObject:synthMethodName];
-                }
-            }
-            free(reqClassProps);
-            _requiredClassProperties = [properties copy];
-        }
+        _requiredClassProperties = [CDProtocolModel _propertiesForProtocol:prcl requiredProperties:YES instanceProperties:NO synthMeths:classSynthMeths];
 #endif
-        struct objc_method_description *reqClassMeths = protocol_copyMethodDescriptionList(prcl, YES, NO, &count);
-        if (reqClassMeths) {
-            NSMutableArray<CDMethodModel *> *methods = [NSMutableArray arrayWithCapacity:count];
-            for (index = 0; index < count; index++) {
-                [methods addObject:[CDMethodModel modelWithMethod:reqClassMeths[index] isClass:YES]];
-            }
-            free(reqClassMeths);
-            _requiredClassMethods = [methods copy];
-        }
+        _requiredClassMethods = [CDProtocolModel _methodsForProtocol:prcl requiredMethods:YES instanceMethods:NO];
         
-        objc_property_t *reqInstProps = protocol_copyPropertyList2(prcl, &count, YES, YES);
-        if (reqInstProps) {
-            NSMutableArray<CDPropertyModel *> *properties = [NSMutableArray arrayWithCapacity:count];
-            for (index = 0; index < count; index++) {
-                CDPropertyModel *propertyRep = [CDPropertyModel modelWithProperty:reqInstProps[index] isClass:NO];
-                [properties addObject:propertyRep];
-                NSString *synthMethodName;
-                if ((synthMethodName = propertyRep.getter)) {
-                    [instcSynthMeths addObject:synthMethodName];
-                }
-                if ((synthMethodName = propertyRep.setter)) {
-                    [instcSynthMeths addObject:synthMethodName];
-                }
-            }
-            free(reqInstProps);
-            _requiredInstanceProperties = [properties copy];
-        }
-        struct objc_method_description *reqInstMeths = protocol_copyMethodDescriptionList(prcl, YES, YES, &count);
-        if (reqInstMeths) {
-            NSMutableArray<CDMethodModel *> *methods = [NSMutableArray arrayWithCapacity:count];
-            for (index = 0; index < count; index++) {
-                [methods addObject:[CDMethodModel modelWithMethod:reqInstMeths[index] isClass:NO]];
-            }
-            free(reqInstMeths);
-            _requiredInstanceMethods = [methods copy];
-        }
+        _requiredInstanceProperties = [CDProtocolModel _propertiesForProtocol:prcl requiredProperties:YES instanceProperties:YES synthMeths:instcSynthMeths];
+        _requiredInstanceMethods = [CDProtocolModel _methodsForProtocol:prcl requiredMethods:YES instanceMethods:YES];
         
-        objc_property_t *optClassProps = protocol_copyPropertyList2(prcl, &count, NO, NO);
-        if (optClassProps) {
-            NSMutableArray<CDPropertyModel *> *properties = [NSMutableArray arrayWithCapacity:count];
-            for (index = 0; index < count; index++) {
-                CDPropertyModel *propertyRep = [CDPropertyModel modelWithProperty:optClassProps[index] isClass:YES];
-                [properties addObject:propertyRep];
-                NSString *synthMethodName;
-                if ((synthMethodName = propertyRep.getter)) {
-                    [classSynthMeths addObject:synthMethodName];
-                }
-                if ((synthMethodName = propertyRep.setter)) {
-                    [classSynthMeths addObject:synthMethodName];
-                }
-            }
-            free(optClassProps);
-            _optionalClassProperties = [properties copy];
-        }
-        struct objc_method_description *optClassMeths = protocol_copyMethodDescriptionList(prcl, NO, NO, &count);
-        if (optClassMeths) {
-            NSMutableArray<CDMethodModel *> *methods = [NSMutableArray arrayWithCapacity:count];
-            for (index = 0; index < count; index++) {
-                [methods addObject:[CDMethodModel modelWithMethod:(optClassMeths[index]) isClass:YES]];
-            }
-            free(optClassMeths);
-            _optionalClassMethods = [methods copy];
-        }
+        _optionalClassProperties = [CDProtocolModel _propertiesForProtocol:prcl requiredProperties:NO instanceProperties:NO synthMeths:classSynthMeths];
+        _optionalClassMethods = [CDProtocolModel _methodsForProtocol:prcl requiredMethods:NO instanceMethods:NO];
         
-        objc_property_t *optInstProps = protocol_copyPropertyList2(prcl, &count, NO, YES);
-        if (optInstProps) {
-            NSMutableArray<CDPropertyModel *> *properties = [NSMutableArray arrayWithCapacity:count];
-            for (index = 0; index < count; index++) {
-                CDPropertyModel *propertyRep = [CDPropertyModel modelWithProperty:optInstProps[index] isClass:NO];
-                [properties addObject:propertyRep];
-                NSString *synthMethodName;
-                if ((synthMethodName = propertyRep.getter)) {
-                    [instcSynthMeths addObject:synthMethodName];
-                }
-                if ((synthMethodName = propertyRep.setter)) {
-                    [instcSynthMeths addObject:synthMethodName];
-                }
-            }
-            free(optInstProps);
-            _optionalInstanceProperties = [properties copy];
-        }
-        struct objc_method_description *optInstMeths = protocol_copyMethodDescriptionList(prcl, NO, YES, &count);
-        if (optInstMeths) {
-            NSMutableArray<CDMethodModel *> *methods = [NSMutableArray arrayWithCapacity:count];
-            for (index = 0; index < count; index++) {
-                [methods addObject:[CDMethodModel modelWithMethod:optInstMeths[index] isClass:NO]];
-            }
-            free(optInstMeths);
-            _optionalInstanceMethods = [methods copy];
-        }
+        _optionalInstanceProperties = [CDProtocolModel _propertiesForProtocol:prcl requiredProperties:NO instanceProperties:YES synthMeths:instcSynthMeths];
+        _optionalInstanceMethods = [CDProtocolModel _methodsForProtocol:prcl requiredMethods:NO instanceMethods:YES];
         
         _classPropertySynthesizedMethods = [classSynthMeths copy];
         _instancePropertySynthesizedMethods = [instcSynthMeths copy];
