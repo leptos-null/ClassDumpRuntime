@@ -5,10 +5,10 @@ on:
 
 jobs:
   test:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Test
         run: |
