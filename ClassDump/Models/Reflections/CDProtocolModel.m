@@ -41,7 +41,7 @@
         NSMutableArray<NSString *> *classSynthMeths = [NSMutableArray array];
         NSMutableArray<NSString *> *instcSynthMeths = [NSMutableArray array];
         
-#if 0 /* this appears to not be working properly, depending on version combinations between runtime enviorment and target image */
+#if 0 /* this appears to not be working properly, depending on version combinations between runtime environment and target image */
         objc_property_t *reqClassProps = protocol_copyPropertyList2(prcl, &count, YES, NO);
         if (reqClassProps) {
             NSMutableArray<CDPropertyModel *> *properties = [NSMutableArray arrayWithCapacity:count];
