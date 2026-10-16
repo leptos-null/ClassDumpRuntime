@@ -23,6 +23,30 @@
     return [[self alloc] initWithClass:cls];
 }
 
++ (NSArray<CDMethodModel *> *)_methodsForClass:(Class)cls {
+    unsigned int count, index;
+    
+    Method *methodList = class_copyMethodList(cls, &count);
+    if (!methodList) {
+        return nil;
+    }
+    
+    BOOL const isClassMethod = class_isMetaClass(cls);
+    
+    struct objc_method_description methodDescription;
+    
+    NSMutableArray<CDMethodModel *> *methods = [NSMutableArray arrayWithCapacity:count];
+    for (index = 0; index < count; index++) {
+        Method const methd = methodList[index];
+        methodDescription.name = method_getName(methd);
+        methodDescription.types = (char *_Nullable)method_getTypeEncoding(methd);
+        [methods addObject:[CDMethodModel modelWithMethod:methodDescription isClass:isClassMethod]];
+    }
+    free(methodList);
+    
+    return [methods copy];
+}
+
 - (instancetype)initWithClass:(Class)cls {
     if (self = [self init]) {
         _backing = cls;
@@ -119,26 +143,8 @@
             _ivars = [ivars copy];
         }
         
-        Method *classMethodList = class_copyMethodList(metaClass, &count);
-        if (classMethodList) {
-            NSMutableArray<CDMethodModel *> *methods = [NSMutableArray arrayWithCapacity:count];
-            for (index = 0; index < count; index++) {
-                [methods addObject:[CDMethodModel modelWithMethod:*method_getDescription(classMethodList[index]) isClass:YES]];
-            }
-            _classMethods = [methods copy];
-            free(classMethodList);
-        }
-        
-        Method *methodList = class_copyMethodList(cls, &count);
-        if (methodList) {
-            NSMutableArray<CDMethodModel *> *methods = [NSMutableArray arrayWithCapacity:count];
-            for (index = 0; index < count; index++) {
-                [methods addObject:[CDMethodModel modelWithMethod:*method_getDescription(methodList[index]) isClass:NO]];
-            }
-            _instanceMethods = [methods copy];
-            free(methodList);
-        }
-        
+        _classMethods = [CDClassModel _methodsForClass:metaClass];
+        _instanceMethods = [CDClassModel _methodsForClass:cls];
     }
     return self;
 }
