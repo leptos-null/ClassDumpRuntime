@@ -121,7 +121,7 @@
                 [methods addObject:[CDMethodModel modelWithMethod:(optClassMeths[index]) isClass:YES]];
             }
             free(optClassMeths);
-            _requiredClassMethods = [methods copy];
+            _optionalClassMethods = [methods copy];
         }
         
         objc_property_t *optInstProps = protocol_copyPropertyList2(prcl, &count, NO, YES);
